@@ -105,13 +105,41 @@ public abstract class AbstractPlayer {
 	}
 	
 	/**
-	 * Sends one update to the player
+	 * Sends one update to the player about another player or himself
 	 * @param type : type of update
 	 * @param player : what player the update is about
 	 * @param value : value of the update
 	 */
 	public void sendUpdate(String type, AbstractPlayer player, String value) {
 		sendLine(String.format("update %s %s %s", type, player.getName(), value));
+	}
+	
+	/**
+	 * Sends one update to the player about another player or himself
+	 * @param type : type of update
+	 * @param player : what player the update is about
+	 * @param value : value of the update
+	 */
+	public void sendUpdate(String type, AbstractPlayer player, int value) {
+		sendLine(String.format("update %s %s %d", type, player.getName(), value));
+	}
+	
+	/**
+	 * Sends one update to the player about the game in general, like round number
+	 * @param type
+	 * @param value
+	 */
+	public void sendUpdate(String type, String value) {
+		sendLine(String.format("update %s game %s", type, value));
+	}
+	
+	/**
+	 * Sends one update to the player about the game in general, like round number
+	 * @param type : type of update
+	 * @param value : value of the update
+	 */
+	public void sendUpdate(String type, int value) {
+		sendLine(String.format("update %s game %d", type, value));
 	}
 	
 	/**
