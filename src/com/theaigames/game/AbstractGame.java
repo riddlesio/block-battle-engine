@@ -135,7 +135,7 @@ public abstract class AbstractGame implements Logic {
 
 		// write everything
 		try { 
-			this.saveGame(); 
+//			this.saveGame();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
