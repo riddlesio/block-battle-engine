@@ -15,42 +15,31 @@
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
-package com.theaigames.game.tetris;
+package com.theaigames.tetris.moves;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.theaigames.game.AbstractPlayer;
-import com.theaigames.game.GameHandler;
-
-public class Processor implements GameHandler {
+public class MoveResult {
 	
-	public Processor(List<Player> players) {
-		
+	private final Move move;
+	private final String fieldString;
+	private final int round;
+	
+	public MoveResult(int roundNumber, Move move, String fieldString) {
+		this.round = roundNumber;
+		this.move = move;
+		this.fieldString = fieldString;
 	}
-
-	@Override
-	public void playRound(int roundNumber) {
-		// TODO Auto-generated method stub
-		
+	
+	public String getMoveString() {
+		if(this.move == null)
+			return "";
+		return this.move.toString();
 	}
-
-	@Override
-	public int getRoundNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+	
+	public String getFieldString() {
+		return this.fieldString;
 	}
-
-	@Override
-	public AbstractPlayer getWinner() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public int getRound() {
+		return this.round;
 	}
-
-	@Override
-	public String getPlayedGame() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -15,7 +15,9 @@
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
-package com.theaigames.game;
+package com.theaigames.game.moves;
+
+import com.theaigames.game.player.AbstractPlayer;
 
 /**
  * abstract class AbstractGame
@@ -29,7 +31,7 @@ package com.theaigames.game;
  * @author Jim van Eeden <jim@starapple.nl>
  */
 
-public class AbstractMove {
+public abstract class AbstractMove {
 	
 	private AbstractPlayer player; //player that did this move
 	private String illegalMove; //gets the value of the error message if move is illegal, else remains empty

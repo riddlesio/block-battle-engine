@@ -1,4 +1,4 @@
-package com.theaigames.game.tetris.field;
+package com.theaigames.tetris.field;
 
 import java.awt.Point;
 
@@ -20,11 +20,22 @@ public class Cell {
 		this.shape = type;
 	}
 	
-	public boolean isWithinBoundaries(Field f) {
-		if(this.location.x < 0 || this.location.y < 0 
-				|| this.location.x >= f.getWidth() || this.location.y >= f.getHeight()) 
-			return false;
-		return true;
+	public Cell(Point location, CellType state, ShapeType shape) {
+		this.location = location;
+		this.state = state;
+		this.shape = shape;
+	}
+	
+	public Cell clone() {
+		if(location != null)
+			return new Cell((Point) this.location.clone(), this.state, this.shape);
+		return new Cell(null, this.state, this.shape);
+	}
+	
+	public boolean isOutOfBoundaries(Field f) {
+		if(this.location.x >= f.getWidth() || this.location.x < 0) 
+			return true;
+		return false;
 	}
 	
 	public boolean isOverFlowing() {
@@ -33,8 +44,17 @@ public class Cell {
 		return false;
 	}
 	
+	public boolean isBelowBottom(Field f) {
+		if(this.location.y >= f.getHeight())
+			return true;
+		return false;
+	}
+	
 	public boolean hasCollision(Field f) {
-		return (this.state == CellType.BLOCK && f.isSolid(this.location));
+		Cell cell = f.getCell(this.location);
+		if(cell == null)
+			return false;
+		return (this.state == CellType.SHAPE && (cell.isSolid() || cell.isBlock()));
 	}
 	
 	public void setLocation(int x, int y) {
@@ -44,8 +64,12 @@ public class Cell {
 		this.location.setLocation(x, y);
 	}
 	
-	public void setShape(ShapeType shape) {
+	public void setShapeType(ShapeType shape) {
 		this.shape = shape;
+	}
+	
+	public void setShape() {
+		this.state = CellType.SHAPE;
 	}
 	
 	public void setBlock() {
@@ -60,6 +84,10 @@ public class Cell {
 	public void setEmpty() {
 		this.state = CellType.EMPTY;
 		this.shape = ShapeType.NONE;
+	}
+	
+	public boolean isShape() {
+		return this.state == CellType.SHAPE;
 	}
 	
 	public boolean isBlock() {
@@ -82,7 +110,7 @@ public class Cell {
 		return this.state;
 	}
 	
-	public ShapeType getShape() {
+	public ShapeType getShapeType() {
 		return this.shape;
 	}
 }

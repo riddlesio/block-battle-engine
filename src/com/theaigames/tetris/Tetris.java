@@ -1,16 +1,17 @@
-package com.theaigames.game.tetris;
+package com.theaigames.tetris;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.theaigames.engine.io.IOPlayer;
 import com.theaigames.game.AbstractGame;
-import com.theaigames.game.tetris.field.Field;
+import com.theaigames.tetris.field.Field;
+import com.theaigames.tetris.player.Player;
 
 public class Tetris extends AbstractGame {
 	
-	private final int TIMEBANK_MAX = 10000;
-	private final int TIME_PER_MOVE = 500;
+	private final long TIMEBANK_MAX = 10000l;
+	private final long TIME_PER_MOVE = 500l;
 	private final int FIELD_WIDTH = 10;
 	private final int FIELD_HEIGHT = 20;
 	
@@ -38,13 +39,13 @@ public class Tetris extends AbstractGame {
 		}
 		
 		// create the processor
-		super.processor = new Processor(this.players);
+		super.processor = new Processor(this.players, FIELD_WIDTH, FIELD_HEIGHT);
 	}
 
 	@Override
 	public void sendSettings(Player player) {
-		player.sendSetting("timebank", TIMEBANK_MAX);
-		player.sendSetting("time_per_move", TIME_PER_MOVE);
+		player.sendSetting("timebank",(int) TIMEBANK_MAX);
+		player.sendSetting("time_per_move",(int) TIME_PER_MOVE);
 		player.sendSetting("field_width", FIELD_WIDTH);
 		player.sendSetting("field_height", FIELD_HEIGHT);
 	}

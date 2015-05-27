@@ -15,7 +15,7 @@
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
-package connections;
+package com.theaigames.connections;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
-import com.theaigames.game.AbstractPlayer;
+import com.theaigames.game.player.AbstractPlayer;
 
 /**
  * Database class

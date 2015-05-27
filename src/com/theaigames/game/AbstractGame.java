@@ -25,9 +25,11 @@ import com.mongodb.BasicDBObject;
 import com.theaigames.engine.Engine;
 import com.theaigames.engine.Logic;
 import com.theaigames.engine.io.IOPlayer;
+import com.theaigames.game.player.AbstractPlayer;
+import com.theaigames.tetris.player.Player;
 
-import connections.Amazon;
-import connections.Database;
+import com.theaigames.connections.Amazon;
+import com.theaigames.connections.Database;
 
 /**
  * abstract class AbstractGame
@@ -64,23 +66,27 @@ public abstract class AbstractGame implements Logic {
 		List<String> botDirs = new ArrayList<String>();
 		List<String> botIds = new ArrayList<String>();
 		
-		this.gameIdString = args[0];
-		
-		// get the bot id's and location of bot program
-		for(int i=1; i<args.length; i++) {
-			switch(i % 2) {
-			case 0:
-				botIds.add(args[i]);
-				break;
-			case 1:
-				botDirs.add(args[i]);
-				break;
-			}
-		}
-		
-		// check is the starting arguments are passed correctly
-		if(botIds.isEmpty() || botDirs.isEmpty() || botIds.size() != botDirs.size())
-			throw new RuntimeException("Missing some arguments");
+//		try {
+//			this.gameIdString = args[0];
+//		} catch(Exception e) {
+//			throw new RuntimeException("No arguments provided.");
+//		}
+//		
+//		// get the bot id's and location of bot program
+//		for(int i=1; i<args.length; i++) {
+//			switch(i % 2) {
+//			case 0:
+//				botIds.add(args[i]);
+//				break;
+//			case 1:
+//				botDirs.add(args[i]);
+//				break;
+//			}
+//		}
+//		
+//		// check is the starting arguments are passed correctly
+//		if(botIds.isEmpty() || botDirs.isEmpty() || botIds.size() != botDirs.size())
+//			throw new RuntimeException("Missing some arguments.");
 		
 		// create engine
 		this.engine = new Engine();
@@ -89,6 +95,9 @@ public abstract class AbstractGame implements Logic {
 		for(int i=0; i<botIds.size(); i++) {
 			this.engine.addPlayer("/opt/aigames/scripts/run_bot.sh aiplayer1 " + botDirs.get(i), botIds.get(i));
 		}
+		
+		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id1");
+		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id2");
 	}
 	
 	/**
@@ -100,9 +109,9 @@ public abstract class AbstractGame implements Logic {
 	 * @return : True when the game is over
 	 */
 	@Override
-	public boolean isGameWon()
+	public boolean isGameOver()
 	{
-		if (this.processor.getWinner() != null 
+		if (this.processor.isGameOver() 
 				|| (this.maxRounds >= 0 && this.processor.getRoundNumber() > this.maxRounds) ) {
         	return true;
         }
@@ -136,6 +145,8 @@ public abstract class AbstractGame implements Logic {
 		// write everything
 		try { 
 //			this.saveGame();
+			this.processor.getPlayedGame();
+			System.out.println(this.processor.getWinner().getName());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

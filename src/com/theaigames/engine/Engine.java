@@ -75,7 +75,7 @@ public class Engine {
      * @return : true if the game has ended
      */
     public boolean hasEnded() {
-        return this.logic.isGameWon();
+        return this.logic.isGameOver();
     }
     
     /**
