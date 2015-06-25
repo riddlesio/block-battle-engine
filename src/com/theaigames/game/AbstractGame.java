@@ -179,6 +179,7 @@ public abstract class AbstractGame implements Logic {
 		System.out.println("Saving the game...");
 		
 		// save the visualization file to amazon
+		Amazon.connectToAmazon();
 		String savedFilePath = Amazon.saveToAmazon(this.processor.getPlayedGame(), gamePath + "/visualization");
 		
 		// save errors and dumps to amazon and create object for database
@@ -190,6 +191,7 @@ public abstract class AbstractGame implements Logic {
 		}
 		
 		// store everything in the database
+		Database.connectToDatabase();
 		Database.storeGameInDatabase(savedFilePath, winner.getBot().getIdString(), score, savedFilePath, errors, dumps);
 	}
 }
