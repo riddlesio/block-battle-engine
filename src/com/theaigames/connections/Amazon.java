@@ -76,8 +76,8 @@ public final class Amazon {
 		try {
 			File jarPath = new File(Amazon.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 			String propertiesPath = jarPath.getParentFile().getAbsolutePath();
-//			prop.load(new FileInputStream(propertiesPath + "/amazon.properties"));
-			prop.load(new FileInputStream("amazon.properties")); //FOR ECLIPSE
+			prop.load(new FileInputStream(propertiesPath + "/amazon.properties"));
+//			prop.load(new FileInputStream("amazon.properties")); //FOR ECLIPSE
 			
 			accessKey = prop.getProperty("accessKey");
 			secretKey = prop.getProperty("secretKey");

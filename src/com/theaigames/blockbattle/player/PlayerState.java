@@ -15,18 +15,31 @@
 //    For the full copyright and license information, please view the LICENSE
 //    file that was distributed with this source code.
 
-package com.theaigames.tetris.moves;
+package com.theaigames.blockbattle.player;
 
-public class MoveResult {
+import com.theaigames.blockbattle.field.ShapeType;
+import com.theaigames.blockbattle.moves.Move;
+
+public class PlayerState {
 	
 	private final Move move;
+	private final int combo;
+	private final int points;
+	private final ShapeType nextShape;
 	private final String fieldString;
 	private final int round;
 	
-	public MoveResult(int roundNumber, Move move, String fieldString) {
+	public PlayerState(int roundNumber, Move move, int combo, int points, ShapeType nextShape, String fieldString) {
 		this.round = roundNumber;
 		this.move = move;
+		this.combo = combo;
+		this.points = points;
+		this.nextShape = nextShape;
 		this.fieldString = fieldString;
+	}
+	
+	public int getRound() {
+		return this.round;
 	}
 	
 	public String getMoveString() {
@@ -35,11 +48,19 @@ public class MoveResult {
 		return this.move.toString();
 	}
 	
-	public String getFieldString() {
-		return this.fieldString;
+	public int getCombo() {
+		return this.combo;
 	}
 	
-	public int getRound() {
-		return this.round;
+	public int getPoints() {
+		return this.points;
+	}
+	
+	public ShapeType getNextShape() {
+		return this.nextShape;
+	}
+	
+	public String getFieldString() {
+		return this.fieldString;
 	}
 }

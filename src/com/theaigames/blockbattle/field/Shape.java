@@ -1,10 +1,10 @@
-package com.theaigames.tetris.field;
+package com.theaigames.blockbattle.field;
 
 import java.awt.Point;
 
 public class Shape {
 
-	private ShapeType type;
+	public ShapeType type;
 	private Cell[][] shape;
 	private int size;
 	private Point location;
@@ -59,18 +59,15 @@ public class Shape {
 	// spawns the shape
 	public boolean spawnShape() {
 		int x = (field.getWidth() - this.size) / 2;
-		int y = 0;
-		
-		if(type == ShapeType.J)
-			x++;
-		if(type == ShapeType.I)
-			y--;
+		int y = -1;
 		
 		this.location = new Point(x, y);
 		setBlockLocations();
-			
-		if(!setShapeInField())
+		
+		if(hasCollision())
 			return false;
+		
+		setShapeInField();
 		return true;
 	}
 
@@ -81,7 +78,9 @@ public class Shape {
 		
 		Cell[][] temp = clone.transposeShape();
 		for(int y=0; y < size; y++) {
-			clone.shape[y] = temp[size - y - 1];
+			for(int x=0; x < size; x++) {
+				clone.shape[x][y] = temp[x][size - y - 1];
+			}
 		}
 		
 		clone.setBlockLocations();
@@ -97,10 +96,8 @@ public class Shape {
 		Shape clone = this.clone();
 		
 		Cell[][] temp = clone.transposeShape();
-		for(int y=0; y < size; y++) {
-			for(int x=0; x < size; x++) {
-				 clone.shape[x][y] = temp[size - x - 1][y];
-			}
+		for(int x=0; x < size; x++) {
+			clone.shape[x] = temp[size - x - 1];
 		}
 		
 		clone.setBlockLocations();
@@ -246,7 +243,7 @@ public class Shape {
 	
 	/////////////////////////////
 
-	public void setBlockLocations() {
+	private void setBlockLocations() {
 		for(int y=0; y < size; y++) {
 			for(int x=0; x < size; x++) {
 				if(shape[x][y].isShape()) {
@@ -256,31 +253,17 @@ public class Shape {
 		}
 	}
 	
-	public void freezeInField() {
+	private void freezeInField() {
 		for(int i=0; i < blocks.length; i++) {
 			field.setBlock(blocks[i].getLocation(), this.type);
 		}
 		isFrozen = true;
 	}
 	
-	public boolean setShapeInField() {
+	private void setShapeInField() {
 		for(int i=0; i < blocks.length; i++) {
-			if(!field.setShape(blocks[i].getLocation(), this.type))
-				return false;
+			field.setShape(blocks[i].getLocation(), this.type);
 		}
-		return true;
-	}
-	
-	public ShapeType getType() {
-		return this.type;
-	}
-	
-	public String getPositionString() {
-		return location.x + "," + location.y;
-	}
-	
-	public boolean isFrozen() {
-		return this.isFrozen;
 	}
 	
 	// set shape in square box
@@ -297,18 +280,18 @@ public class Shape {
 			case J:
 				this.size = 3;
 				this.shape = initializeShape();
-				this.blocks[0] = this.shape[1][0];
-				this.blocks[1] = this.shape[1][1];
-				this.blocks[2] = this.shape[1][2];
-				this.blocks[3] = this.shape[0][2];
+				this.blocks[0] = this.shape[0][0];
+				this.blocks[1] = this.shape[0][1];
+				this.blocks[2] = this.shape[1][1];
+				this.blocks[3] = this.shape[2][1];
 				break;
 			case L:
 				this.size = 3;
 				this.shape = initializeShape();
-				this.blocks[0] = this.shape[1][0];
-				this.blocks[1] = this.shape[1][1];
-				this.blocks[2] = this.shape[1][2];
-				this.blocks[3] = this.shape[2][2];
+				this.blocks[0] = this.shape[2][0];
+				this.blocks[1] = this.shape[0][1];
+				this.blocks[2] = this.shape[1][1];
+				this.blocks[3] = this.shape[2][1];
 				break;
 			case O:
 				this.size = 2;
@@ -329,10 +312,10 @@ public class Shape {
 			case T:
 				this.size = 3;
 				this.shape = initializeShape();
-				this.blocks[0] = this.shape[0][0];
-				this.blocks[1] = this.shape[1][0];
-				this.blocks[2] = this.shape[2][0];
-				this.blocks[3] = this.shape[1][1];
+				this.blocks[0] = this.shape[1][0];
+				this.blocks[1] = this.shape[0][1];
+				this.blocks[2] = this.shape[1][1];
+				this.blocks[3] = this.shape[2][1];
 				break;
 			case Z:
 				this.size = 3;
@@ -360,11 +343,27 @@ public class Shape {
 		return newShape;
 	}
 	
-	public String toString() {
-		StringBuffer output = new StringBuffer();
-		for(int i=0; i < blocks.length; i++) {
-			output.append(blocks[i].getLocation().x + "," + blocks[i].getLocation().y + " ");
-		}
-		return output.toString();
+	public String getPositionString() {
+		return location.x + "," + location.y;
 	}
+	
+	public ShapeType getType() {
+		return this.type;
+	}
+	
+	public boolean isFrozen() {
+		return this.isFrozen;
+	}
+	
+	public Point getLocation() {
+		return this.location;
+	}
+	
+//	public String toString() {
+//		StringBuffer output = new StringBuffer();
+//		for(int i=0; i < blocks.length; i++) {
+//			output.append(blocks[i].getLocation().x + "," + blocks[i].getLocation().y + " ");
+//		}
+//		return output.toString();
+//	}
 }

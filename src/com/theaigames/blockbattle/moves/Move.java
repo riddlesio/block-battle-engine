@@ -1,4 +1,4 @@
-package com.theaigames.tetris.moves;
+package com.theaigames.blockbattle.moves;
 
 import com.theaigames.game.moves.AbstractMove;
 import com.theaigames.game.player.AbstractPlayer;

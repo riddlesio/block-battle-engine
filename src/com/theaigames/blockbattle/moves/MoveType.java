@@ -1,4 +1,4 @@
-package com.theaigames.tetris.moves;
+package com.theaigames.blockbattle.moves;
 
 public enum MoveType {
 	DOWN, LEFT, RIGHT, TURNLEFT, TURNRIGHT, DROP;

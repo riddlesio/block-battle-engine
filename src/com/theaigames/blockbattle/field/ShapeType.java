@@ -1,4 +1,4 @@
-package com.theaigames.tetris.field;
+package com.theaigames.blockbattle.field;
 
 import java.util.Random;
 

@@ -18,7 +18,7 @@
 package com.theaigames.engine;
 
 import com.theaigames.engine.io.IOPlayer;
-import com.theaigames.tetris.player.Player;
+import com.theaigames.game.player.AbstractPlayer;
 
 import java.util.ArrayList;
 
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 public interface Logic {
     public void setupGame(ArrayList<IOPlayer> players) throws Exception; // create the players, set up the game
     public void playRound(int roundNumber); // play a round
-    public void sendSettings(Player player); // send the game settings to given player
+    public void sendSettings(AbstractPlayer player); // send the game settings to given player
     public boolean isGameOver(); // check if the game is over
     public void finish() throws Exception; // wrap things up
     public void saveGame() throws Exception; // save all the game data

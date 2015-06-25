@@ -111,7 +111,7 @@ public abstract class AbstractPlayer {
 	 * @param value : value of the update
 	 */
 	public void sendUpdate(String type, AbstractPlayer player, String value) {
-		sendLine(String.format("update %s %s %s", type, player.getName(), value));
+		sendLine(String.format("update %s %s %s", player.getName(), type, value));
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public abstract class AbstractPlayer {
 	 * @param value : value of the update
 	 */
 	public void sendUpdate(String type, AbstractPlayer player, int value) {
-		sendLine(String.format("update %s %s %d", type, player.getName(), value));
+		sendLine(String.format("update %s %s %d", player.getName(), type, value));
 	}
 	
 	/**
@@ -130,7 +130,7 @@ public abstract class AbstractPlayer {
 	 * @param value
 	 */
 	public void sendUpdate(String type, String value) {
-		sendLine(String.format("update %s game %s", type, value));
+		sendLine(String.format("update game %s %s", type, value));
 	}
 	
 	/**
@@ -139,7 +139,7 @@ public abstract class AbstractPlayer {
 	 * @param value : value of the update
 	 */
 	public void sendUpdate(String type, int value) {
-		sendLine(String.format("update %s game %d", type, value));
+		sendLine(String.format("update game %s %d", type, value));
 	}
 	
 	/**

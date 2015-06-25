@@ -26,8 +26,8 @@ import com.theaigames.engine.Engine;
 import com.theaigames.engine.Logic;
 import com.theaigames.engine.io.IOPlayer;
 import com.theaigames.game.player.AbstractPlayer;
-import com.theaigames.tetris.player.Player;
 
+import com.theaigames.blockbattle.player.Player;
 import com.theaigames.connections.Amazon;
 import com.theaigames.connections.Database;
 
@@ -66,27 +66,27 @@ public abstract class AbstractGame implements Logic {
 		List<String> botDirs = new ArrayList<String>();
 		List<String> botIds = new ArrayList<String>();
 		
-//		try {
-//			this.gameIdString = args[0];
-//		} catch(Exception e) {
-//			throw new RuntimeException("No arguments provided.");
-//		}
-//		
-//		// get the bot id's and location of bot program
-//		for(int i=1; i<args.length; i++) {
-//			switch(i % 2) {
-//			case 0:
-//				botIds.add(args[i]);
-//				break;
-//			case 1:
-//				botDirs.add(args[i]);
-//				break;
-//			}
-//		}
-//		
-//		// check is the starting arguments are passed correctly
-//		if(botIds.isEmpty() || botDirs.isEmpty() || botIds.size() != botDirs.size())
-//			throw new RuntimeException("Missing some arguments.");
+		try {
+			this.gameIdString = args[0];
+		} catch(Exception e) {
+			throw new RuntimeException("No arguments provided.");
+		}
+		
+		// get the bot id's and location of bot program
+		for(int i=1; i<args.length; i++) {
+			switch(i % 2) {
+			case 0:
+				botIds.add(args[i]);
+				break;
+			case 1:
+				botDirs.add(args[i]);
+				break;
+			}
+		}
+		
+		// check is the starting arguments are passed correctly
+		if(botIds.isEmpty() || botDirs.isEmpty() || botIds.size() != botDirs.size())
+			throw new RuntimeException("Missing some arguments.");
 		
 		// create engine
 		this.engine = new Engine();
@@ -96,8 +96,8 @@ public abstract class AbstractGame implements Logic {
 			this.engine.addPlayer("/opt/aigames/scripts/run_bot.sh aiplayer1 " + botDirs.get(i), botIds.get(i));
 		}
 		
-		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id1");
-		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id2");
+//		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id1");
+//		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id2");
 	}
 	
 	/**
@@ -126,7 +126,7 @@ public abstract class AbstractGame implements Logic {
     public void playRound(int roundNumber) 
 	{
 		for(IOPlayer ioPlayer : this.engine.getPlayers())
-			ioPlayer.addToDump(String.format("Round %d\n", roundNumber));
+			ioPlayer.addToDump(String.format("Round %d", roundNumber));
 		
 		this.processor.playRound(roundNumber);
 	}
@@ -145,8 +145,11 @@ public abstract class AbstractGame implements Logic {
 		// write everything
 		try { 
 //			this.saveGame();
-			this.processor.getPlayedGame();
-			System.out.println(this.processor.getWinner().getName());
+			this.processor.getPlayedGame(); //temp
+//			System.out.println(this.engine.getPlayers().get(0).getDump()); //temp
+//			System.out.println("ERRORS: \n"); //temp
+//			System.out.println(this.engine.getPlayers().get(0).getStderr()); //temp
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -179,9 +182,11 @@ public abstract class AbstractGame implements Logic {
 		String savedFilePath = Amazon.saveToAmazon(this.processor.getPlayedGame(), gamePath + "/visualization");
 		
 		// save errors and dumps to amazon and create object for database
+		int botNr = 0;
 		for(IOPlayer ioPlayer : this.engine.getPlayers()) {
-			errors.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getStderr(), gamePath + "/bot1Errors"));
-			dumps.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getDump(), gamePath + "/bot1Dump"));
+			botNr++;
+			errors.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getStderr(), String.format("%s/bot%dErrors", gamePath, botNr)));
+			dumps.append(ioPlayer.getIdString(), Amazon.saveToAmazon(ioPlayer.getDump(), String.format("%s/bot%dDump", gamePath, botNr)));
 		}
 		
 		// store everything in the database

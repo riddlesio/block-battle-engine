@@ -1,14 +1,15 @@
-package com.theaigames.tetris;
+package com.theaigames.blockbattle;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.theaigames.blockbattle.field.Field;
+import com.theaigames.blockbattle.player.Player;
 import com.theaigames.engine.io.IOPlayer;
 import com.theaigames.game.AbstractGame;
-import com.theaigames.tetris.field.Field;
-import com.theaigames.tetris.player.Player;
+import com.theaigames.game.player.AbstractPlayer;
 
-public class Tetris extends AbstractGame {
+public class Blockbattle extends AbstractGame {
 	
 	private final long TIMEBANK_MAX = 10000l;
 	private final long TIME_PER_MOVE = 500l;
@@ -33,19 +34,33 @@ public class Tetris extends AbstractGame {
 			String playerName = String.format("player%d", i+1);
 			Player player = new Player(playerName, ioPlayers.get(i), TIMEBANK_MAX, TIME_PER_MOVE, field);
 			this.players.add(player);
-			
-			// send the settings
-			sendSettings(player);
 		}
+		
+		// send the settings
+		for(AbstractPlayer player : this.players)
+			sendSettings(player);
 		
 		// create the processor
 		super.processor = new Processor(this.players, FIELD_WIDTH, FIELD_HEIGHT);
 	}
 
 	@Override
-	public void sendSettings(Player player) {
+	public void sendSettings(AbstractPlayer player) {
+		
+		// create player names string
+		String playerNames = "";
+		for(Player p : this.players) {
+			playerNames += p.getName() + ",";
+		}
+		playerNames = playerNames.substring(0, playerNames.length()-1);
+		
+		// send the mandatory settings
 		player.sendSetting("timebank",(int) TIMEBANK_MAX);
 		player.sendSetting("time_per_move",(int) TIME_PER_MOVE);
+		player.sendSetting("player_names", playerNames);
+		player.sendSetting("your_bot", player.getName());
+		
+		// send the game specific settings
 		player.sendSetting("field_width", FIELD_WIDTH);
 		player.sendSetting("field_height", FIELD_HEIGHT);
 	}
@@ -58,7 +73,7 @@ public class Tetris extends AbstractGame {
 	
 	public static void main(String args[]) throws Exception
 	{
-		Tetris game = new Tetris();
+		Blockbattle game = new Blockbattle();
 		
 		game.setupEngine(args);
 		game.runEngine();

@@ -1,4 +1,4 @@
-package com.theaigames.tetris.field;
+package com.theaigames.blockbattle.field;
 
 import java.awt.Point;
 
@@ -27,8 +27,8 @@ public class Field {
 		if(amount <= 0)
 			return false;
 		
-		for(int y=0; y < height + amount; y++) {
-			for(int x=0; x < width; x++) {
+		for(int y = 0; y < height + amount; y++) {
+			for(int x = 0; x < width; x++) {
 
 				int newY = y - amount;
 				
@@ -36,8 +36,8 @@ public class Field {
 					return true;
 				}
 				
-				if(newY >= 0) { // move cells up
-					grid[x][newY] = grid[x][y];
+				if(newY >= 0 && y < height) { // move cells up
+					grid[x][newY] = grid[x][y].clone();
 					grid[x][newY].setLocation(x, newY);
 				}
 				
@@ -65,9 +65,9 @@ public class Field {
 			}
 			
 			if(fullRow) { // move cells down one line
-				for(int oy=y; oy >= 0; oy--) {
+				for(int oy = y - 1; oy >= 0; oy--) {
 					for(int x=0; x < width; x++) {
-						grid[x][oy + 1] = grid[x][oy]; 
+						grid[x][oy + 1] = grid[x][oy].clone(); 
 					}
 				}
 				for(int x=0; x < width; x++) {
@@ -103,23 +103,23 @@ public class Field {
 		return grid[p.x][p.y];
 	}
 	
-	public boolean setShape(Point p, ShapeType shape) {
+	public void setShape(Point p, ShapeType shape) {
 		Cell cell = getCell(p);
 		if(cell != null && cell.isEmpty()) {
 			cell.setShape();
 			cell.setShapeType(shape);
-			return true;
 		}
-		return false;
 	}
 	
 	public void setBlock(Point p, ShapeType shape) {
 		Cell cell = getCell(p);
-		if(cell != null && !(cell.isSolid() || cell.isBlock())) {
-			cell.setBlock();
-			cell.setShapeType(shape);
-		} else {
-			System.err.printf("Can't set block here. (%s %s)\n", p.toString(), shape);
+		if(cell != null) {
+			if(!cell.isSolid() && !cell.isBlock()) {
+				cell.setBlock();
+				cell.setShapeType(shape);
+			} else {
+				System.err.printf("Can't set block here. (%s %s)\n", p.toString(), shape);
+			}
 		}
 	}
 	

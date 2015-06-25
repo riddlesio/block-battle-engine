@@ -1,4 +1,4 @@
-package com.theaigames.tetris.field;
+package com.theaigames.blockbattle.field;
 
 public enum CellType {
 	EMPTY(0), 

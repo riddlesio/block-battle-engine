@@ -63,26 +63,27 @@ public class IOPlayer implements Runnable {
         if (!this.finished) {
             try {
         		this.inputStream.write(line + "\n");
+        		System.out.println(line);
         		this.inputStream.flush();
             } catch(IOException e) {
                 System.err.println("Writing to bot failed");
             }
-            addToDump(line + "\n");
+            addToDump(line);
         }
     }
     
     /**
      * Wait's until the this.response has a value and then returns that value
      * @param timeOut : time before timeout
-     * @return : bot's response
+     * @return : bot's response, returns and empty string when there is no response
      */
     public String getResponse(long timeOut) {
     	long timeStart = System.currentTimeMillis();
-    	String botOutput = "Output from your bot: ";
+    	String enginesays = "Output from your bot: ";
     	String response;
 		
     	if (this.errorCounter > this.MAX_ERRORS) {
-    		addToDump(String.format("Maximum number (%d) of time-outs reached: skipping all moves.\n", this.MAX_ERRORS));
+    		addToDump(String.format("Maximum number (%d) of time-outs reached: skipping all moves.", this.MAX_ERRORS));
     		return "";
     	}
     	
@@ -91,12 +92,12 @@ public class IOPlayer implements Runnable {
 			long timeElapsed = timeNow - timeStart;
 			
 			if(timeElapsed >= timeOut) {
-				addToDump(String.format("Response timed out (%dms), let your bot return '%s' instead of nothing or make it faster.\n", timeOut, this.NULL_MOVE));
+				addToDump(String.format("Response timed out (%dms), let your bot return '%s' instead of nothing or make it faster.", timeOut, this.NULL_MOVE));
 				this.errorCounter++;
                 if (this.errorCounter > this.MAX_ERRORS) {
                     finish();
                 }
-                addToDump(String.format("%snull\n", botOutput));
+                addToDump(String.format("%snull", enginesays));
 				return "";
 			}
 			
@@ -104,14 +105,14 @@ public class IOPlayer implements Runnable {
     	}
 		if(this.response.equalsIgnoreCase("no_moves")) {
 			this.response = null;
-            addToDump(String.format("%s\"%s\"\n", botOutput, this.NULL_MOVE));
+            addToDump(String.format("%s\"%s\"", enginesays, this.NULL_MOVE));
 			return "";
 		}
 		
 		response = this.response;
 		this.response = null;
 
-		addToDump(String.format("%s\"%s\"\n", botOutput, response));
+		addToDump(String.format("%s\"%s\"", enginesays, response));
 		return response;
     }
     
@@ -153,7 +154,7 @@ public class IOPlayer implements Runnable {
      * @param dumpy : string to add to the dump
      */
     public void addToDump(String dumpy){
-		dump.append(dumpy);
+		dump.append(dumpy + "\n");
 	}
     
     /**
