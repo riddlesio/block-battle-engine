@@ -207,7 +207,6 @@ public class Processor implements GameHandler {
 			}
 			
 			// store the winner in the final state
-			states.getJSONObject(states.length() - 1).put("winner", winner.getName());
 			if(this.winner == null)
 				states.getJSONObject(states.length() - 1).put("winner", "none");
 			else

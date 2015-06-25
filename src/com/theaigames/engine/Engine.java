@@ -51,6 +51,7 @@ public class Engine {
 
         // Create new process
     	Process process = Runtime.getRuntime().exec(command);
+    	System.out.println(command);
 
         // Attach IO to process
         IOPlayer player = new IOPlayer(process, idString);
