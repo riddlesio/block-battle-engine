@@ -62,7 +62,7 @@ public final class Database {
 			File jarPath = new File(Amazon.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 			String propertiesPath = jarPath.getParentFile().getAbsolutePath();
 			prop.load(new FileInputStream(propertiesPath + "/database.properties"));
-//			prop.load(new FileInputStream("amazon.properties")); //FOR ECLIPSE
+//			prop.load(new FileInputStream("database.properties")); //FOR ECLIPSE
 			
 			dbHost = prop.getProperty("host");
 			dbPort = prop.getProperty("port");
