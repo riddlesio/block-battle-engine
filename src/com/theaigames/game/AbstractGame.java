@@ -92,8 +92,8 @@ public abstract class AbstractGame implements Logic {
 		this.engine = new Engine();
 		
 		// add the players
-		for(int i=0; i<botIds.size(); i++) {
-			this.engine.addPlayer("/opt/aigames/scripts/run_bot.sh aiplayer1 " + botDirs.get(i), botIds.get(i));
+		for(int i=0; i < botIds.size(); i++) {
+			this.engine.addPlayer(String.format("/opt/aigames/scripts/run_bot.sh aiplayer%d %s", i + 1, botDirs.get(i)), botIds.get(i));
 		}
 		
 //		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id1");
