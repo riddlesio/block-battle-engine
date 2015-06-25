@@ -63,7 +63,6 @@ public class IOPlayer implements Runnable {
         if (!this.finished) {
             try {
         		this.inputStream.write(line + "\n");
-        		System.out.println(line);
         		this.inputStream.flush();
             } catch(IOException e) {
                 System.err.println("Writing to bot failed");

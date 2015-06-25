@@ -144,8 +144,8 @@ public abstract class AbstractGame implements Logic {
 
 		// write everything
 		try { 
-//			this.saveGame();
-			this.processor.getPlayedGame(); //temp
+			this.saveGame();
+//			this.processor.getPlayedGame(); //temp
 //			System.out.println(this.engine.getPlayers().get(0).getDump()); //temp
 //			System.out.println("ERRORS: \n"); //temp
 //			System.out.println(this.engine.getPlayers().get(0).getStderr()); //temp

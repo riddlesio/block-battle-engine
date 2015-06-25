@@ -219,7 +219,6 @@ public class Processor implements GameHandler {
 			System.err.println("Can't convert game to JSON. " + e);
 		}
 		
-		System.out.println(output.toString());
 		return output.toString();
 	}
 
