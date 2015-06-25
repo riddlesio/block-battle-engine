@@ -76,7 +76,7 @@ public abstract class AbstractGame implements Logic {
 		for(int i=1; i <= (args.length - 1) / 2; i++) { // first arguments are the bot ids
 			botIds.add(args[i]);
 		}
-		for(int i=(args.length - 1) / 2; i <= args.length; i++) { // last arguments are the bot dirs
+		for(int i=((args.length - 1) / 2) + 1; i < args.length; i++) { // last arguments are the bot dirs
 			botDirs.add(args[i]);
 		}
 		
