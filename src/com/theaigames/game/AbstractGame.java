@@ -73,15 +73,11 @@ public abstract class AbstractGame implements Logic {
 		}
 		
 		// get the bot id's and location of bot program
-		for(int i=1; i<args.length; i++) {
-			switch(i % 2) {
-			case 0:
-				botIds.add(args[i]);
-				break;
-			case 1:
-				botDirs.add(args[i]);
-				break;
-			}
+		for(int i=1; i <= (args.length - 1) / 2; i++) { // first arguments are the bot ids
+			botIds.add(args[i]);
+		}
+		for(int i=(args.length - 1) / 2; i <= args.length; i++) { // last arguments are the bot dirs
+			botDirs.add(args[i]);
 		}
 		
 		// check is the starting arguments are passed correctly
