@@ -190,7 +190,11 @@ public class Processor implements GameHandler {
 							else // special case on the last round with the added final state
 								result = roundResult.get(roundResult.size() - 2);
 							
-							playerState.put("move", "");
+							if(result.getMove() != null && result.getMove().isIllegal()) {
+								playerState.put("move", result.getMoveString());
+							} else {
+								playerState.put("move", "");
+							}
 						}
 						playerState.put("field", result.getFieldString());
 						playerState.put("points", result.getPoints());
@@ -238,12 +242,12 @@ public class Processor implements GameHandler {
 		player.sendUpdate("round", roundNumber);
 		player.sendUpdate("this_piece_type", player.getCurrentShape().getType().toString());
 		player.sendUpdate("next_piece_type", nextShape.toString());
+		player.sendUpdate("this_piece_position", player.getCurrentShape().getPositionString());
 		
 		// player updates
 		player.sendUpdate("row_points", player, player.getRowPoints());
 		player.sendUpdate("combo", player, player.getCombo());
 		player.sendUpdate("field", player, player.getField().toString(false, false));
-		player.sendUpdate("this_piece_position", player, player.getCurrentShape().getPositionString());
 		
 		// opponent updates
 		Player opponent = player.getOpponent();

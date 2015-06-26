@@ -42,6 +42,10 @@ public class PlayerState {
 		return this.round;
 	}
 	
+	public Move getMove(){
+		return this.move;
+	}
+	
 	public String getMoveString() {
 		if(this.move == null)
 			return "";
