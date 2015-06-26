@@ -51,6 +51,10 @@ public abstract class AbstractGame implements Logic {
 	
 	public int maxRounds;
 	
+	public boolean DEV_MODE = false; // turn this on for local testing
+	public String TEST_BOT; // command for the test bot in DEV_MODE
+	public int NUM_TEST_BOTS; // number of bots for this game
+	
 	public AbstractGame() {
 		maxRounds = -1; // set this later if there is a maximum amount of rounds for this game
 	}
@@ -63,6 +67,26 @@ public abstract class AbstractGame implements Logic {
 	 */
 	public void setupEngine(String args[]) throws IOException, RuntimeException {
 		
+		// create engine
+		this.engine = new Engine();
+		
+		// add the test bots if in DEV_MODE
+		if(DEV_MODE) {
+			if(TEST_BOT.isEmpty()) {
+				throw new RuntimeException("DEV_MODE: Please provide a command to start the test bot by setting 'TEST_BOT' in your main class.");
+			}
+			if(NUM_TEST_BOTS <= 0) {
+				throw new RuntimeException("DEV_MODE: Please provide the number of bots in this game by setting 'NUM_TEST_BOTS' in your main class.");
+			}
+			
+			for(int i = 0; i < NUM_TEST_BOTS; i++) {
+				this.engine.addPlayer(TEST_BOT, "ID_" + i);
+			}
+			
+			return;
+		}
+		
+		// add the bots from the arguments if not in DEV_MODE
 		List<String> botDirs = new ArrayList<String>();
 		List<String> botIds = new ArrayList<String>();
 		
@@ -84,16 +108,10 @@ public abstract class AbstractGame implements Logic {
 		if(botIds.isEmpty() || botDirs.isEmpty() || botIds.size() != botDirs.size())
 			throw new RuntimeException("Missing some arguments.");
 		
-		// create engine
-		this.engine = new Engine();
-		
 		// add the players
 		for(int i=0; i < botIds.size(); i++) {
 			this.engine.addPlayer(String.format("/opt/aigames/scripts/run_bot.sh aiplayer%d %s", i + 1, botDirs.get(i)), botIds.get(i));
 		}
-		
-//		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id1");
-//		this.engine.addPlayer("java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter", "id2");
 	}
 	
 	/**
@@ -137,17 +155,16 @@ public abstract class AbstractGame implements Logic {
 		for(IOPlayer ioPlayer : this.engine.getPlayers())
 			ioPlayer.finish();
 		Thread.sleep(100);
-
-		// write everything
-		try { 
-			this.saveGame();
-//			this.processor.getPlayedGame(); //temp
-//			System.out.println(this.engine.getPlayers().get(0).getDump()); //temp
-//			System.out.println("ERRORS: \n"); //temp
-//			System.out.println(this.engine.getPlayers().get(0).getStderr()); //temp
-			
-		} catch(Exception e) {
-			e.printStackTrace();
+		
+		if(DEV_MODE) { // print the game file when in DEV_MODE
+			String playedGame = this.processor.getPlayedGame();
+			System.out.println(playedGame);
+		} else { // save the game to database
+			try {
+				this.saveGame();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		System.out.println("Done.");

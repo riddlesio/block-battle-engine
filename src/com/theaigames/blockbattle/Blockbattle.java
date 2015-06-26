@@ -23,6 +23,9 @@ public class Blockbattle extends AbstractGame {
 		
 		System.out.println("Setting up game...");
 		
+		// set the maximum number of rounds if necessary
+		super.maxRounds = -1;
+		
 		// create all the players and everything they need
 		this.players = new ArrayList<Player>();
 		for(int i=0; i<ioPlayers.size(); i++) {
@@ -74,6 +77,11 @@ public class Blockbattle extends AbstractGame {
 	public static void main(String args[]) throws Exception
 	{
 		Blockbattle game = new Blockbattle();
+		
+		// DEV_MODE settings
+		game.TEST_BOT = "java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter";
+		game.NUM_TEST_BOTS = 2;
+		game.DEV_MODE = false;
 		
 		game.setupEngine(args);
 		game.runEngine();
