@@ -246,7 +246,10 @@ public class Processor implements GameHandler {
 		player.sendUpdate("this_piece_position", player, player.getCurrentShape().getPositionString());
 		
 		// opponent updates
-		player.sendUpdate("field", player.getOpponent(), player.getField().toString(false, false));
+		Player opponent = player.getOpponent();
+		player.sendUpdate("field", opponent, player.getField().toString(false, false));
+		player.sendUpdate("row_points", opponent, opponent.getRowPoints());
+		player.sendUpdate("combo", opponent, opponent.getCombo());
 	}
 	
 	private ArrayList<Move> parseMoves(String input, Player player) {
@@ -255,7 +258,7 @@ public class Processor implements GameHandler {
 		
 		for(int i=0; i < parts.length; i++) {
 			if(i > MAX_MOVES) {
-				player.getBot().addToDump(String.format("Maximum number of moves reached, only the first %s will be executed.", MAX_MOVES));
+				player.getBot().outputEngineWarning(String.format("Maximum number of moves reached, only the first %s will be executed.", MAX_MOVES));
 				break;
 			}
 			if(parts[i].isEmpty())
@@ -273,7 +276,7 @@ public class Processor implements GameHandler {
 		MoveType moveType = MoveType.fromString(input);
 		
 		if(moveType == null) {
-			player.getBot().addToDump(String.format("Cannot parse input: %s", input));
+			player.getBot().outputEngineWarning(String.format("Cannot parse input: %s", input));
 			return null;
 		}
 
@@ -286,7 +289,7 @@ public class Processor implements GameHandler {
 		
 		for(Move move : player.getRoundMoves()) {
 			if(shape.isFrozen()) {
-				player.getBot().addToDump("Piece was frozen in place on the previous move. Skipping all next moves.");
+				player.getBot().outputEngineWarning("Piece was frozen in place on the previous move. Skipping all next moves.");
 				break;
 			}
 			switch(move.getType()) {
@@ -326,7 +329,7 @@ public class Processor implements GameHandler {
 				move.setIllegalMove(error);
 				
 				storePlayerState(player, move);
-				player.getBot().addToDump(error);
+				player.getBot().outputEngineWarning(error);
 			}
 		}
 		

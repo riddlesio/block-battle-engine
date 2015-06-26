@@ -152,9 +152,17 @@ public class IOPlayer implements Runnable {
      * Adds a string to the bot dump
      * @param dumpy : string to add to the dump
      */
-    public void addToDump(String dumpy){
+    public void addToDump(String dumpy) {
 		dump.append(dumpy + "\n");
 	}
+    
+    /**
+     * Add a warning to the bot's dump that the engine outputs
+     * @param warning : the warning message
+     */
+    public void outputEngineWarning(String warning) {
+    	dump.append(String.format("Engine warning: \"%s\"\n", warning));
+    }
     
     /**
      * @return : the complete stdOut from the bot process

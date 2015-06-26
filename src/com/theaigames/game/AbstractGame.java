@@ -27,7 +27,6 @@ import com.theaigames.engine.Logic;
 import com.theaigames.engine.io.IOPlayer;
 import com.theaigames.game.player.AbstractPlayer;
 
-import com.theaigames.blockbattle.player.Player;
 import com.theaigames.connections.Amazon;
 import com.theaigames.connections.Database;
 
