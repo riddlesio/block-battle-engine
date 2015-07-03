@@ -377,7 +377,7 @@ public class Processor implements GameHandler {
 	// if there was a winner already, set winner to null, so we know it's a draw
 	private void setWinner(Player player) {
 		this.gameOver = true;
-		if(this.winner == null)
+		if(this.winner == null || this.winner == player)
 			this.winner = player;
 		else
 			this.winner = null;
