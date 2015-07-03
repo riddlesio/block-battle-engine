@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import com.mongodb.BasicDBObject;
 import com.theaigames.engine.Engine;
 import com.theaigames.engine.Logic;
@@ -177,6 +179,7 @@ public abstract class AbstractGame implements Logic {
 	public void saveGame() {
 		
 		AbstractPlayer winner = this.processor.getWinner();
+		ObjectId winnerId = null;
 		int score = this.processor.getRoundNumber() - 1;
 		BasicDBObject errors = new BasicDBObject();
 		BasicDBObject dumps = new BasicDBObject();
@@ -184,6 +187,7 @@ public abstract class AbstractGame implements Logic {
 
 		if(winner != null) {
 			System.out.println("winner: " + winner.getName());
+			winnerId = new ObjectId(winner.getBot().getIdString());
 		} else {
 			System.out.println("winner: draw");
 		}
@@ -204,6 +208,6 @@ public abstract class AbstractGame implements Logic {
 		
 		// store everything in the database
 		Database.connectToDatabase();
-		Database.storeGameInDatabase(this.gameIdString, winner.getBot().getIdString(), score, savedFilePath, errors, dumps);
+		Database.storeGameInDatabase(this.gameIdString, winnerId, score, savedFilePath, errors, dumps);
 	}
 }

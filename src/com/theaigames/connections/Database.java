@@ -96,7 +96,7 @@ public final class Database {
 	 * @param errors : DBObject that contains the paths for each bot's error log
 	 * @param dumps : DBObject that contains the paths for each bot's dump
 	 */
-	public static void storeGameInDatabase(String gameIdString, String winnerIdString, int score, String savedFilePath, BasicDBObject errors, BasicDBObject dumps) {
+	public static void storeGameInDatabase(String gameIdString, ObjectId winnerId, int score, String savedFilePath, BasicDBObject errors, BasicDBObject dumps) {
 		
 		DBCollection coll = db.getCollection("games");
 
@@ -105,7 +105,7 @@ public final class Database {
 
 		DBObject updateDoc = new BasicDBObject()
 			.append("$set", new BasicDBObject()
-				.append("winner", new ObjectId(winnerIdString))
+				.append("winner", winnerId)
 				.append("score", score)
 				.append("visualization", savedFilePath)
 				.append("errors",errors)
