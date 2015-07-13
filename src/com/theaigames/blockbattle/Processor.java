@@ -251,7 +251,7 @@ public class Processor implements GameHandler {
 		
 		// opponent updates
 		Player opponent = player.getOpponent();
-		player.sendUpdate("field", opponent, player.getField().toString(false, false));
+		player.sendUpdate("field", opponent, opponent.getField().toString(false, false));
 		player.sendUpdate("row_points", opponent, opponent.getRowPoints());
 		player.sendUpdate("combo", opponent, opponent.getCombo());
 	}
