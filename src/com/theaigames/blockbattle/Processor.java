@@ -105,6 +105,14 @@ public class Processor implements GameHandler {
 			executeMovesForPlayer(player);
 		}
 		
+		// game could be over if shape is outside of boundaries, so add game over state
+		if(this.gameOver) {
+			for(Player player : this.players) {
+				storePlayerState(player, null);
+			}
+			return;
+		}
+		
 		// remove rows and store the amount removed
 		for(Player player : this.players) {
 			player.setRowsRemoved(player.getField().processEndOfRoundField());
