@@ -35,7 +35,7 @@ public class Field {
 		if(amount <= 0)
 			return false;
 		
-		for(int y = 0; y < height + amount - this.solidRows; y++) {
+		for(int y = 0; y < height + amount - solidRows; y++) {
 			for(int x = 0; x < width; x++) {
 
 				int newY = y - amount;
@@ -60,7 +60,7 @@ public class Field {
 		this.solidRows += amount;
 		
 		// make the bottom rows into solid rows
-		for(int y = height - 1; y > height - amount - 1; y--) {
+		for(int y = height - solidRows - 1; y > height - solidRows - amount - 1; y--) {
 			for(int x = 0; x < width; x++) {
 				grid[x][y].setSolid();
 			}
@@ -74,7 +74,7 @@ public class Field {
 		ArrayList<Integer> exclude = new ArrayList<Integer>();
 		
 		// make the bottom rows into garbage lines
-		for(int y = height - 1; y > height - amount - 1; y--) {
+		for(int y = height - solidRows - 1; y > height - solidRows - amount - 1; y--) {
 			
 			// add random hole, and make sure it is not on the same column
 			// for multiple garbage lines
@@ -91,7 +91,7 @@ public class Field {
 				if(x == emptyCellIndex)
 					grid[x][y].setEmpty();
 				else
-					grid[x][y].setBlock();
+					grid[x][y].setGarbage();
 			}
 		}
 		
