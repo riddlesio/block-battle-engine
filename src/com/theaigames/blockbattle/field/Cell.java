@@ -81,6 +81,11 @@ public class Cell {
 		this.shape = ShapeType.NONE;
 	}
 	
+	public void setGarbage() {
+		this.state = CellType.GARBAGE;
+		this.shape = ShapeType.NONE;
+	}
+	
 	public void setEmpty() {
 		this.state = CellType.EMPTY;
 		this.shape = ShapeType.NONE;

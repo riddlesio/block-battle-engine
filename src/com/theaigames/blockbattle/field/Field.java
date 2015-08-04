@@ -9,6 +9,7 @@ public class Field {
 
 	private int width;
 	private int height;
+	private int solidRows;
 	public Cell grid[][];
 	private static final SecureRandom RANDOM = new SecureRandom();
 	
@@ -16,6 +17,7 @@ public class Field {
 		
 		this.height = height;
 		this.width = width;
+		this.solidRows = 0;
 		grid = new Cell[width][height];
 		
 		for(int y=0; y < height; y++) {
@@ -33,7 +35,7 @@ public class Field {
 		if(amount <= 0)
 			return false;
 		
-		for(int y = 0; y < height + amount; y++) {
+		for(int y = 0; y < height + amount - this.solidRows; y++) {
 			for(int x = 0; x < width; x++) {
 
 				int newY = y - amount;
@@ -55,6 +57,7 @@ public class Field {
 	// adds solid rows to bottom, returns true if game over
 	public boolean addSolidRows(int amount) {
 		boolean gameOver = moveFieldUp(amount);
+		this.solidRows += amount;
 		
 		// make the bottom rows into solid rows
 		for(int y = height - 1; y > height - amount - 1; y--) {
