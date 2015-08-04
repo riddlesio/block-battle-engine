@@ -44,8 +44,17 @@ public class Processor implements GameHandler {
 	private int fieldHeight;
 	
 	private final int MAX_MOVES = 40;
-	private final int POINTS_PER_SOLID = 4;
-	private final double MULTIPLIER = 2;
+	private final int ROUNDS_PER_SOLID = 10;
+	
+	// points
+	private final int POINTS_PER_GARBAGE = 4;
+	private final int SINGLE_CLEAR_SCORE = 1;
+	private final int DOUBLE_CLEAR_SCORE = 3;
+	private final int TRIPLE_CLEAR_SCORE = 6;
+	private final int QUAD_CLEAR_SCORE = 12;
+	private final int SINGLE_T_SCORE = 6;
+	private final int DOUBLE_T_SCORE = 12;
+	private final int PERFECT_CLEAR_SCORE = 20;
 	
 	public Processor(List<Player> players, int fieldWidth, int fieldHeight) {
 		this.players = (ArrayList<Player>) players;
@@ -120,7 +129,11 @@ public class Processor implements GameHandler {
 		
 		// handle everything that changes after the pieces have been placed
 		for(Player player : this.players) {
-			addSolidRowsForPlayer(player);
+			addGarbageLinesForPlayer(player);
+			
+			if(this.roundNumber % ROUNDS_PER_SOLID == 0) // add solid line on certain round number
+				if(player.getField().addSolidRows(1)) // set winner if player is out of bounds
+					setWinner(player.getOpponent());
 		}
 		
 		// add final game over state
@@ -343,6 +356,8 @@ public class Processor implements GameHandler {
 				storePlayerState(player, move);
 				player.getBot().outputEngineWarning(error);
 			}
+		} else { // perform a T-spin check
+			player.setTSpin(shape.checkTSpin());
 		}
 		
 		if(shape.isOverflowing()) {
@@ -350,29 +365,62 @@ public class Processor implements GameHandler {
 		}
 	}
 	
-	private void addSolidRowsForPlayer(Player player) {
+	private void addGarbageLinesForPlayer(Player player) {
 		
-		int unusedRowPoints = player.getRowPoints() % POINTS_PER_SOLID;
+		int unusedRowPoints = player.getRowPoints() % POINTS_PER_GARBAGE;
+		int rowsRemoved = player.getRowsRemoved();
 		
 		// set combo
-		if(player.getRowsRemoved() > 0)
+		if(rowsRemoved > 0)
 			player.setCombo(player.getCombo() + 1);
 		else
 			player.setCombo(0);
 		
 		// calculate row points for this round
-		int rowPoints = player.getRowsRemoved();
-		if(player.getRowsRemoved() == 4)
-			rowPoints *= MULTIPLIER;
+		int rowPoints;
+		if(player.getTSpin()) { // T-spin clears
+			switch(rowsRemoved) {
+				case 2:
+					rowPoints = this.DOUBLE_T_SCORE;
+					break;
+				case 1:
+					rowPoints = this.SINGLE_T_SCORE;
+					break;
+				default:
+					rowPoints = 0;
+					break;
+			}
+		}
+		else {
+			switch(rowsRemoved) { // Normal clears
+				case 4:
+					rowPoints = this.QUAD_CLEAR_SCORE;
+					break;
+				case 3:
+					rowPoints = this.TRIPLE_CLEAR_SCORE;
+					break;
+				case 2:
+					rowPoints = this.DOUBLE_CLEAR_SCORE;
+					break;
+				case 1:
+					rowPoints = this.SINGLE_CLEAR_SCORE;
+					break;
+				default:
+					rowPoints = 0;
+					break;
+			}
+		}
+		// add combo points
 		if(player.getCombo() > 0)
 			rowPoints += player.getCombo() - 1;
+		
 		player.addRowPoints(rowPoints);
 		
 		// add unused row points too from previous rounds
 		rowPoints += unusedRowPoints;
 		
 		// add the solid rows to opponent and check for gameover
-		if(player.getOpponent().getField().addSolidRows(rowPoints / POINTS_PER_SOLID)) {
+		if(player.getOpponent().getField().addGarbageLines(rowPoints / POINTS_PER_GARBAGE)) {
 			setWinner(player);
 		}
 	}

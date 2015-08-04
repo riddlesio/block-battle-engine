@@ -15,6 +15,7 @@ public class Player extends AbstractPlayer {
 	private Field field;
 	private Shape currentShape;
 	private ArrayList<Move> roundMoves;
+	private boolean performedTSpin;
 	private int rowPoints;
 	private int combo;
 	private int rowsRemoved;
@@ -47,6 +48,10 @@ public class Player extends AbstractPlayer {
 		}
 	}
 	
+	public void setTSpin(boolean performedTSpin) {
+		this.performedTSpin = performedTSpin;
+	}
+	
 	public Player getOpponent() {
 		return this.opponent;
 	}
@@ -73,6 +78,10 @@ public class Player extends AbstractPlayer {
 	
 	public void addRowPoints(int points) {
 		this.rowPoints += points;
+	}
+	
+	public boolean getTSpin() {
+		return this.performedTSpin;
 	}
 	
 	public int getRowPoints() {

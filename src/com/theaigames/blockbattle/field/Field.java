@@ -1,13 +1,16 @@
 package com.theaigames.blockbattle.field;
 
 import java.awt.Point;
-
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Field {
 
 	private int width;
 	private int height;
 	public Cell grid[][];
+	private static final SecureRandom RANDOM = new SecureRandom();
 	
 	public Field(int width, int height) {
 		
@@ -22,8 +25,11 @@ public class Field {
 		}
 	}
 	
-	// adds solid rows to bottom, returns true if game over
-	public boolean addSolidRows(int amount) {
+	// moves the whole field upwards to make room for new
+	// lines from the bottom, returns true if game over.
+	// leaves the bottom rows untouched (are changed in the appropriate
+	// methods).
+	public boolean moveFieldUp(int amount) {
 		if(amount <= 0)
 			return false;
 		
@@ -40,14 +46,53 @@ public class Field {
 					grid[x][newY] = grid[x][y].clone();
 					grid[x][newY].setLocation(x, newY);
 				}
-				
-				if(y >= height) { // set solid lines
-					grid[x][newY].setSolid();
-				}
 			}
 		}
 		
 		return false;
+	}
+	
+	// adds solid rows to bottom, returns true if game over
+	public boolean addSolidRows(int amount) {
+		boolean gameOver = moveFieldUp(amount);
+		
+		// make the bottom rows into solid rows
+		for(int y = height - 1; y > height - amount - 1; y--) {
+			for(int x = 0; x < width; x++) {
+				grid[x][y].setSolid();
+			}
+		}
+		
+		return gameOver;
+	}
+	
+	public boolean addGarbageLines(int amount) {
+		boolean gameOver = moveFieldUp(amount);
+		ArrayList<Integer> exclude = new ArrayList<Integer>();
+		
+		// make the bottom rows into garbage lines
+		for(int y = height - 1; y > height - amount - 1; y--) {
+			
+			// add random hole, and make sure it is not on the same column
+			// for multiple garbage lines
+			int emptyCellIndex = RANDOM.nextInt(width - exclude.size());
+			exclude.add(emptyCellIndex);
+			Collections.sort(exclude);
+			for(int ex : exclude) {
+				if(emptyCellIndex < ex)
+					break;
+				emptyCellIndex++;
+			}
+
+			for(int x = 0; x < width; x++) {
+				if(x == emptyCellIndex)
+					grid[x][y].setEmpty();
+				else
+					grid[x][y].setBlock();
+			}
+		}
+		
+		return gameOver;
 	}
 	
 	// handles round end by clean up and checking for full rows

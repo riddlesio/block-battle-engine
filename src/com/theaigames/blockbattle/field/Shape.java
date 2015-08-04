@@ -241,6 +241,37 @@ public class Shape {
 		return "";
 	}
 	
+	public boolean checkTSpin() {
+		if(this.type != ShapeType.T)
+			return false;
+		
+		// check if the T is 'locked' i.e. it cannot shift out of position
+		Shape clone;
+		
+		// check right
+		clone = this.clone();
+		clone.location.x++;
+		clone.setBlockLocations();
+		if(!isOutOfBoundaries() && !hasCollision())
+			return false;
+		
+		// check left
+		clone = this.clone();
+		clone.location.x--;
+		clone.setBlockLocations();
+		if(!isOutOfBoundaries() && !hasCollision())
+			return false;
+		
+		// check up
+		clone = this.clone();
+		clone.location.y--;
+		clone.setBlockLocations();
+		if(!hasCollision())
+			return false;
+		
+		return true;
+	}
+	
 	/////////////////////////////
 
 	private void setBlockLocations() {
