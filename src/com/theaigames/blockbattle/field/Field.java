@@ -80,13 +80,13 @@ public class Field {
 			// add random hole, and make sure it is not on the same column
 			// for multiple garbage lines
 			int emptyCellIndex = RANDOM.nextInt(width - exclude.size());
-			exclude.add(emptyCellIndex);
-			Collections.sort(exclude);
 			for(int ex : exclude) {
 				if(emptyCellIndex < ex)
 					break;
 				emptyCellIndex++;
 			}
+			exclude.add(emptyCellIndex);
+			Collections.sort(exclude);
 
 			for(int x = 0; x < width; x++) {
 				if(x == emptyCellIndex)
