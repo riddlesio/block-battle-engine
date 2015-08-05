@@ -90,8 +90,10 @@ public class Field {
 			for(int x = 0; x < width; x++) {
 				if(x == emptyCellIndex)
 					grid[x][y].setEmpty();
-				else
-					grid[x][y].setGarbage();
+				else {
+					grid[x][y].setBlock();
+					grid[x][y].setShapeType(ShapeType.GARBAGE);
+				}
 			}
 		}
 		

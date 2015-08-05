@@ -4,8 +4,7 @@ public enum CellType {
 	EMPTY(0), 
 	SHAPE(1),
 	BLOCK(2),
-	SOLID(3),
-	GARBAGE(4);
+	SOLID(3);
 	
 	private final int code;
 	

@@ -3,7 +3,7 @@ package com.theaigames.blockbattle.field;
 import java.security.SecureRandom;
 
 public enum ShapeType {
-	I, J, L, O, S, T, Z, NONE;
+	I, J, L, O, S, T, Z, NONE, GARBAGE;
 	
 	private static final ShapeType[] VALUES = ShapeType.values();
 	private static final SecureRandom RANDOM = new SecureRandom();
