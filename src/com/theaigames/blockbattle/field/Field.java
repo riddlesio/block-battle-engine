@@ -57,7 +57,6 @@ public class Field {
 	// adds solid rows to bottom, returns true if game over
 	public boolean addSolidRows(int amount) {
 		boolean gameOver = moveFieldUp(amount);
-		this.solidRows += amount;
 		
 		// make the bottom rows into solid rows
 		for(int y = height - solidRows - 1; y > height - solidRows - amount - 1; y--) {
@@ -65,6 +64,8 @@ public class Field {
 				grid[x][y].setSolid();
 			}
 		}
+		
+		this.solidRows += amount;
 		
 		return gameOver;
 	}
