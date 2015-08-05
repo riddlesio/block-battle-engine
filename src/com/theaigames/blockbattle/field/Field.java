@@ -93,7 +93,7 @@ public class Field {
 					grid[x][y].setEmpty();
 				else {
 					grid[x][y].setBlock();
-					grid[x][y].setShapeType(ShapeType.GARBAGE);
+					grid[x][y].setShapeType(ShapeType.G);
 				}
 			}
 		}
