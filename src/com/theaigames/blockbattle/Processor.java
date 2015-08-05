@@ -54,7 +54,7 @@ public class Processor implements GameHandler {
 	private final int QUAD_CLEAR_SCORE = 12;
 	private final int SINGLE_T_SCORE = 6;
 	private final int DOUBLE_T_SCORE = 12;
-	private final int PERFECT_CLEAR_SCORE = 20;
+	private final int PERFECT_CLEAR_SCORE = 24;
 	
 	public Processor(List<Player> players, int fieldWidth, int fieldHeight) {
 		this.players = (ArrayList<Player>) players;
@@ -129,7 +129,8 @@ public class Processor implements GameHandler {
 		
 		// handle everything that changes after the pieces have been placed
 		for(Player player : this.players) {
-			addGarbageLinesForPlayer(player);
+			
+			processPointsForPlayer(player);
 			
 			if(this.roundNumber % ROUNDS_PER_SOLID == 0) // add solid line on certain round number
 				if(player.getField().addSolidRows(1)) // set winner if player is out of bounds
@@ -365,7 +366,7 @@ public class Processor implements GameHandler {
 		}
 	}
 	
-	private void addGarbageLinesForPlayer(Player player) {
+	private void processPointsForPlayer(Player player) {
 		
 		int unusedRowPoints = player.getRowPoints() % POINTS_PER_GARBAGE;
 		int rowsRemoved = player.getRowsRemoved();
@@ -413,6 +414,10 @@ public class Processor implements GameHandler {
 		// add combo points
 		if(player.getCombo() > 0)
 			rowPoints += player.getCombo() - 1;
+		
+		// check if the whole field is cleared and reward points
+		if(player.getField().isFieldCleared())
+			rowPoints = this.PERFECT_CLEAR_SCORE;
 		
 		player.addRowPoints(rowPoints);
 		

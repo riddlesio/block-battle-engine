@@ -130,6 +130,15 @@ public class Field {
 		return rowsRemoved;
 	}
 	
+	// checks whether the whole field is empty
+	public boolean isFieldCleared() {	
+		for(int y=0; y < height; y++)
+			for(int x=0; x < width; x++)
+				if(grid[x][y].isBlock())
+					return false;
+		return true;
+	}
+	
 	// removes shape cells from field
 	public void cleanField() {
 		for(int y=0; y < height; y++) {
