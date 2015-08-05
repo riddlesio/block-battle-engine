@@ -7,10 +7,10 @@ public enum ShapeType {
 	
 	private static final ShapeType[] VALUES = ShapeType.values();
 	private static final SecureRandom RANDOM = new SecureRandom();
-	private static final int SIZE_SHAPES = VALUES.length - 1;
+	private static final int SIZE_SHAPES = VALUES.length - 2;
 	
 	/**
-	 * Gets a random ShapeType, NONE not included
+	 * Gets a random ShapeType, NONE and GARBAGE not included
 	 * @return
 	 */
 	public static ShapeType getRandom() {
