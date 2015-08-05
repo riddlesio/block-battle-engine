@@ -212,11 +212,10 @@ public class Processor implements GameHandler {
 							else // special case on the last round with the added final state
 								result = roundResult.get(roundResult.size() - 2);
 							
-							if(result.getMove() != null && result.getMove().isIllegal()) {
+							if(result.getMove() != null && result.getMove().isIllegal())
 								playerState.put("move", result.getMoveString());
-							} else {
+							else
 								playerState.put("move", "");
-							}
 						}
 						playerState.put("field", result.getFieldString());
 						playerState.put("points", result.getPoints());

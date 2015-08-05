@@ -35,13 +35,15 @@ public class Field {
 		if(amount <= 0)
 			return false;
 		
+		boolean gameOver = false;
+		
 		for(int y = 0; y < height + amount - solidRows; y++) {
 			for(int x = 0; x < width; x++) {
 
 				int newY = y - amount;
 				
 				if(newY < 0 && !grid[x][y].isEmpty()) {
-					return true;
+					gameOver = true;
 				}
 				
 				if(newY >= 0 && y < height) { // move cells up
@@ -51,7 +53,7 @@ public class Field {
 			}
 		}
 		
-		return false;
+		return gameOver;
 	}
 	
 	// adds solid rows to bottom, returns true if game over
