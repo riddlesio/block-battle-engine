@@ -310,7 +310,7 @@ public class Processor implements GameHandler {
 	
 	private void executeMovesForPlayer(Player player) {
 		Shape shape = player.getCurrentShape();
-//		System.out.println("executing moves for player " + player.getName());
+		Move lastMove = null;
 		
 		for(Move move : player.getRoundMoves()) {
 			if(shape.isFrozen()) {
@@ -340,6 +340,8 @@ public class Processor implements GameHandler {
 			
 			// add a moveResult to the player's playedGame
 			storePlayerState(player, move);
+			
+			lastMove = move;
 		}
 		
 		// freeze shape and add extra drop move if the piece is still loose in the field
@@ -355,11 +357,12 @@ public class Processor implements GameHandler {
 				
 				storePlayerState(player, move);
 				player.getBot().outputEngineWarning(error);
+				
+				lastMove = move;
 			}
 		}
 			
 		// perform a T-spin check
-		Move lastMove = player.getRoundMoves().get(player.getRoundMoves().size() - 1);
 		player.setTSpin(shape.checkTSpin(lastMove));
 		
 		if(shape.isOverflowing()) {

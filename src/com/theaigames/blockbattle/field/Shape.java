@@ -247,7 +247,8 @@ public class Shape {
 	public boolean checkTSpin(Move lastMove) {
 		if(this.type != ShapeType.T)
 			return false;
-		if(lastMove.getType() != MoveType.TURNLEFT && lastMove.getType() != MoveType.TURNRIGHT)
+		if(lastMove == null || !(lastMove.getType() == MoveType.TURNLEFT 
+				|| lastMove.getType() == MoveType.TURNRIGHT))
 			return false;
 		
 //		// check if the T is 'locked' i.e. it cannot shift out of position
