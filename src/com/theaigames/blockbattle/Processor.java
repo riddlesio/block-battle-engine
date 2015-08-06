@@ -207,10 +207,10 @@ public class Processor implements GameHandler {
 							playerState.put("move", result.getMoveString());
 						} catch (Exception e) { // fill up with idle states
 							
-							if(r < this.roundNumber)
+//							if(r < this.roundNumber)
 								result = roundResult.get(roundResult.size() - 1);
-							else // special case on the last round with the added final state
-								result = roundResult.get(roundResult.size() - 2);
+//							else // special case on the last round with the added final state
+//								result = roundResult.get(roundResult.size() - 2);
 							
 							if(result.getMove() != null && result.getMove().isIllegal())
 								playerState.put("move", result.getMoveString());
@@ -356,9 +356,11 @@ public class Processor implements GameHandler {
 				storePlayerState(player, move);
 				player.getBot().outputEngineWarning(error);
 			}
-		} else { // perform a T-spin check
-			player.setTSpin(shape.checkTSpin());
 		}
+			
+		// perform a T-spin check
+		Move lastMove = player.getRoundMoves().get(player.getRoundMoves().size() - 1);
+		player.setTSpin(shape.checkTSpin(lastMove));
 		
 		if(shape.isOverflowing()) {
 			setWinner(player.getOpponent());

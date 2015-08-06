@@ -2,6 +2,9 @@ package com.theaigames.blockbattle.field;
 
 import java.awt.Point;
 
+import com.theaigames.blockbattle.moves.Move;
+import com.theaigames.blockbattle.moves.MoveType;
+
 public class Shape {
 
 	public ShapeType type;
@@ -241,35 +244,56 @@ public class Shape {
 		return "";
 	}
 	
-	public boolean checkTSpin() {
+	public boolean checkTSpin(Move lastMove) {
 		if(this.type != ShapeType.T)
 			return false;
-		
-		// check if the T is 'locked' i.e. it cannot shift out of position
-		Shape clone;
-		
-		// check right
-		clone = this.clone();
-		clone.location.x++;
-		clone.setBlockLocations();
-		if(!clone.isOutOfBoundaries() && !clone.hasCollision())
+		if(lastMove.getType() != MoveType.TURNLEFT && lastMove.getType() != MoveType.TURNRIGHT)
 			return false;
 		
-		// check left
-		clone = this.clone();
-		clone.location.x--;
-		clone.setBlockLocations();
-		if(!clone.isOutOfBoundaries() && !clone.hasCollision())
-			return false;
+//		// check if the T is 'locked' i.e. it cannot shift out of position
+//		Shape clone;
+//		
+//		// check right
+//		clone = this.clone();
+//		clone.location.x++;
+//		clone.setBlockLocations();
+//		if(!clone.isOutOfBoundaries() && !clone.hasCollision())
+//			return false;
+//		
+//		// check left
+//		clone = this.clone();
+//		clone.location.x--;
+//		clone.setBlockLocations();
+//		if(!clone.isOutOfBoundaries() && !clone.hasCollision())
+//			return false;
+//		
+//		// check up
+//		clone = this.clone();
+//		clone.location.y--;
+//		clone.setBlockLocations();
+//		if(!clone.hasCollision())
+//			return false;
 		
-		// check up
-		clone = this.clone();
-		clone.location.y--;
-		clone.setBlockLocations();
-		if(!clone.hasCollision())
-			return false;
+		// check if 3/4 corners of the matrix are Blocks in the field
+		Point upperLeft = new Point(this.location.x, this.location.y);
+		Point upperRight = new Point(this.location.x + 2, this.location.y);
+		Point lowerLeft = new Point(this.location.x, this.location.y + 2);
+		Point lowerRight = new Point(this.location.x + 2, this.location.y + 2);
 		
-		return true;
+		int counter = 0;
+		if (this.field.getCell(upperLeft).isBlock())
+			counter++;
+		if (this.field.getCell(upperRight).isBlock())
+			counter++;
+		if (this.field.getCell(lowerLeft).isBlock())
+			counter++;
+		if (this.field.getCell(lowerRight).isBlock())
+			counter++;
+		
+		if(counter == 3)
+			return true;
+		
+		return false;
 	}
 	
 	/////////////////////////////
