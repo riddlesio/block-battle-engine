@@ -252,21 +252,21 @@ public class Shape {
 		clone = this.clone();
 		clone.location.x++;
 		clone.setBlockLocations();
-		if(!isOutOfBoundaries() && !hasCollision())
+		if(!clone.isOutOfBoundaries() && !clone.hasCollision())
 			return false;
 		
 		// check left
 		clone = this.clone();
 		clone.location.x--;
 		clone.setBlockLocations();
-		if(!isOutOfBoundaries() && !hasCollision())
+		if(!clone.isOutOfBoundaries() && !clone.hasCollision())
 			return false;
 		
 		// check up
 		clone = this.clone();
 		clone.location.y--;
 		clone.setBlockLocations();
-		if(!hasCollision())
+		if(!clone.hasCollision())
 			return false;
 		
 		return true;
