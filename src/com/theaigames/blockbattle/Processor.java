@@ -125,6 +125,7 @@ public class Processor implements GameHandler {
 		// remove rows and store the amount removed
 		for(Player player : this.players) {
 			player.setRowsRemoved(player.getField().processEndOfRoundField());
+			player.setFieldCleared(player.getField().isFieldCleared());
 		}
 		
 		// handle everything that changes after the pieces have been placed
@@ -310,7 +311,8 @@ public class Processor implements GameHandler {
 	
 	private void executeMovesForPlayer(Player player) {
 		Shape shape = player.getCurrentShape();
-		Move lastMove = null;
+		Move lastMove1 = null;
+		Move lastMove2 = null;
 		
 		for(Move move : player.getRoundMoves()) {
 			if(shape.isFrozen()) {
@@ -341,7 +343,8 @@ public class Processor implements GameHandler {
 			// add a moveResult to the player's playedGame
 			storePlayerState(player, move);
 			
-			lastMove = move;
+			lastMove2 = lastMove1;
+			lastMove1 = move;
 		}
 		
 		// freeze shape and add extra drop move if the piece is still loose in the field
@@ -358,12 +361,13 @@ public class Processor implements GameHandler {
 				storePlayerState(player, move);
 				player.getBot().outputEngineWarning(error);
 				
-				lastMove = move;
+				lastMove2 = lastMove1;
+				lastMove1 = move;
 			}
 		}
 			
 		// perform a T-spin check
-		player.setTSpin(shape.checkTSpin(lastMove));
+		player.setTSpin(shape.checkTSpin(lastMove1, lastMove2));
 		
 		if(shape.isOverflowing()) {
 			setWinner(player.getOpponent());
@@ -420,7 +424,7 @@ public class Processor implements GameHandler {
 			rowPoints += player.getCombo() - 1;
 		
 		// check if the whole field is cleared and reward points
-		if(player.getField().isFieldCleared())
+		if(player.getFieldCleared())
 			rowPoints = this.PERFECT_CLEAR_SCORE;
 		
 		player.addRowPoints(rowPoints);

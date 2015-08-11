@@ -16,6 +16,7 @@ public class Player extends AbstractPlayer {
 	private Shape currentShape;
 	private ArrayList<Move> roundMoves;
 	private boolean performedTSpin;
+	private boolean fieldCleared;
 	private int rowPoints;
 	private int combo;
 	private int rowsRemoved;
@@ -28,6 +29,8 @@ public class Player extends AbstractPlayer {
 		this.rowPoints = 0;
 		this.combo = 0;
 		this.playedGame = new HashMap<Integer, ArrayList<PlayerState>>();
+		this.performedTSpin = false;
+		this.fieldCleared = false;
 	}
 	
 	public void addPlayerState(int round, Move move, ShapeType nextShape) {
@@ -50,6 +53,10 @@ public class Player extends AbstractPlayer {
 	
 	public void setTSpin(boolean performedTSpin) {
 		this.performedTSpin = performedTSpin;
+	}
+	
+	public void setFieldCleared(boolean isFieldCleared) {
+		this.fieldCleared = isFieldCleared;
 	}
 	
 	public Player getOpponent() {
@@ -84,6 +91,9 @@ public class Player extends AbstractPlayer {
 		return this.performedTSpin;
 	}
 	
+	public boolean getFieldCleared() {
+		return this.fieldCleared;
+	}
 	public int getRowPoints() {
 		return this.rowPoints;
 	}
