@@ -191,6 +191,7 @@ public class Processor implements GameHandler {
 					if(nrOfMoves > maxMoves)
 						maxMoves = nrOfMoves;
 				}
+				int lastMove = maxMoves - 1;
 				
 				for(int i=0; i<maxMoves; i++) {
 					
@@ -221,7 +222,7 @@ public class Processor implements GameHandler {
 						
 						playerStates.put(playerState);
 						
-						if(r == this.roundNumber && i == maxMoves - 1) { // add game-over state at the end
+						if(r == this.roundNumber && i == lastMove) { // add game-over state at the end
 							maxMoves++;
 							storePlayerState(player, null);
 						}
