@@ -252,7 +252,7 @@ public class Shape {
 			return false;
 		
 		// last move is turn or second to last move is turn
-		if(!(lastMove1.getType() == MoveType.TURNLEFT || lastMove1.getType() == MoveType.TURNLEFT 
+		if(!(lastMove1.getType() == MoveType.TURNRIGHT || lastMove1.getType() == MoveType.TURNLEFT 
 				|| ((lastMove1.getType() == MoveType.DOWN || lastMove1.getType() == MoveType.DROP)
 				&& (lastMove2.getType() == MoveType.TURNLEFT || lastMove2.getType() == MoveType.TURNRIGHT))))
 			return false;

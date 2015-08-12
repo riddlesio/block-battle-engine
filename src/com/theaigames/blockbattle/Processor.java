@@ -115,12 +115,12 @@ public class Processor implements GameHandler {
 		}
 		
 		// game could be over if shape is outside of boundaries, so add game over state
-		if(this.gameOver) {
-			for(Player player : this.players) {
-				storePlayerState(player, null);
-			}
-			return;
-		}
+//		if(this.gameOver) {
+//			for(Player player : this.players) {
+//				storePlayerState(player, null);
+//			}
+//			return;
+//		}
 		
 		// remove rows and store the amount removed
 		for(Player player : this.players) {
@@ -139,11 +139,11 @@ public class Processor implements GameHandler {
 		}
 		
 		// add final game over state
-		if(this.gameOver) {
-			for(Player player : this.players) {
-				storePlayerState(player, null);
-			}
-		}
+//		if(this.gameOver) {
+//			for(Player player : this.players) {
+//				storePlayerState(player, null);
+//			}
+//		}
 	}
 
 	@Override
@@ -208,10 +208,7 @@ public class Processor implements GameHandler {
 							playerState.put("move", result.getMoveString());
 						} catch (Exception e) { // fill up with idle states
 							
-//							if(r < this.roundNumber)
-								result = roundResult.get(roundResult.size() - 1);
-//							else // special case on the last round with the added final state
-//								result = roundResult.get(roundResult.size() - 2);
+							result = roundResult.get(roundResult.size() - 1);
 							
 							if(result.getMove() != null && result.getMove().isIllegal())
 								playerState.put("move", result.getMoveString());
@@ -223,6 +220,11 @@ public class Processor implements GameHandler {
 						playerState.put("combo", result.getCombo());
 						
 						playerStates.put(playerState);
+						
+						if(r == this.roundNumber && i == maxMoves - 1) { // add game-over state at the end
+							maxMoves++;
+							storePlayerState(player, null);
+						}
 					}
 					
 					state.put("round", r);
