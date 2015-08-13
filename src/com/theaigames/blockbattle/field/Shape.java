@@ -244,7 +244,7 @@ public class Shape {
 		return "";
 	}
 	
-	public boolean checkTSpin(Move lastMove1, Move lastMove2) {
+	public boolean checkTSpin(Move lastMove1, Move lastMove2, Point lastLocation) {
 		if(this.type != ShapeType.T)
 			return false;
 
@@ -254,7 +254,8 @@ public class Shape {
 		// last move is turn or second to last move is turn
 		if(!(lastMove1.getType() == MoveType.TURNRIGHT || lastMove1.getType() == MoveType.TURNLEFT 
 				|| ((lastMove1.getType() == MoveType.DOWN || lastMove1.getType() == MoveType.DROP)
-				&& (lastMove2.getType() == MoveType.TURNLEFT || lastMove2.getType() == MoveType.TURNRIGHT))))
+				&& (lastMove2.getType() == MoveType.TURNLEFT || lastMove2.getType() == MoveType.TURNRIGHT)
+				&& (lastLocation.equals(this.location)))))
 			return false;
 
 //		// check if the T is 'locked' i.e. it cannot shift out of position

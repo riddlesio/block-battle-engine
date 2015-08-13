@@ -17,6 +17,7 @@
 
 package com.theaigames.blockbattle;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -316,8 +317,12 @@ public class Processor implements GameHandler {
 		Shape shape = player.getCurrentShape();
 		Move lastMove1 = null;
 		Move lastMove2 = null;
+		Point lastLocation = new Point(-1, -1);
 		
 		for(Move move : player.getRoundMoves()) {
+			
+			lastLocation = new Point(shape.getLocation().x, shape.getLocation().y);
+			
 			if(shape.isFrozen()) {
 				player.getBot().outputEngineWarning("Piece was frozen in place on the previous move. Skipping all next moves.");
 				break;
@@ -363,14 +368,13 @@ public class Processor implements GameHandler {
 				
 				storePlayerState(player, move);
 				player.getBot().outputEngineWarning(error);
-				
-				lastMove2 = lastMove1;
-				lastMove1 = move;
+				player.setTSpin(false);
+			} else {
+				player.setTSpin(shape.checkTSpin(lastMove1, lastMove2, lastLocation));
 			}
+		} else {
+			player.setTSpin(shape.checkTSpin(lastMove1, lastMove2, lastLocation));
 		}
-			
-		// perform a T-spin check
-		player.setTSpin(shape.checkTSpin(lastMove1, lastMove2));
 		
 		if(shape.isOverflowing()) {
 			setWinner(player.getOpponent());
