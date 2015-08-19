@@ -283,20 +283,16 @@ public class Shape {
 //			return false;
 		
 		// check if 3/4 corners of the matrix are Blocks in the field
-		Point upperLeft = new Point(this.location.x, this.location.y);
-		Point upperRight = new Point(this.location.x + 2, this.location.y);
-		Point lowerLeft = new Point(this.location.x, this.location.y + 2);
-		Point lowerRight = new Point(this.location.x + 2, this.location.y + 2);
+		Cell[] corners = new Cell[4];
+		corners[0] = this.field.getCell(new Point(this.location.x, this.location.y));
+		corners[1] = this.field.getCell(new Point(this.location.x + 2, this.location.y));
+		corners[2] = this.field.getCell(new Point(this.location.x, this.location.y + 2));
+		corners[3] = this.field.getCell(new Point(this.location.x, this.location.y + 2));
 		
 		int counter = 0;
-		if (this.field.getCell(upperLeft).isBlock())
-			counter++;
-		if (this.field.getCell(upperRight).isBlock())
-			counter++;
-		if (this.field.getCell(lowerLeft).isBlock())
-			counter++;
-		if (this.field.getCell(lowerRight).isBlock())
-			counter++;
+		for(int i = 0; i < corners.length; i++)
+			if(corners[i] != null && corners[i].isBlock())
+				counter++;
 		
 		if(counter == 3)
 			return true;
