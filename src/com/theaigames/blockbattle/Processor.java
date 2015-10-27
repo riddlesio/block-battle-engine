@@ -50,8 +50,8 @@ public class Processor implements GameHandler {
 	// points
 	private final int POINTS_PER_GARBAGE = 3;
 	private final int SINGLE_CLEAR_SCORE = 0;
-	private final int DOUBLE_CLEAR_SCORE = 2;
-	private final int TRIPLE_CLEAR_SCORE = 5;
+	private final int DOUBLE_CLEAR_SCORE = 3;
+	private final int TRIPLE_CLEAR_SCORE = 6;
 	private final int QUAD_CLEAR_SCORE = 10;
 	private final int SINGLE_T_SCORE = 5;
 	private final int DOUBLE_T_SCORE = 10;
