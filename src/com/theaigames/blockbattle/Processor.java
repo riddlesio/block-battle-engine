@@ -348,10 +348,10 @@ public class Processor implements GameHandler {
 					move.setIllegalMove(shape.drop());
 					break;
 				case SKIP:
-//					if (player.getSkips() > 0) {
+					if (player.getSkips() > 0) {
 						shape.skip();
 						player.setSkips(player.getSkips() - 1);
-//					}
+					}
 					break;
 			}
 			
@@ -416,6 +416,7 @@ public class Processor implements GameHandler {
 			switch(rowsRemoved) {
 				case 2:
 					rowPoints = this.DOUBLE_T_SCORE;
+					player.setSkips(player.getSkips() + 1);
 					break;
 				case 1:
 					rowPoints = this.SINGLE_T_SCORE;
@@ -429,6 +430,7 @@ public class Processor implements GameHandler {
 			switch(rowsRemoved) { // Normal clears
 				case 4:
 					rowPoints = this.QUAD_CLEAR_SCORE;
+					player.setSkips(player.getSkips() + 1);
 					break;
 				case 3:
 					rowPoints = this.TRIPLE_CLEAR_SCORE;
