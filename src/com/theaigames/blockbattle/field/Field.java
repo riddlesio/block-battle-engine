@@ -102,26 +102,19 @@ public class Field {
 			
 			// switch between single and double holes in garbage lines
 			count++;
-			int[] emptyCellIndexes = new int[2];
-			emptyCellIndexes[0] = RANDOM.nextInt(width);
-			emptyCellIndexes[1] = -1;
+			
+			for(int x = 0; x < width; x++) {
+				grid[x][y].setBlock();
+				grid[x][y].setShapeType(ShapeType.G);
+			}
+			
+			int index1 = RANDOM.nextInt(width);
+			grid[index1][y].setEmpty();
 			
 			if ((count % 2 == 1 && !firstIsSingle) || (count % 2 == 0 && firstIsSingle)) { // double hole
 				int rotate = 1 + RANDOM.nextInt(width - 1);
-				emptyCellIndexes[1] = (emptyCellIndexes[0] + rotate) % width;
-			}
-			
-			for(int x = 0; x < width; x++) {
-				for(int index : emptyCellIndexes) {
-					if (x < 0)
-						continue;
-					if(x == index)
-						grid[x][y].setEmpty();
-					else {
-						grid[x][y].setBlock();
-						grid[x][y].setShapeType(ShapeType.G);
-					}
-				}
+				int index2 = (index1 + rotate) % width;
+				grid[index2][y].setEmpty();
 			}
 		}
 		
