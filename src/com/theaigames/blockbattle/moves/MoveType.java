@@ -1,7 +1,7 @@
 package com.theaigames.blockbattle.moves;
 
 public enum MoveType {
-	DOWN, LEFT, RIGHT, TURNLEFT, TURNRIGHT, DROP;
+	DOWN, LEFT, RIGHT, TURNLEFT, TURNRIGHT, DROP, SKIP;
 	
 	public static MoveType fromString(String move) {
 		

@@ -2,8 +2,8 @@ package com.theaigames.blockbattle.field;
 
 import java.awt.Point;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
+//import java.util.ArrayList;
+//import java.util.Collections;
 
 public class Field {
 
@@ -72,30 +72,55 @@ public class Field {
 		return gameOver;
 	}
 	
-	public boolean addGarbageLines(int amount) {
+	public boolean addGarbageLines(int amount, boolean firstIsSingle) {
 		boolean gameOver = moveFieldUp(amount);
-		ArrayList<Integer> exclude = new ArrayList<Integer>();
+//		ArrayList<Integer> exclude = new ArrayList<Integer>();
+		int count = 0;
 		
 		// make the bottom rows into garbage lines
 		for(int y = height - solidRows - 1; y > height - solidRows - amount - 1; y--) {
-			
-			// add random hole, and make sure it is not on the same column
-			// for multiple garbage lines
-			int emptyCellIndex = RANDOM.nextInt(width - exclude.size());
-			for(int ex : exclude) {
-				if(emptyCellIndex < ex)
-					break;
-				emptyCellIndex++;
-			}
-			exclude.add(emptyCellIndex);
-			Collections.sort(exclude);
 
+//			// add random hole, and make sure it is not on the same column
+//			// for multiple garbage lines
+//			int emptyCellIndex = RANDOM.nextInt(width - exclude.size());
+//			for(int ex : exclude) {
+//				if(emptyCellIndex < ex)
+//					break;
+//				emptyCellIndex++;
+//			}
+//			exclude.add(emptyCellIndex);
+//			Collections.sort(exclude);
+//
+//			for(int x = 0; x < width; x++) {
+//				if(x == emptyCellIndex)
+//					grid[x][y].setEmpty();
+//				else {
+//					grid[x][y].setBlock();
+//					grid[x][y].setShapeType(ShapeType.G);
+//				}
+//			}
+			
+			// switch between single and double holes in garbage lines
+			count++;
+			int[] emptyCellIndexes = new int[2];
+			emptyCellIndexes[0] = RANDOM.nextInt(width);
+			emptyCellIndexes[1] = -1;
+			
+			if ((count % 2 == 1 && !firstIsSingle) || (count % 2 == 0 && firstIsSingle)) { // double hole
+				int rotate = 1 + RANDOM.nextInt(width - 1);
+				emptyCellIndexes[1] = (emptyCellIndexes[0] + rotate) % width;
+			}
+			
 			for(int x = 0; x < width; x++) {
-				if(x == emptyCellIndex)
-					grid[x][y].setEmpty();
-				else {
-					grid[x][y].setBlock();
-					grid[x][y].setShapeType(ShapeType.G);
+				for(int index : emptyCellIndexes) {
+					if (x < 0)
+						continue;
+					if(x == index)
+						grid[x][y].setEmpty();
+					else {
+						grid[x][y].setBlock();
+						grid[x][y].setShapeType(ShapeType.G);
+					}
 				}
 			}
 		}
@@ -183,6 +208,11 @@ public class Field {
 				System.err.printf("Can't set block here. (%s %s)\n", p.toString(), shape);
 			}
 		}
+	}
+	
+	public void setEmpty(Point p) {
+		Cell cell = getCell(p);
+		cell.setEmpty();
 	}
 	
 	/**

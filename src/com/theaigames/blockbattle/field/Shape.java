@@ -178,7 +178,18 @@ public class Shape {
 		return ""; // can't return an error
 	}
 	
-	//////////////////////////
+	//////////// skip action /////////
+	
+	public void skip() {
+		
+		for(int i=0; i < blocks.length; i++) {
+			field.setEmpty(blocks[i].getLocation());
+		}
+		
+		isFrozen = true;
+	}
+	
+	////////////////////////////////////
 	
 	private void takePosition(Shape shape) {		
 		this.shape = shape.shape;
@@ -383,6 +394,8 @@ public class Shape {
 				this.blocks[1] = this.shape[1][0];
 				this.blocks[2] = this.shape[1][1];
 				this.blocks[3] = this.shape[2][1];
+				break;
+			default:
 				break;
 		}
 		

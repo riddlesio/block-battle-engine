@@ -20,6 +20,7 @@ public class Player extends AbstractPlayer {
 	private int rowPoints;
 	private int combo;
 	private int rowsRemoved;
+	private int skips;
 	private HashMap<Integer, ArrayList<PlayerState>> playedGame;
 	private Player opponent;
 
@@ -28,6 +29,7 @@ public class Player extends AbstractPlayer {
 		this.field = field;
 		this.rowPoints = 0;
 		this.combo = 0;
+		this.skips = 0;
 		this.playedGame = new HashMap<Integer, ArrayList<PlayerState>>();
 		this.performedTSpin = false;
 		this.fieldCleared = false;
@@ -104,6 +106,14 @@ public class Player extends AbstractPlayer {
 	
 	public int getCombo() {
 		return this.combo;
+	}
+	
+	public void setSkips(int skips) {
+		this.skips = skips;
+	}
+	
+	public int getSkips() {
+		return this.skips;
 	}
 	
 	public void setRowsRemoved(int rowsRemoved) {

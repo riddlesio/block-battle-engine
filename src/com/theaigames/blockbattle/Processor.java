@@ -48,14 +48,14 @@ public class Processor implements GameHandler {
 	private final int ROUNDS_PER_SOLID = 20;
 	
 	// points
-	private final int POINTS_PER_GARBAGE = 4;
-	private final int SINGLE_CLEAR_SCORE = 1;
-	private final int DOUBLE_CLEAR_SCORE = 3;
-	private final int TRIPLE_CLEAR_SCORE = 6;
-	private final int QUAD_CLEAR_SCORE = 12;
-	private final int SINGLE_T_SCORE = 6;
-	private final int DOUBLE_T_SCORE = 12;
-	private final int PERFECT_CLEAR_SCORE = 24;
+	private final int POINTS_PER_GARBAGE = 3;
+	private final int SINGLE_CLEAR_SCORE = 0;
+	private final int DOUBLE_CLEAR_SCORE = 2;
+	private final int TRIPLE_CLEAR_SCORE = 5;
+	private final int QUAD_CLEAR_SCORE = 10;
+	private final int SINGLE_T_SCORE = 5;
+	private final int DOUBLE_T_SCORE = 10;
+	private final int PERFECT_CLEAR_SCORE = 18;
 	
 	public Processor(List<Player> players, int fieldWidth, int fieldHeight) {
 		this.players = (ArrayList<Player>) players;
@@ -346,6 +346,9 @@ public class Processor implements GameHandler {
 				case DROP:
 					move.setIllegalMove(shape.drop());
 					break;
+				case SKIP:
+					shape.skip();
+					break;
 			}
 			
 			// add a moveResult to the player's playedGame
@@ -386,10 +389,16 @@ public class Processor implements GameHandler {
 		int unusedRowPoints = player.getRowPoints() % POINTS_PER_GARBAGE;
 		int rowsRemoved = player.getRowsRemoved();
 		
+//		// set combo
+//		if(rowsRemoved > 0)
+//			player.setCombo(player.getCombo() + 1);
+//		else
+//			player.setCombo(0);
+		
 		// set combo
-		if(rowsRemoved > 0)
+		if(rowsRemoved > 1 || (rowsRemoved == 1 && player.getTSpin()))
 			player.setCombo(player.getCombo() + 1);
-		else
+		else if(rowsRemoved < 1)
 			player.setCombo(0);
 		
 		// calculate row points for this round
@@ -439,8 +448,15 @@ public class Processor implements GameHandler {
 		// add unused row points too from previous rounds
 		rowPoints += unusedRowPoints;
 		
+		// calculate whether the first garbage line has single or double holes
+		int totalNrLines = player.getRowPoints() / POINTS_PER_GARBAGE;
+		boolean firstIsSingle = false;
+		if (totalNrLines % 2 == 0) {
+			firstIsSingle = true;
+		}
+		
 		// add the solid rows to opponent and check for gameover
-		if(player.getOpponent().getField().addGarbageLines(rowPoints / POINTS_PER_GARBAGE)) {
+		if(player.getOpponent().getField().addGarbageLines(rowPoints / POINTS_PER_GARBAGE, firstIsSingle)) {
 			setWinner(player);
 		}
 	}
