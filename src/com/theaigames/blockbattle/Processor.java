@@ -220,6 +220,7 @@ public class Processor implements GameHandler {
 						playerState.put("field", result.getFieldString());
 						playerState.put("points", result.getPoints());
 						playerState.put("combo", result.getCombo());
+						playerState.put("skips", result.getSkips());
 						
 						playerStates.put(playerState);
 						

@@ -36,7 +36,7 @@ public class Player extends AbstractPlayer {
 	}
 	
 	public void addPlayerState(int round, Move move, ShapeType nextShape) {
-		PlayerState moveResult = new PlayerState(round, move, this.combo, this.rowPoints, nextShape, this.field.toString(false, true));
+		PlayerState moveResult = new PlayerState(round, move, this.combo, this.skips, this.rowPoints, nextShape, this.field.toString(false, true));
 		
 		if(round >= this.playedGame.size()) 
 			this.playedGame.put(round, new ArrayList<PlayerState>());

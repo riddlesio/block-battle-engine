@@ -24,15 +24,17 @@ public class PlayerState {
 	
 	private final Move move;
 	private final int combo;
+	private final int skips;
 	private final int points;
 	private final ShapeType nextShape;
 	private final String fieldString;
 	private final int round;
 	
-	public PlayerState(int roundNumber, Move move, int combo, int points, ShapeType nextShape, String fieldString) {
+	public PlayerState(int roundNumber, Move move, int combo, int skips, int points, ShapeType nextShape, String fieldString) {
 		this.round = roundNumber;
 		this.move = move;
 		this.combo = combo;
+		this.skips = skips;
 		this.points = points;
 		this.nextShape = nextShape;
 		this.fieldString = fieldString;
@@ -54,6 +56,10 @@ public class PlayerState {
 	
 	public int getCombo() {
 		return this.combo;
+	}
+	
+	public int getSkips() {
+		return this.skips;
 	}
 	
 	public int getPoints() {
