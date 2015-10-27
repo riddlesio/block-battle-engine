@@ -45,7 +45,7 @@ public class Processor implements GameHandler {
 	private int fieldHeight;
 	
 	private final int MAX_MOVES = 40;
-	private final int ROUNDS_PER_SOLID = 20;
+	private final int ROUNDS_PER_SOLID = 15;
 	
 	// points
 	private final int POINTS_PER_GARBAGE = 3;
