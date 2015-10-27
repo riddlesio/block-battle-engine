@@ -348,10 +348,10 @@ public class Processor implements GameHandler {
 					move.setIllegalMove(shape.drop());
 					break;
 				case SKIP:
-					if (player.getSkips() > 0) {
+//					if (player.getSkips() > 0) {
 						shape.skip();
 						player.setSkips(player.getSkips() - 1);
-					}
+//					}
 					break;
 			}
 			
@@ -373,8 +373,8 @@ public class Processor implements GameHandler {
 			
 			if(initialY != finalY) {
 				String error = "The piece is still loose in the field. Dropping it.";
-				if (lastMove1.getType() == MoveType.SKIP)
-					error = "Can't perform 'skip'. There were no skips available, dropping the piece.";
+				if (lastMove1 != null && lastMove1.getType() == MoveType.SKIP)
+					error = "Can't perform 'skip'. There were no skips available.";
 				Move move = new Move(player, MoveType.DROP);
 				move.setIllegalMove(error);
 				
