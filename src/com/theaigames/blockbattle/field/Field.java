@@ -212,7 +212,8 @@ public class Field {
 	
 	public void setEmpty(Point p) {
 		Cell cell = getCell(p);
-		cell.setEmpty();
+		if(cell != null)
+			cell.setEmpty();
 	}
 	
 	/**

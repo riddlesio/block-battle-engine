@@ -79,7 +79,7 @@ public class Blockbattle extends AbstractGame {
 		Blockbattle game = new Blockbattle();
 		
 		// DEV_MODE settings
-		game.TEST_BOT = "java -cp /home/jim/workspace/StarterBotTetris/bin/ bot.BotStarter";
+		game.TEST_BOT = "java -cp /home/jim/workspace/jimBotTetris/bin/ bot.BotStarter";
 		game.NUM_TEST_BOTS = 2;
 		game.DEV_MODE = false;
 		

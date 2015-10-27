@@ -183,6 +183,7 @@ public class Shape {
 	public void skip() {
 		
 		for(int i=0; i < blocks.length; i++) {
+			blocks[i].setEmpty();
 			field.setEmpty(blocks[i].getLocation());
 		}
 		
@@ -228,7 +229,7 @@ public class Shape {
 	
 	public boolean isOverflowing() {
 		for(int i=0; i < blocks.length; i++) {
-			if(blocks[i].isOverFlowing())
+			if(!blocks[i].isEmpty() && blocks[i].isOverFlowing())
 				return true;
 		}
 		return false;
