@@ -17,6 +17,7 @@ public class Player extends AbstractPlayer {
 	private ArrayList<Move> roundMoves;
 	private boolean performedTSpin;
 	private boolean fieldCleared;
+	private boolean usedSkip;
 	private int rowPoints;
 	private int combo;
 	private int rowsRemoved;
@@ -33,6 +34,7 @@ public class Player extends AbstractPlayer {
 		this.playedGame = new HashMap<Integer, ArrayList<PlayerState>>();
 		this.performedTSpin = false;
 		this.fieldCleared = false;
+		this.usedSkip = false;
 	}
 	
 	public void addPlayerState(int round, Move move, ShapeType nextShape) {
@@ -114,6 +116,14 @@ public class Player extends AbstractPlayer {
 	
 	public int getSkips() {
 		return this.skips;
+	}
+	
+	public void setUsedSkip(boolean usedSkip) {
+		this.usedSkip = usedSkip;
+	}
+	
+	public boolean getUsedSkip() {
+		return this.usedSkip;
 	}
 	
 	public void setRowsRemoved(int rowsRemoved) {

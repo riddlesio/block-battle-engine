@@ -320,6 +320,7 @@ public class Processor implements GameHandler {
 		Move lastMove1 = null;
 		Move lastMove2 = null;
 		Point lastLocation = new Point(-1, -1);
+		player.setUsedSkip(false);
 		
 		for(Move move : player.getRoundMoves()) {
 			
@@ -352,6 +353,7 @@ public class Processor implements GameHandler {
 					if (player.getSkips() > 0) {
 						shape.skip();
 						player.setSkips(player.getSkips() - 1);
+						player.setUsedSkip(true);
 					}
 					break;
 			}
@@ -408,7 +410,7 @@ public class Processor implements GameHandler {
 		// set combo
 		if(rowsRemoved > 1 || (rowsRemoved == 1 && player.getTSpin()))
 			player.setCombo(player.getCombo() + 1);
-		else if(rowsRemoved < 1)
+		else if(rowsRemoved < 1 && !player.getUsedSkip())
 			player.setCombo(0);
 		
 		// calculate row points for this round
