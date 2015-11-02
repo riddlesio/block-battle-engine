@@ -444,6 +444,8 @@ public class Processor implements GameHandler {
 			player.setCombo(player.getCombo() + 1);
 		} else if(rowsRemoved < 1 && !player.getUsedSkip()) {
 			player.setCombo(0);
+		} else {
+			rowPoints += player.getCombo(); // add combo points of previous round
 		}
 			
 		// check if the whole field is cleared and reward points
