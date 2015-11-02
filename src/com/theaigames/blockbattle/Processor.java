@@ -401,18 +401,6 @@ public class Processor implements GameHandler {
 		int unusedRowPoints = player.getRowPoints() % POINTS_PER_GARBAGE;
 		int rowsRemoved = player.getRowsRemoved();
 		
-//		// set combo
-//		if(rowsRemoved > 0)
-//			player.setCombo(player.getCombo() + 1);
-//		else
-//			player.setCombo(0);
-		
-		// set combo
-		if(rowsRemoved > 1 || (rowsRemoved == 1 && player.getTSpin()))
-			player.setCombo(player.getCombo() + 1);
-		else if(rowsRemoved < 1 && !player.getUsedSkip())
-			player.setCombo(0);
-		
 		// calculate row points for this round
 		int rowPoints;
 		if(player.getTSpin()) { // T-spin clears
@@ -449,9 +437,14 @@ public class Processor implements GameHandler {
 					break;
 			}
 		}
-		// add combo points
-		if(player.getCombo() > 0)
-			rowPoints += player.getCombo() - 1;
+		// add combo points of previous round
+		rowPoints += player.getCombo();
+		
+		// set new combo
+		if(rowsRemoved > 1 || (rowsRemoved == 1 && player.getTSpin()))
+			player.setCombo(player.getCombo() + 1);
+		else if(rowsRemoved < 1 && !player.getUsedSkip())
+			player.setCombo(0);
 		
 		// check if the whole field is cleared and reward points
 		if(player.getFieldCleared())
