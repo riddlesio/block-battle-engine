@@ -437,15 +437,15 @@ public class Processor implements GameHandler {
 					break;
 			}
 		}
-		// add combo points of previous round
-		rowPoints += player.getCombo();
 		
 		// set new combo
-		if(rowsRemoved > 1 || (rowsRemoved == 1 && player.getTSpin()))
+		if(rowsRemoved > 1 || (rowsRemoved == 1 && player.getTSpin())) {
+			rowPoints += player.getCombo(); // add combo points of previous round
 			player.setCombo(player.getCombo() + 1);
-		else if(rowsRemoved < 1 && !player.getUsedSkip())
+		} else if(rowsRemoved < 1 && !player.getUsedSkip()) {
 			player.setCombo(0);
-		
+		}
+			
 		// check if the whole field is cleared and reward points
 		if(player.getFieldCleared())
 			rowPoints = this.PERFECT_CLEAR_SCORE;
