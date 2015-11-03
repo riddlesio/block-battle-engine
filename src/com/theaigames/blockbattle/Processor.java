@@ -282,6 +282,7 @@ public class Processor implements GameHandler {
 		player.sendUpdate("field", opponent, opponent.getField().toString(false, false));
 		player.sendUpdate("row_points", opponent, opponent.getRowPoints());
 		player.sendUpdate("combo", opponent, opponent.getCombo());
+		player.sendUpdate("skips", opponent, opponent.getSkips());
 	}
 	
 	private ArrayList<Move> parseMoves(String input, Player player) {
