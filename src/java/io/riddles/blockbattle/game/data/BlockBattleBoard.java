@@ -1,5 +1,8 @@
 package io.riddles.blockbattle.game.data;
 
+import io.riddles.blockbattle.BlockBattle;
+import io.riddles.javainterface.game.data.Board;
+
 import java.awt.*;
 
 /**
@@ -13,11 +16,13 @@ import java.awt.*;
  * @author Niko
  */
 
-public class BlockBattleBoard {
-    protected int[][] board;
+public class BlockBattleBoard extends Board<Cell> {
 
-    protected int width = 9;
-    protected int height = 9;
+    public BlockBattleBoard() {
+        super();
+    }
+
+    private int solidRows;
 
     public static final int EMPTY_FIELD = 0;
 
@@ -26,23 +31,26 @@ public class BlockBattleBoard {
     public BlockBattleBoard(int w, int h) {
         this.width = w;
         this.height = h;
-        this.board = new int[w][h];
+        this.solidRows = 0;
+        this.fields = new Cell[width][height];
         clearBoard();
     }
 
     public BlockBattleBoard(BlockBattleBoard b) {
         this.width = b.getWidth();
         this.height = b.getHeight();
+        /* TODO: clone board */
 
     }
 
     public void clearBoard() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                board[x][y] = EMPTY_FIELD;
+        for(int y=0; y < height; y++) {
+            for(int x=0; x < width; x++) {
+                this.fields[x][y] = new Cell(x, y);
             }
         }
     }
+
 
 
     @Override
@@ -79,18 +87,6 @@ public class BlockBattleBoard {
                 x = 0; y++;
             }
         }
-    }
-
-
-    public int getWidth() { return this.width; }
-    public int getHeight() { return this.height; }
-
-
-    public int getFieldAt(Point c) {
-        return board[c.x][c.y];
-    }
-    public void setFieldAt(Point c, int v) {
-        board[c.x][c.y] = v;
     }
 
     public void dump() {

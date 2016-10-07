@@ -36,6 +36,24 @@ import java.util.ArrayList;
  */
 public class BlockBattleState extends AbstractState<BlockBattleMove> {
 
+    private final Move move;
+    private final int combo;
+    private final int skips;
+    private final int points;
+    private final ShapeType nextShape;
+    private final String fieldString;
+    private final int round;
+    private Shape currentShape;
+    private ArrayList<Move> roundMoves;
+    private boolean performedTSpin;
+    private boolean fieldCleared;
+    private boolean usedSkip;
+    private int rowPoints;
+    private int combo;
+    private int rowsRemoved;
+    private int skips;
+
+
     private BlockBattleBoard board;
     private String errorMessage;
     private int moveNumber;
