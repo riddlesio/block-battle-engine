@@ -44,7 +44,7 @@ gradle test #Runs all testing scripts
 
 The main Java code is split up in two parts:
 - javainterface: handles everything the game engine needs to do to start, run and finish.
-- tictactoe: contains project specific code and extends most of javainterfaces abstract classes.
+- blockbattle: contains project specific code and extends most of javainterfaces abstract classes.
 
 The Engine's entry point is the `src/java/io/riddles/blockbattle/BlockBattle.java` file. This file creates a blockbattle Engine and invokes it's run function.
 

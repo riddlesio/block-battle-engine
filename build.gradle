@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'io.riddles.tictactoe.TicTacToe'
+mainClassName = 'io.riddles.blockbattle.BlockBattle'
 version '1.0.0'
 
 sourceCompatibility = 1.8
@@ -24,7 +24,7 @@ sourceSets {
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Ultimate Tic Tac Toe Game Engine',
+        attributes 'Implementation-Title': 'Block Battle Game Engine',
                 'Implementation-Version': version,
                 'Main-Class': mainClassName
     }
