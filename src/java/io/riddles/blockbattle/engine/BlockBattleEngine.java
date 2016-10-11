@@ -89,7 +89,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
     @Override
     protected BlockBattleState getInitialState() {
         BlockBattleState s = new BlockBattleState();
-        s.setBoard(new BlockBattleBoard(9,9));
+        s.setBoard(new BlockBattleBoard(10,20));
         return s;
     }
 }

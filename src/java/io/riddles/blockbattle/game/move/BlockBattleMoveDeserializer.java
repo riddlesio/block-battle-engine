@@ -25,6 +25,8 @@ import io.riddles.blockbattle.game.data.MoveType;
 import io.riddles.javainterface.exception.InvalidInputException;
 import io.riddles.javainterface.serialize.Deserializer;
 
+import java.util.ArrayList;
+
 /**
  * ${PACKAGE_NAME}
  *
@@ -36,7 +38,7 @@ import io.riddles.javainterface.serialize.Deserializer;
  * @author Niko
  */
 
-public class BlockBattleMoveDeserializer implements Deserializer<BlockBattleMove> {
+public class BlockBattleMoveDeserializer implements Deserializer<ArrayList<BlockBattleMove>> {
 
     private BlockBattlePlayer player;
 
@@ -45,27 +47,26 @@ public class BlockBattleMoveDeserializer implements Deserializer<BlockBattleMove
     }
 
     @Override
-    public BlockBattleMove traverse(String string) {
+    public ArrayList<BlockBattleMove> traverse(String string) {
+        ArrayList<BlockBattleMove> moves = new ArrayList<BlockBattleMove>();
         try {
-            return visitMove(string);
+            moves = visitMove(string);
         } catch (InvalidInputException ex) {
-            return new BlockBattleMove(this.player, ex);
+            moves.add(new BlockBattleMove(this.player, ex));
         } catch (Exception ex) {
-            return new BlockBattleMove(
-                this.player, new InvalidInputException("Failed to parse move"));
+            moves.add(new BlockBattleMove(this.player, new InvalidInputException("Failed to parse move")));
         }
+        return moves;
     }
 
-    private BlockBattleMove visitMove(String input) throws InvalidInputException {
+    private ArrayList<BlockBattleMove> visitMove(String input) throws InvalidInputException {
 
-        String[] split = input.split(" ");
-        if (split.length != 3) {
-            throw new InvalidInputException("Number of parameters is incorrect.");
+        String[] split = input.split(",");
+        ArrayList<BlockBattleMove> moves = new ArrayList<BlockBattleMove>();
+        for (int i = 0; i < split.length; i++) {
+            moves.add(new BlockBattleMove(this.player, visitAssessment(split[i])));
         }
-        MoveType type = visitAssessment(split[0]);
-        int column = Integer.parseInt(split[1]);
-        int row = Integer.parseInt(split[2]);
-        return new BlockBattleMove(this.player);
+        return moves;
     }
 
     public MoveType visitAssessment(String input) throws InvalidInputException {

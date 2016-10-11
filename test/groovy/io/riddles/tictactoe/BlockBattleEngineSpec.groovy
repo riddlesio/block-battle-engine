@@ -126,7 +126,7 @@ class BlockBattleEngineSpec extends Specification {
         engine.run()
 
         expect:
-        engine.finalState instanceof TicTacToeState;
+        engine.finalState instanceof BlockBattleState;
     }
 
     //@Ignore
@@ -143,6 +143,6 @@ class BlockBattleEngineSpec extends Specification {
         engine.run()
 
         expect:
-        engine.finalState instanceof TicTacToeState;
+        engine.finalState instanceof BlockBattleState;
     }
 }

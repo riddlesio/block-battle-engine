@@ -24,6 +24,8 @@ public abstract class Board<T> {
 
 
     public T getFieldAt(Point point) {
+        if(point.x < 0 || point.x >= width || point.y < 0 || point.y >= height)
+            return null;
         return fields[point.getX()][point.getY()];
     }
 

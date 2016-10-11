@@ -22,7 +22,6 @@ public class BlockBattleBoard extends Board<Cell> {
 
     private int solidRows;
 
-    public static final int EMPTY_FIELD = 0;
 
     @Override
     public void clear() {
@@ -44,6 +43,8 @@ public class BlockBattleBoard extends Board<Cell> {
     public BlockBattleBoard(BlockBattleBoard b) {
         this.width = b.getWidth();
         this.height = b.getHeight();
+        this.solidRows = 0;
+        this.fields = new Cell[width][height];
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
                 this.fields[x][y] = b.getFieldAt(new Point(x, y)).clone();
@@ -71,7 +72,11 @@ public class BlockBattleBoard extends Board<Cell> {
     public void dump() {
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
-                System.out.print(fields[x][y]);
+                if (fields[x][y].isShape()) {
+                    System.out.print("0,");
+                } else {
+                    System.out.print("1,");
+                }
             }
             System.out.println();
         }

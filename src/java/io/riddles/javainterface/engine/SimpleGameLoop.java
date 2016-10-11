@@ -56,7 +56,7 @@ public class SimpleGameLoop implements GameLoop {
             state = processor.playRound(roundNumber, state);
 
             if (state == null) {
-                LOGGER.severe("Processor has retured a null state");
+                LOGGER.severe("Processor has returned a null state");
             }
         }
 

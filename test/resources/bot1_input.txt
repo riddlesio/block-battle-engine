@@ -1,4 +1,4 @@
-place_move 3 3
+left,left,left,left,drop
 place_move 2 0
 place_move 2 0
 place_move 7 1

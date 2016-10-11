@@ -42,7 +42,11 @@ public class BlockBattleMove extends AbstractMove<BlockBattlePlayer> {
 
     public BlockBattleMove(BlockBattlePlayer player) {
         super(player);
+    }
 
+    public BlockBattleMove(BlockBattlePlayer player, MoveType type) {
+        super(player);
+        this.type = type;
     }
 
     public BlockBattleMove(BlockBattlePlayer player, InvalidInputException exception) {
@@ -51,6 +55,11 @@ public class BlockBattleMove extends AbstractMove<BlockBattlePlayer> {
 
     public MoveType getMoveType() {
         return this.type;
+    }
+
+    @Override
+    public String toString() {
+        return this.type.toString();
     }
 
 }

@@ -23,6 +23,9 @@ import java.util.ArrayList;
 
 import io.riddles.blockbattle.engine.BlockBattleEngine;
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
+import io.riddles.blockbattle.game.data.Shape;
+import io.riddles.blockbattle.game.data.ShapeOperations;
+import io.riddles.blockbattle.game.data.ShapeType;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.state.BlockBattleState;
 import io.riddles.javainterface.game.processor.AbstractProcessor;
@@ -44,13 +47,14 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     private boolean gameOver;
     private BlockBattlePlayer winner;
     private BlockBattleLogic logic;
-
+    private ShapeOperations shapeOps;
 
     /* Constructor */
     public BlockBattleProcessor(ArrayList<BlockBattlePlayer> players) {
         super(players);
         this.gameOver = false;
         this.logic = new BlockBattleLogic();
+        this.shapeOps = new ShapeOperations();
     }
 
     /* preGamePhase may be used to set up the Processor before starting the game loop.
@@ -82,26 +86,37 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
             if (!hasGameEnded(nextState)) {
                 nextState = new BlockBattleState(nextState, new ArrayList<>(), roundNumber);
                 nextState.setMoveNumber(roundNumber*2 + playerCounter - 1);
-                BlockBattleBoard nextBoard = nextState.getBoard();
 
-                int nextPlayer = getNextPlayerId(player);
+                Shape shape = new Shape(getRandomShape());
 
+
+                if(!shapeOps.spawnShape(shape, nextState.getBoard())) { /* Board is full! */
+                    /* TODO: OPPONENT WINS */
+                }
+
+                nextState.getBoard().dump();
+
+
+                player.setCurrentShape(shape);
                 sendRoundUpdatesToPlayer(player, nextState);
 
                 String response = player.requestMove(ActionType.MOVE.toString());
 
                 // parse the response
                 BlockBattleMoveDeserializer deserializer = new BlockBattleMoveDeserializer(player);
-                BlockBattleMove move = deserializer.traverse(response);
+                ArrayList<BlockBattleMove> moves = deserializer.traverse(response);
+                for(BlockBattleMove move : moves) {
+                    System.out.println(move);
+                }
 
                 try {
-                    logic.transform(nextState, move);
+                    //logic.transform(nextState, move);
                 } catch (Exception e) {
                     LOGGER.info(String.format("Unknown response: %s", response));
                 }
 
                 // add the next move
-                nextState.getMoves().add(move);
+                // nextState.getMoves().add(move);
 
                 // stop game if bot returns nothing
                 if (response == null) {
@@ -119,6 +134,13 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     }
 
     /**
+     * Get the next shape to be played randomly
+     */
+    private ShapeType getRandomShape() {
+        return ShapeType.getRandom();
+    }
+
+    /**
      * Sends all updates the player needs at the start of the round.
      * @param player : player to send the updates to
      */
@@ -127,7 +149,8 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         // game updates
         player.sendUpdate("round", roundNumber);
         player.sendUpdate("this_piece_type", player.getCurrentShape().getType().toString());
-        player.sendUpdate("next_piece_type", player.getNextShape().getType().toString());
+        /* TODO */
+        //player.sendUpdate("next_piece_type", player.getNextShape().getType().toString());
         player.sendUpdate("this_piece_position", player.getCurrentShape().getPositionString());
 
         // player updates
