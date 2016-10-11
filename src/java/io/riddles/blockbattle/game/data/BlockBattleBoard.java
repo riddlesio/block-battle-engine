@@ -22,7 +22,6 @@ public class BlockBattleBoard extends Board<Cell> {
 
     private int solidRows;
 
-
     @Override
     public void clear() {
         for(int y=0; y < height; y++) {

@@ -95,7 +95,7 @@ class BlockBattleEngineSpec extends Specification {
         engine.finalState.getBoard().toString() == "2,0,1,0,0,0,0,0,2,0,0,0,0,0,0,1,1,1,0,0,0,2,0,2,2,0,0,0,0,2,1,1,1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,2,1,0,0,0,2,1,0,0";
     }
 
-    //@Ignore
+    @Ignore
     def "test illegal moves"() {
 
         setup:
@@ -112,7 +112,7 @@ class BlockBattleEngineSpec extends Specification {
         engine.finalState instanceof BlockBattleState;
     }
 
-    //@Ignore
+    @Ignore
     def "test out of bounds"() {
 
         setup:
@@ -129,7 +129,7 @@ class BlockBattleEngineSpec extends Specification {
         engine.finalState instanceof BlockBattleState;
     }
 
-    //@Ignore
+    @Ignore
     def "test garbage input"() {
 
         setup:

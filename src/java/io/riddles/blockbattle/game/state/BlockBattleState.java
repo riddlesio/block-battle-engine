@@ -19,8 +19,6 @@
 
 package io.riddles.blockbattle.game.state;
 
-import io.riddles.blockbattle.game.data.Shape;
-import io.riddles.blockbattle.game.data.ShapeType;
 import io.riddles.javainterface.game.state.AbstractState;
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
 import io.riddles.blockbattle.game.move.BlockBattleMove;

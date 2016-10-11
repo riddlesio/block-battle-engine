@@ -51,6 +51,7 @@ public class ShapeOperations {
 
     //////////////////////////////////// /* TODO: Please add documentation */
     private void takePosition(Shape shape1, Shape shape2, BlockBattleBoard board) {
+        System.out.println("takePosition " + shape1);
         shape1.shape = shape2.shape;
         shape1.blocks = shape2.blocks;
         shape1.location = shape2.location;

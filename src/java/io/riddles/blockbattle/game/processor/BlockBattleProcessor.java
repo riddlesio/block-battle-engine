@@ -84,20 +84,13 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         int playerCounter = 0;
         for (BlockBattlePlayer player : this.players) {
             if (!hasGameEnded(nextState)) {
-                nextState = new BlockBattleState(nextState, new ArrayList<>(), roundNumber);
-                nextState.setMoveNumber(roundNumber*2 + playerCounter - 1);
 
                 Shape shape = new Shape(getRandomShape());
-
-
                 if(!shapeOps.spawnShape(shape, nextState.getBoard())) { /* Board is full! */
                     /* TODO: OPPONENT WINS */
                 }
-
-                nextState.getBoard().dump();
-
-
                 player.setCurrentShape(shape);
+
                 sendRoundUpdatesToPlayer(player, nextState);
 
                 String response = player.requestMove(ActionType.MOVE.toString());
@@ -105,26 +98,31 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 // parse the response
                 BlockBattleMoveDeserializer deserializer = new BlockBattleMoveDeserializer(player);
                 ArrayList<BlockBattleMove> moves = deserializer.traverse(response);
+
+                nextState = new BlockBattleState(nextState, moves, roundNumber);
+                nextState.setMoveNumber(roundNumber*2 + playerCounter - 1);
+
+
+
+
                 for(BlockBattleMove move : moves) {
                     System.out.println(move);
                 }
 
                 try {
-                    //logic.transform(nextState, move);
+                    logic.transform(nextState, moves);
                 } catch (Exception e) {
                     LOGGER.info(String.format("Unknown response: %s", response));
                 }
-
-                // add the next move
-                // nextState.getMoves().add(move);
 
                 // stop game if bot returns nothing
                 if (response == null) {
                     this.gameOver = true;
                 }
 
-                //nextState.getBoard().dump();
-                //nextState.getBoard().dumpMacroboard();
+                nextState.getBoard().dump();
+
+
                 checkWinner(nextState);
                 playerCounter++;
             }
