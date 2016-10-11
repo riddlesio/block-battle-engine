@@ -1,6 +1,8 @@
 package io.riddles.blockbattle.game.data;
 
-import java.awt.Point;
+import io.riddles.blockbattle.BlockBattle;
+import io.riddles.javainterface.game.data.Point;
+import jdk.nashorn.internal.ir.Block;
 
 public class Cell {
 	
@@ -32,8 +34,8 @@ public class Cell {
 		return new Cell(null, this.state, this.shape);
 	}
 	
-	public boolean isOutOfBoundaries(Field f) {
-		if(this.location.x >= f.getWidth() || this.location.x < 0) 
+	public boolean isOutOfBoundaries(BlockBattleBoard b) {
+		if(this.location.x >= b.getWidth() || this.location.x < 0)
 			return true;
 		return false;
 	}
@@ -44,14 +46,14 @@ public class Cell {
 		return false;
 	}
 	
-	public boolean isBelowBottom(Field f) {
-		if(this.location.y >= f.getHeight())
+	public boolean isBelowBottom(BlockBattleBoard b) {
+		if(this.location.y >= b.getHeight())
 			return true;
 		return false;
 	}
 	
-	public boolean hasCollision(Field f) {
-		Cell cell = f.getCell(this.location);
+	public boolean hasCollision(BlockBattleBoard b) {
+		Cell cell = b.getFieldAt(this.location);
 		if(cell == null)
 			return false;
 		return (this.state == CellType.SHAPE && (cell.isSolid() || cell.isBlock()));

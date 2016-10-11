@@ -19,6 +19,8 @@
 
 package io.riddles.blockbattle.game.state;
 
+import io.riddles.blockbattle.game.data.Shape;
+import io.riddles.blockbattle.game.data.ShapeType;
 import io.riddles.javainterface.game.state.AbstractState;
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
@@ -30,21 +32,19 @@ import java.util.ArrayList;
  * io.riddles.game.game.state.BlockBattleState - Created on 2-6-16
  *
  * BlockBattleState extends AbstractState and is used to store game specific data per state.
- * It can be initialised to store a BlockBattleMove, or multiple TicTacToeMoves in an ArrayList.
+ * It can be initialised to store a BlockBattleMove, or multiple BlockBattleMoves in an ArrayList.
  *
  * @author joost
  */
 public class BlockBattleState extends AbstractState<BlockBattleMove> {
 
-    private final Move move;
-    private final int combo;
-    private final int skips;
-    private final int points;
-    private final ShapeType nextShape;
-    private final String fieldString;
-    private final int round;
+    private BlockBattleMove move;
+    private int points;
+    private ShapeType nextShape;
+    private String fieldString;
+    private int round;
     private Shape currentShape;
-    private ArrayList<Move> roundMoves;
+    private ArrayList<BlockBattleMove> roundMoves;
     private boolean performedTSpin;
     private boolean fieldCleared;
     private boolean usedSkip;
@@ -65,14 +65,27 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
 
     public BlockBattleState(BlockBattleState previousState, BlockBattleMove move, int roundNumber, String possibleMovesString, String fieldPresentationString) {
         super(previousState, move, roundNumber);
+        this.rowPoints = 0;
+        this.combo = 0;
+        this.skips = 0;
+        this.performedTSpin = false;
+        this.fieldCleared = false;
+        this.usedSkip = false;
         this.board = new BlockBattleBoard(previousState.getBoard());
 
     }
 
     public BlockBattleState(BlockBattleState previousState, ArrayList<BlockBattleMove> moves, int roundNumber) {
         super(previousState, moves, roundNumber);
+        this.rowPoints = 0;
+        this.combo = 0;
+        this.skips = 0;
+        this.performedTSpin = false;
+        this.fieldCleared = false;
+        this.usedSkip = false;
         this.board = new BlockBattleBoard(previousState.getBoard());
     }
+
 
     public BlockBattleBoard getBoard() {
         return this.board;
@@ -84,4 +97,69 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
 
     public void setMoveNumber(int n) { this.moveNumber = n; }
     public int getMoveNumber() { return this.moveNumber; }
+
+    /* Block Battle specific functions */
+
+    public void setTSpin(boolean performedTSpin) {
+        this.performedTSpin = performedTSpin;
+    }
+
+    public void setFieldCleared(boolean isFieldCleared) {
+        this.fieldCleared = isFieldCleared;
+    }
+
+    public void setCurrentShape(Shape shape) {
+        this.currentShape = shape;
+    }
+
+    public Shape getCurrentShape() {
+        return this.currentShape;
+    }
+
+    public void addRowPoints(int points) {
+        this.rowPoints += points;
+    }
+
+    public boolean getTSpin() {
+        return this.performedTSpin;
+    }
+
+    public boolean getFieldCleared() {
+        return this.fieldCleared;
+    }
+    public int getRowPoints() {
+        return this.rowPoints;
+    }
+
+    public void setCombo(int combo) {
+        this.combo = combo;
+    }
+
+    public int getCombo() {
+        return this.combo;
+    }
+
+    public void setSkips(int skips) {
+        this.skips = skips;
+    }
+
+    public int getSkips() {
+        return this.skips;
+    }
+
+    public void setUsedSkip(boolean usedSkip) {
+        this.usedSkip = usedSkip;
+    }
+
+    public boolean getUsedSkip() {
+        return this.usedSkip;
+    }
+
+    public void setRowsRemoved(int rowsRemoved) {
+        this.rowsRemoved = rowsRemoved;
+    }
+
+    public int getRowsRemoved() {
+        return this.rowsRemoved;
+    }
 }

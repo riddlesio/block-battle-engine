@@ -1,36 +1,53 @@
 package io.riddles.javainterface.game.data;
+import io.riddles.javainterface.game.data.Point;
 
-import java.awt.*;
 
 /**
  * Created by joost on 10/7/16.
  */
 
-public class Board<T> {
+public abstract class Board<T> {
     protected T fields[][];
 
     protected int width;
     protected int height;
 
 
-    public Board(int width, int height, T[][]) {
-        this.fields = new T[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                this.fields[x][y] = new T();
-            }
-        }
+    public Board() {
+
     }
+
+    public abstract void clear();
 
     public int getWidth() { return this.width; }
     public int getHeight() { return this.height; }
 
 
     public T getFieldAt(Point point) {
-        return fields[(int)point.getX()][(int)point.getY()];
+        return fields[point.getX()][point.getY()];
     }
 
     public void setFieldAt(Point point, T c) {
-        fields[(int)point.getX()][(int)point.getY()] = c;
-    }  /* TODO: don't use Point */
+        fields[point.getX()][point.getY()] = c;
+    }
+
+    /**
+     * Creates comma separated String
+     * @param :
+     * @return : String
+     */
+    public String toString() {
+        String r = "";
+        int counter = 0;
+        for (int y = 0; y < this.height; y++) {
+            for (int x = 0; x < this.width; x++) {
+                if (counter > 0) {
+                    r += ",";
+                }
+                r += fields[x][y];
+                counter++;
+            }
+        }
+        return r;
+    }
 }
