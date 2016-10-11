@@ -1,0 +1,12 @@
+place_move 1
+place_move a
+garbage
+place_move a b
+place_move 6 7
+place_move 8 1
+place_move 1 8
+place_move 6 8
+place_move 1 7
+place_move 5 3
+place_move 4 3
+place_move 6 1

@@ -1,0 +1,6 @@
+initialize
+configuration {"maxRounds":{"type":"integer","value":20},"fieldWidth":{"type":"integer","value":20},"fieldHeight":{"type":"integer","value":14},}}
+bot_ids 0,1
+start
+details
+game

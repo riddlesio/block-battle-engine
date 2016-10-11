@@ -70,8 +70,20 @@ public class BlockBattleMoveDeserializer implements Deserializer<BlockBattleMove
 
     public MoveType visitAssessment(String input) throws InvalidInputException {
         switch (input) {
-            case "place_move":
-                return MoveType.PLACEMOVE;
+            case "left":
+                return MoveType.LEFT;
+            case "right":
+                return MoveType.RIGHT;
+            case "turnleft":
+                return MoveType.TURNLEFT;
+            case "turnright":
+                return MoveType.TURNRIGHT;
+            case "drop":
+                return MoveType.DROP;
+            case "skip":
+                return MoveType.SKIP;
+            case "down":
+                return MoveType.DOWN;
             default:
                 throw new InvalidInputException("Move isn't valid");
         }

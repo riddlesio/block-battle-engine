@@ -86,7 +86,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
 
                 int nextPlayer = getNextPlayerId(player);
 
-                player.sendUpdate("field", nextBoard.toString());
+                sendRoundUpdatesToPlayer(player, nextState);
 
                 String response = player.requestMove(ActionType.MOVE.toString());
 
@@ -119,6 +119,32 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     }
 
     /**
+     * Sends all updates the player needs at the start of the round.
+     * @param player : player to send the updates to
+     */
+    private void sendRoundUpdatesToPlayer(BlockBattlePlayer player, BlockBattleState nextState) {
+
+        // game updates
+        player.sendUpdate("round", roundNumber);
+        player.sendUpdate("this_piece_type", player.getCurrentShape().getType().toString());
+        player.sendUpdate("next_piece_type", player.getNextShape().getType().toString());
+        player.sendUpdate("this_piece_position", player.getCurrentShape().getPositionString());
+
+        // player updates
+        player.sendUpdate("row_points", player, player.getRowPoints());
+        player.sendUpdate("combo", player, player.getCombo());
+        player.sendUpdate("skips", player, player.getSkips());
+        player.sendUpdate("field", player, nextState.getBoard().toString(false, false));
+
+        // opponent updates
+        BlockBattlePlayer opponent = getOpponentPlayer(player);
+        player.sendUpdate("field", opponent, nextState.getBoard().toString(false, false));
+        player.sendUpdate("row_points", opponent, opponent.getRowPoints());
+        player.sendUpdate("combo", opponent, opponent.getCombo());
+        player.sendUpdate("skips", opponent, opponent.getSkips());
+    }
+
+    /**
      * When this.players's size = 2, it will find the other player than 'p'.
      * If this.player's size != 2, it's outcome is -1.
      *
@@ -132,6 +158,22 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
             }
         }
         return -1;
+    }
+
+    /**
+     * When this.players's size = 2, it will find the other player than 'p'.
+     * If this.player's size != 2, it's outcome is -1.
+     *
+     * @param BlockBattlePlayer The player to find the opponent for.
+     * @return The BlockBattlePlayer of the opponent player, or null if no opponent can be determined.
+     */
+    private BlockBattlePlayer getOpponentPlayer(BlockBattlePlayer p) {
+        if (this.players.size() == 2) {
+            for (BlockBattlePlayer player : this.players) {
+                if (player.getId() != p.getId()) return player;
+            }
+        }
+        return null;
     }
 
     /* hasGameEnded should check all conditions on which a game should end

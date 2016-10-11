@@ -1,8 +1,6 @@
 package io.riddles.blockbattle.game.data;
 
-import io.riddles.blockbattle.BlockBattle;
 import io.riddles.javainterface.game.data.Point;
-import jdk.nashorn.internal.ir.Block;
 
 public class Cell {
 	

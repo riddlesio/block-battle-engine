@@ -67,6 +67,15 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
             stateJson.put("exception", move.getException().getMessage());
             stateJson.put("illegalMove", move.getException().getMessage());
         }
+
+        stateJson.put("field", state.getBoard().toString(true, true));
+        /* TODO: We need a BlockBattlePlayer here. */
+        /*
+        stateJson.put("points", state.getPoints());
+        stateJson.put("combo", state.getCombo());
+        stateJson.put("skips", state.getSkips());
+        */
+
         return stateJson;
     }
 }
