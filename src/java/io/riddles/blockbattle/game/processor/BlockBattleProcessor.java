@@ -86,7 +86,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
             if (!hasGameEnded(nextState)) {
 
                 Shape shape = new Shape(getRandomShape());
-                if(!shapeOps.spawnShape(shape, nextState.getBoard())) { /* Board is full! */
+                if(!shapeOps.spawnShape(shape, nextState.getBoard(player.getId()))) { /* Board is full! */
                     /* TODO: OPPONENT WINS */
                 }
                 player.setCurrentShape(shape);
@@ -104,11 +104,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
 
 
 
-
-                for(BlockBattleMove move : moves) {
-                    System.out.println(move);
-                }
-
                 try {
                     logic.transform(nextState, moves);
                 } catch (Exception e) {
@@ -120,7 +115,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                     this.gameOver = true;
                 }
 
-                nextState.getBoard().dump();
+               // nextState.getBoard().dump();
 
 
                 checkWinner(nextState);
@@ -155,11 +150,11 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         player.sendUpdate("row_points", player, player.getRowPoints());
         player.sendUpdate("combo", player, player.getCombo());
         player.sendUpdate("skips", player, player.getSkips());
-        player.sendUpdate("field", player, nextState.getBoard().toString(false, false));
+        player.sendUpdate("field", player, nextState.getBoard(player.getId()).toString(false, false));
 
         // opponent updates
         BlockBattlePlayer opponent = getOpponentPlayer(player);
-        player.sendUpdate("field", opponent, nextState.getBoard().toString(false, false));
+        player.sendUpdate("field", opponent, nextState.getBoard(player.getId()).toString(false, false));
         player.sendUpdate("row_points", opponent, opponent.getRowPoints());
         player.sendUpdate("combo", opponent, opponent.getCombo());
         player.sendUpdate("skips", opponent, opponent.getSkips());

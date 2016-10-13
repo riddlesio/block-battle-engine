@@ -69,16 +69,7 @@ public class BlockBattleBoard extends Board<Cell> {
     }
 
     public void dump() {
-        for (int y = 0; y < this.height; y++) {
-            for (int x = 0; x < this.width; x++) {
-                if (fields[x][y].isShape()) {
-                    System.out.print("0,");
-                } else {
-                    System.out.print("1,");
-                }
-            }
-            System.out.println();
-        }
+        System.out.println(this.toString(true, true));
     }
 
     public int getSolidRows() { return solidRows; }
@@ -123,7 +114,7 @@ public class BlockBattleBoard extends Board<Cell> {
     }
 
     // removes shape cells from field
-    public void cleanField() {
+    public void cleanShapeFields() {
         for(int y=0; y < height; y++) {
             for(int x=0; x < width; x++) {
                 if(fields[x][y].isShape())

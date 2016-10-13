@@ -37,38 +37,19 @@ public class BlockBattleLogic {
     }
 
     /**
-     * Takes a BlockBattleState and applies the move.
+     * Takes a BlockBattleState and applies the move(s).
      *
      * Return
      * Returns nothing, but transforms the given BlockBattleState.
      * @param BlockBattleState The initial state
-     * @param BlockBattleMove The move of the player
+     * @param ArrayList<BlockBattleMove> The move(s) of the player
      * @return
      */
-    private void transformMove(BlockBattleState state, BlockBattleMove move) {
-        BlockBattlePlayer player = move.getPlayer();
-        BlockBattleBoard board = state.getBoard();
-
-        BlockBattleBoard b = state.getBoard();
-
-        move.setException(new InvalidInputException("Error: BlockBattle doesnt do anything yet"));
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
     private void executeMovesForPlayer(BlockBattleState state, ArrayList<BlockBattleMove> moves) {
         if (moves.size() > 0) {
             BlockBattlePlayer player = moves.get(0).getPlayer();
+            BlockBattleBoard board = state.getBoard(player.getId());
+
             Shape shape = player.getCurrentShape();
             BlockBattleMove lastMove1 = null;
             BlockBattleMove lastMove2 = null;
@@ -85,32 +66,33 @@ public class BlockBattleLogic {
                 String result = "";
                 switch (move.getMoveType()) {
                     case LEFT:
-                        result = shapeOps.oneLeft(shape, state.getBoard());
+                        result = shapeOps.oneLeft(shape, board);
                         break;
                     case RIGHT:
-                        result = shapeOps.oneRight(shape, state.getBoard());
+                        result = shapeOps.oneRight(shape, board);
                         break;
                     case TURNLEFT:
-                        result = shapeOps.turnLeft(shape, state.getBoard());
+                        result = shapeOps.turnLeft(shape, board);
                         break;
                     case TURNRIGHT:
-                        result = shapeOps.turnRight(shape, state.getBoard());
+                        result = shapeOps.turnRight(shape, board);
                         break;
                     case DOWN:
-                        result = shapeOps.oneDown(shape, state.getBoard());
+                        result = shapeOps.oneDown(shape, board);
                         break;
                     case DROP:
-                        shapeOps.drop(shape, state.getBoard());
+                        shapeOps.drop(shape, board);
                         break;
                     case SKIP:
                         if (player.getSkips() > 0) {
-                            shapeOps.skip(shape, state.getBoard());
+                            shapeOps.skip(shape, board);
                             player.setSkips(player.getSkips() - 1);
                             player.setUsedSkip(true);
                         }
                         break;
 
                 }
+                System.out.println(result);
                 if (!result.isEmpty()) {
                     move.setException(new InvalidInputException(result));
                 }
@@ -120,13 +102,16 @@ public class BlockBattleLogic {
 
                 if (move.getMoveType() == MoveType.SKIP)
                     break;
+
+                System.out.println(move);
+                board.dump();
             } /* End moves for loop */
 
 
             // freeze shape and add extra drop move if the piece is still loose in the field
             if (!shape.isFrozen()) {
                 int initialY = shape.getLocation().y;
-                shapeOps.drop(shape, state.getBoard());
+                shapeOps.drop(shape, board);
                 int finalY = shape.getLocation().y;
 
                 if (initialY != finalY) {
@@ -137,10 +122,10 @@ public class BlockBattleLogic {
                     move.setException(new InvalidInputException(error));
                     player.setTSpin(false);
                 } else {
-                    player.setTSpin(shapeOps.checkTSpin(shape, state.getBoard(), lastMove1, lastMove2, lastLocation));
+                    player.setTSpin(shapeOps.checkTSpin(shape, board, lastMove1, lastMove2, lastLocation));
                 }
             } else {
-                player.setTSpin(shapeOps.checkTSpin(shape, state.getBoard(), lastMove1, lastMove2, lastLocation));
+                player.setTSpin(shapeOps.checkTSpin(shape, board, lastMove1, lastMove2, lastLocation));
             }
 
             if (shapeOps.isOverflowing(shape)) {

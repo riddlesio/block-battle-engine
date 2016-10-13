@@ -55,7 +55,8 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
             winnerString = String.valueOf(winner);
         }
 
-        stateJson.put("field", state.getBoard());
+        /* TODO: Add for each player */
+        //stateJson.put("field", state.getBoard().toString(true, true));
         stateJson.put("winner", winnerString);
 
         stateJson.put("move", state.getMoveNumber());
@@ -68,7 +69,6 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
             stateJson.put("illegalMove", move.getException().getMessage());
         }
 
-        stateJson.put("field", state.getBoard().toString(true, true));
         /* TODO: We need a BlockBattlePlayer here. */
         /*
         stateJson.put("points", state.getPoints());

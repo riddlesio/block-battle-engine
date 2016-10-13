@@ -56,7 +56,7 @@ public class ShapeOperations {
         shape1.blocks = shape2.blocks;
         shape1.location = shape2.location;
 
-        board.cleanField();
+        board.cleanShapeFields();
         setShapeInField(shape1, board);
     }
 
@@ -128,7 +128,7 @@ public class ShapeOperations {
         }
 
         clone.setBlockLocations();
-        String error = checkForPositionErrors(shape, board, "turnleft");
+        String error = checkForPositionErrors(clone, board, "turnleft");
 
         if(error.isEmpty())
             takePosition(shape, clone, board);
@@ -155,7 +155,7 @@ public class ShapeOperations {
 
         clone.location.x--;
         clone.setBlockLocations();
-        String error = checkForPositionErrors(shape, board, "left");
+        String error = checkForPositionErrors(clone, board, "left");
 
         if(error.isEmpty())
             takePosition(shape, clone, board);
@@ -170,7 +170,7 @@ public class ShapeOperations {
 
         clone.location.x++;
         clone.setBlockLocations();
-        String error = checkForPositionErrors(shape, board, "right");
+        String error = checkForPositionErrors(clone, board, "right");
 
         if(error.isEmpty())
             takePosition(shape, clone, board);
@@ -201,7 +201,6 @@ public class ShapeOperations {
         String error = String.format("Can't perform %s: ", move);
 
         if(move.equals("left") || move.equals("right")) {
-
             if(isOutOfBoundaries(shape, board))
                 return error += "Piece is on the field boundary. Action changed to 'down'.";
             if(hasCollision(shape, board))

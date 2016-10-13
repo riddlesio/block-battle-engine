@@ -44,7 +44,7 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
     private ArrayList<BlockBattleMove> roundMoves;
 
 
-    private BlockBattleBoard board;
+    private ArrayList<BlockBattleBoard> boards;
     private String errorMessage;
     private int moveNumber;
 
@@ -53,24 +53,31 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
         super();
     }
 
-    public BlockBattleState(BlockBattleState previousState, BlockBattleMove move, int roundNumber, String possibleMovesString, String fieldPresentationString) {
+    public BlockBattleState(BlockBattleState previousState, BlockBattleMove move, int roundNumber) {
         super(previousState, move, roundNumber);
-        this.board = new BlockBattleBoard(previousState.getBoard());
-
+        this.boards = new ArrayList<BlockBattleBoard>();
+        for (BlockBattleBoard board : previousState.getBoards()) {
+            BlockBattleBoard newBoard = new BlockBattleBoard(board);
+            this.boards.add(newBoard);
+        }
     }
 
     public BlockBattleState(BlockBattleState previousState, ArrayList<BlockBattleMove> moves, int roundNumber) {
         super(previousState, moves, roundNumber);
-        this.board = new BlockBattleBoard(previousState.getBoard());
+        this.boards = new ArrayList<BlockBattleBoard>();
+        for (BlockBattleBoard board : previousState.getBoards()) {
+            BlockBattleBoard newBoard = new BlockBattleBoard(board);
+            this.boards.add(newBoard);
+        }
     }
 
-
-    public BlockBattleBoard getBoard() {
-        return this.board;
+    public ArrayList<BlockBattleBoard> getBoards() { return this.boards; }
+    public BlockBattleBoard getBoard(int i) {
+        return this.boards.get(i);
     }
 
-    public void setBoard(BlockBattleBoard b) {
-        this.board = b;
+    public void setBoard(BlockBattleBoard b, int player) {
+        this.boards.add(player, b);
     }
 
     public void setMoveNumber(int n) { this.moveNumber = n; }
