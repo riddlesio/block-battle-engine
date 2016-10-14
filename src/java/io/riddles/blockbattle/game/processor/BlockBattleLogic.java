@@ -49,6 +49,7 @@ public class BlockBattleLogic {
         if (moves.size() > 0) {
             BlockBattlePlayer player = moves.get(0).getPlayer();
             BlockBattleBoard board = state.getBoard(player.getId());
+            System.out.println (player.getId() + " boardhash " + board.hashCode() + " state " + state.hashCode());
 
             Shape shape = player.getCurrentShape();
             BlockBattleMove lastMove1 = null;
@@ -103,8 +104,9 @@ public class BlockBattleLogic {
                 if (move.getMoveType() == MoveType.SKIP)
                     break;
 
-                System.out.println(move);
-                board.dump();
+                //System.out.println(move);
+                //board.dump();
+                move.setBoardRepresentation(board.toString(true, true));
             } /* End moves for loop */
 
 

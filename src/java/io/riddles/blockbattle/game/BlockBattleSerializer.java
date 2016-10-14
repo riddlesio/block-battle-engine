@@ -19,6 +19,7 @@
 
 package io.riddles.blockbattle.game;
 
+import io.riddles.blockbattle.game.move.BlockBattleMove;
 import io.riddles.javainterface.game.player.AbstractPlayer;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.processor.BlockBattleProcessor;
@@ -29,6 +30,8 @@ import org.json.JSONObject;
 
 import io.riddles.javainterface.game.AbstractGameSerializer;
 
+import java.util.ArrayList;
+
 /**
  * BlockBattleSerializer takes a BlockBattleState and serialises it and all previous states into a JSON String.
  * Customize this to add all game specific data to the output.
@@ -38,7 +41,7 @@ import io.riddles.javainterface.game.AbstractGameSerializer;
 public class BlockBattleSerializer extends
         AbstractGameSerializer<BlockBattleProcessor, BlockBattleState> {
 
-    private final int SIZE = 9;
+    private final int SIZE = Integer.MIN_VALUE; /* TODO: remove this */
 
     @Override
     public String traverseToString(BlockBattleProcessor processor, BlockBattleState initialState) {
@@ -48,11 +51,47 @@ public class BlockBattleSerializer extends
         JSONArray states = new JSONArray();
         BlockBattleState state = initialState;
         BlockBattleStateSerializer serializer = new BlockBattleStateSerializer();
+
+
+
+
         while (state.hasNextState()) {
             state = (BlockBattleState) state.getNextState();
+            ArrayList<BlockBattleMove> moves = state.getMoves();
+            BlockBattleState state2 = (BlockBattleState) state.getNextState();
+            ArrayList<BlockBattleMove> moves2 = new ArrayList<BlockBattleMove>();
+            if (state2 != null) {
+                moves2 = state2.getMoves();
+            }
 
-            states.put(serializer.traverseToJson(state));
+            int maxMoves = moves.size();
+            if (moves2.size() > moves.size()) {
+                maxMoves = moves2.size();
+            }
+
+            for (int i = 0; i < maxMoves; i++) {
+                String move1 = "----", move2="----";
+                JSONObject move1JSON = new JSONObject(), move2JSON = new JSONObject();
+
+                if (moves.size() > i) {
+                    move1 = moves.get(i).getMoveType().toString();
+                    move1JSON.put("field", moves.get(i).getBoardRepresentation());
+
+                }
+                if (moves2.size() > i) {
+                    move2 = moves2.get(i).getMoveType().toString();
+                    move2JSON.put("field", moves2.get(i).getBoardRepresentation());
+                }
+                System.out.println (move1 + "  " + move2);
+
+                JSONArray players = new JSONArray();
+                players.put(move1JSON);
+                players.put(move2JSON);
+                states.put(players);
+            }
+
         }
+        //states.put(serializer.traverseToJson(state));
 
         JSONObject matchdata = new JSONObject();
         matchdata.put("states", states);

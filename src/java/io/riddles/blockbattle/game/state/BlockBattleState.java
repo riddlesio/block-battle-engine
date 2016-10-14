@@ -20,6 +20,7 @@
 package io.riddles.blockbattle.game.state;
 
 import io.riddles.blockbattle.game.data.Shape;
+import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.javainterface.game.state.AbstractState;
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
@@ -45,8 +46,9 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
 
     private Shape nextShape;
 
-
     private ArrayList<BlockBattleBoard> boards;
+
+    private BlockBattlePlayer winner;
 
 
     public BlockBattleState() {
@@ -90,6 +92,8 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
     public Shape getNextShape() { return this.nextShape; }
     public void setNextShape(Shape nextShape) { this.nextShape = nextShape; }
 
+    public BlockBattlePlayer getWinner() { return this.winner; }
+    public void setWinner(BlockBattlePlayer winner) { this.winner = winner; }
 
 
 }

@@ -68,14 +68,13 @@ public class ShapeOperations {
             return false;
 
         // last move is turn or second to last move is turn
-        /* TODO: add move.getType */
-        /*
-        if(!(lastMove1.getType() == MoveType.TURNRIGHT || lastMove1.getType() == MoveType.TURNLEFT
-                || ((lastMove1.getType() == MoveType.DOWN || lastMove1.getType() == MoveType.DROP)
-                && (lastMove2.getType() == MoveType.TURNLEFT || lastMove2.getType() == MoveType.TURNRIGHT)
+
+        if(!(lastMove1.getMoveType() == MoveType.TURNRIGHT || lastMove1.getMoveType() == MoveType.TURNLEFT
+                || ((lastMove1.getMoveType() == MoveType.DOWN || lastMove1.getMoveType() == MoveType.DROP)
+                && (lastMove2.getMoveType() == MoveType.TURNLEFT || lastMove2.getMoveType() == MoveType.TURNRIGHT)
                 && (lastLocation.equals(shape.location)))))
             return false;
-        */
+
 
         // check if 3/4 corners of the matrix are Blocks in the field
         Cell[] corners = new Cell[4];
@@ -225,6 +224,7 @@ public class ShapeOperations {
         return false;
     }
 
+    /* Checks Shape is bellow bottom of Board */
     public boolean isBelowBottom(Shape shape, BlockBattleBoard board) {
         for(int i=0; i < shape.blocks.length; i++) {
             if(shape.blocks[i].isBelowBottom(board))

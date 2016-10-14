@@ -1,3 +1,8 @@
+left,left,left,left,drop
+left,left,drop
+drop
+right,right,drop
+right,right,right,right,drop
 down,down,down,turnleft,left,left,left
 right,right,right,right,drop
 down,down,down,turnleft,turnleft,left,left

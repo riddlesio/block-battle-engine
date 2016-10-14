@@ -42,6 +42,18 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
         configuration.put("maxRounds", 20);
         configuration.put("fieldWidth", 10);
         configuration.put("fieldHeight", 20);
+
+        configuration.put("roundsPerSolid", 15);
+        configuration.put("doubleTScore", 10);
+        configuration.put("singleTScore", 5);
+        configuration.put("quadClearScore", 10);
+        configuration.put("tripleClearScore", 6);
+        configuration.put("doubleClearScore", 3);
+        configuration.put("singleClearScore", 0);
+        configuration.put("perfectClearScore", 18);
+        configuration.put("pointsPerGarbage", 3);
+
+
     }
 
 

@@ -51,7 +51,6 @@ public class BlockBattleBoard extends Board<Cell> {
                 this.fields[x][y] = b.getFieldAt(new Point(x, y)).clone();
             }
         }
-
     }
 
 
@@ -71,6 +70,8 @@ public class BlockBattleBoard extends Board<Cell> {
     }
 
     public void dump() {
+        System.out.println("dump " + this.hashCode());
+
         System.out.println(this.toString(true, true));
     }
 

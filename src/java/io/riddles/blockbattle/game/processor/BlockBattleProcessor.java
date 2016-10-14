@@ -22,10 +22,7 @@ package io.riddles.blockbattle.game.processor;
 import java.util.ArrayList;
 
 import io.riddles.blockbattle.engine.BlockBattleEngine;
-import io.riddles.blockbattle.game.data.BlockBattleBoard;
-import io.riddles.blockbattle.game.data.Shape;
-import io.riddles.blockbattle.game.data.ShapeOperations;
-import io.riddles.blockbattle.game.data.ShapeType;
+import io.riddles.blockbattle.game.data.*;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.state.BlockBattleState;
 import io.riddles.javainterface.game.processor.AbstractProcessor;
@@ -48,6 +45,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     private BlockBattlePlayer winner;
     private BlockBattleLogic logic;
     private ShapeOperations shapeOps;
+    private BlockBattleBoardOperations boardOps;
 
     /* Constructor */
     public BlockBattleProcessor(ArrayList<BlockBattlePlayer> players) {
@@ -55,6 +53,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         this.gameOver = false;
         this.logic = new BlockBattleLogic();
         this.shapeOps = new ShapeOperations();
+        this.boardOps = new BlockBattleBoardOperations();
     }
 
     /* preGamePhase may be used to set up the Processor before starting the game loop.
@@ -83,24 +82,23 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
 
         for (BlockBattlePlayer player : this.players) {
             if (!hasGameEnded(nextState)) {
-                player.setCurrentShape(state.getNextShape().clone());
+                player.setCurrentShape(nextState.getNextShape().clone());
 
+                BlockBattleBoard board = nextState.getBoard(player.getId());
                 System.out.println("Playing roundNumber " + roundNumber + " with player " + player.getId());
 
-                if(!shapeOps.spawnShape(player.getCurrentShape(), nextState.getBoard(player.getId()))) { /* Board is full! */
-                    /* TODO: OPPONENT WINS */
+                if(!shapeOps.spawnShape(player.getCurrentShape(), board)) { /* Board is full! */
+                    setWinner(state, getOpponentPlayer(player));
                 }
-
                 sendRoundUpdatesToPlayer(player, nextState);
 
                 String response = player.requestMove(ActionType.MOVE.toString());
-
                 // parse the response
                 BlockBattleMoveDeserializer deserializer = new BlockBattleMoveDeserializer(player);
                 ArrayList<BlockBattleMove> moves = deserializer.traverse(response);
 
                 nextState = new BlockBattleState(nextState, moves, roundNumber);
-
+                board = nextState.getBoard(player.getId());
 
                 try {
                     logic.transform(nextState, moves);
@@ -112,13 +110,27 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 if (response == null) {
                     this.gameOver = true;
                 }
-
-                //nextState.getBoard(player.getId()).dump();
-
-
-                checkWinner(nextState);
+                board.dump();
             }
+        }
 
+        // remove rows and store the amount removed
+        for (BlockBattlePlayer player : this.players) {
+            BlockBattleBoard board = nextState.getBoard(player.getId());
+            player.setRowsRemoved(board.processEndOfRoundField());
+            player.setFieldCleared(board.isFieldCleared());
+        }
+
+        // handle everything that changes after the pieces have been placed
+        for (BlockBattlePlayer player : this.players) {
+
+            processPointsForPlayer(nextState, player);
+
+            if (this.roundNumber % BlockBattleEngine.configuration.getInt("roundsPerSolid") == 0) // add solid line on certain round number
+                if (boardOps.addSolidRows(nextState.getBoard(player.getId()), 1)) {
+                    // set winner if player is out of bounds
+                    setWinner(state, getOpponentPlayer(player));
+            }
         }
         nextState.setNextShape(new Shape(ShapeType.getRandom()));
         return nextState;
@@ -150,6 +162,82 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         player.sendUpdate("row_points", opponent, opponent.getRowPoints());
         player.sendUpdate("combo", opponent, opponent.getCombo());
         player.sendUpdate("skips", opponent, opponent.getSkips());
+    }
+
+    private void processPointsForPlayer(BlockBattleState state, BlockBattlePlayer player) {
+
+        int unusedRowPoints = player.getRowPoints() % BlockBattleEngine.configuration.getInt("roundsPerSolid");
+        int rowsRemoved = player.getRowsRemoved();
+
+        // calculate row points for this round
+        int rowPoints;
+        if(player.getTSpin()) { // T-spin clears
+            switch(rowsRemoved) {
+                case 2:
+                    rowPoints = BlockBattleEngine.configuration.getInt("doubleTScore");
+                    player.setSkips(player.getSkips() + 1);
+                    break;
+                case 1:
+                    rowPoints = BlockBattleEngine.configuration.getInt("singleTScore");
+                    break;
+                default:
+                    rowPoints = 0;
+                    break;
+            }
+        }
+        else {
+            switch(rowsRemoved) { // Normal clears
+                case 4:
+                    rowPoints = BlockBattleEngine.configuration.getInt("quadClearScore");
+                    player.setSkips(player.getSkips() + 1);
+                    break;
+                case 3:
+                    rowPoints = BlockBattleEngine.configuration.getInt("tripleClearScore");
+                    break;
+                case 2:
+                    rowPoints = BlockBattleEngine.configuration.getInt("doubleClearScore");
+                    break;
+                case 1:
+                    rowPoints = BlockBattleEngine.configuration.getInt("singleClearScore");
+                    break;
+                default:
+                    rowPoints = 0;
+                    break;
+            }
+        }
+
+        // set new combo
+        if(rowsRemoved > 1 || (rowsRemoved == 1 && player.getTSpin())) {
+            rowPoints += player.getCombo(); // add combo points of previous round
+            player.setCombo(player.getCombo() + 1);
+        } else if(rowsRemoved < 1 && !player.getUsedSkip()) {
+            player.setCombo(0);
+        } else if (!player.getUsedSkip()) {
+            rowPoints += player.getCombo(); // add combo points of previous round
+        }
+
+        // check if the whole field is cleared and reward points
+        if(player.getFieldCleared())
+            rowPoints = BlockBattleEngine.configuration.getInt("perfectClearScore");
+
+        player.addRowPoints(rowPoints);
+
+        // add unused row points too from previous rounds
+        rowPoints += unusedRowPoints;
+
+        // calculate whether the first garbage line has single or double holes
+        int totalNrLines = player.getRowPoints() / BlockBattleEngine.configuration.getInt("pointsPerGarbage");
+        boolean firstIsSingle = false;
+        if (totalNrLines % 2 == 0) {
+            firstIsSingle = true;
+        }
+
+        // add the solid rows to opponent and check for gameover
+        int nrGarbageRows = (rowPoints / BlockBattleEngine.configuration.getInt("pointsPerGarbage"));
+        if(boardOps.addGarbageLines(state.getBoard(getOpponentPlayer(player).getId()), nrGarbageRows, firstIsSingle)) {
+            setWinner(state, player);
+        }
+        System.out.println("rowsRemoved: " + player.getRowsRemoved());
     }
 
     /**
@@ -191,7 +279,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     public boolean hasGameEnded(BlockBattleState state) {
         boolean returnVal = false;
         if (this.roundNumber > BlockBattleEngine.configuration.getInt("maxRounds")) returnVal = true;
-        checkWinner(state);
         if (this.winner != null) returnVal = true;
         return returnVal;
     }
@@ -204,19 +291,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         return this.winner;
     }
 
-    public void checkWinner(BlockBattleState s) {
-        this.winner = null;
-        /*
-        int winner = s.getBoard().getWinner();
-        if (winner > -1) {
-            for (BlockBattlePlayer player : this.players) {
-                if (player.getId() == winner) {
-                    this.winner = player;
-                }
-            }
-        }
-        */
-    }
 
     /* getScore should return the game score if applicable.
     *  returns: double Score
@@ -226,4 +300,9 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         return 0;
     }
 
+    public void setWinner(BlockBattleState state, BlockBattlePlayer winner) {
+        this.winner = winner;
+        state.setWinner(winner);
+        System.out.println("WE HAVE A WINNER!");
+    }
 }

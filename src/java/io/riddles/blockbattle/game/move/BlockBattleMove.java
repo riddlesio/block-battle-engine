@@ -39,6 +39,7 @@ import io.riddles.javainterface.game.move.AbstractMove;
 public class BlockBattleMove extends AbstractMove<BlockBattlePlayer> {
 
     private MoveType type;
+    private String boardRepresentation;
 
     public BlockBattleMove(BlockBattlePlayer player) {
         super(player);
@@ -61,5 +62,8 @@ public class BlockBattleMove extends AbstractMove<BlockBattlePlayer> {
     public String toString() {
         return this.type.toString();
     }
+
+    public void setBoardRepresentation(String s) { this.boardRepresentation = s; }
+    public String getBoardRepresentation() { return this.boardRepresentation; }
 
 }

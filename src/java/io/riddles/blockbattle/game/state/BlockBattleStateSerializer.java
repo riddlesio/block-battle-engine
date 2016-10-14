@@ -20,6 +20,7 @@
 package io.riddles.blockbattle.game.state;
 
 import io.riddles.blockbattle.game.move.BlockBattleMove;
+import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import org.json.JSONObject;
 import io.riddles.javainterface.game.state.AbstractStateSerializer;
 
@@ -46,17 +47,16 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
         BlockBattleMove move = state.getMoves().get(0);
 
         stateJson.put("movetype", move.getMoveType());
-        int winner = 0; /* TODO */
+
+        BlockBattlePlayer winner = state.getWinner();
         String winnerString = "";
-        if (winner <= 0) {
-            winnerString = "";
-        } else {
-            winnerString = String.valueOf(winner);
+        if (winner != null) {
+            winnerString = winner.toString();
         }
 
         /* TODO: Add for each player */
         //stateJson.put("field", state.getBoard().toString(true, true));
-        stateJson.put("winner", winnerString);
+        stateJson.put("winner", winner);
 
 
         if (move.getException() == null) {

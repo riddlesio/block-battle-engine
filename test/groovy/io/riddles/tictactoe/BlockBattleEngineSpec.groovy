@@ -20,6 +20,7 @@
 package io.riddles.tictactoe
 
 import io.riddles.blockbattle.engine.BlockBattleEngine
+import io.riddles.blockbattle.game.data.ShapeType
 import io.riddles.blockbattle.game.state.BlockBattleState
 import io.riddles.javainterface.exception.TerminalException
 import io.riddles.javainterface.io.IOHandler

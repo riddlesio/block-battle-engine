@@ -37,9 +37,9 @@ public class BlockBattleBoardOperations {
         return overflow;
     }
 
-    // adds solid rows to bottom, returns true if game over
-    public void addSolidRows(BlockBattleBoard board, int amount) {
-        moveFieldUp(board, amount);
+    // adds solid rows to bottom, returns true if failed
+    public boolean addSolidRows(BlockBattleBoard board, int amount) {
+        boolean failed = moveFieldUp(board, amount);
 
         // make the bottom rows into solid rows
         for(int y = board.getHeight() - board.getSolidRows() - 1; y > board.getHeight() - board.getSolidRows() - amount - 1; y--) {
@@ -49,6 +49,7 @@ public class BlockBattleBoardOperations {
         }
 
         board.setSolidRows(board.getSolidRows() + amount);
+        return failed;
     }
 
     public boolean addGarbageLines(BlockBattleBoard board, int amount, boolean firstIsSingle) {

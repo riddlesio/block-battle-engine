@@ -43,7 +43,8 @@ public class Cell {
 			return true;
 		return false;
 	}
-	
+
+	/* Checks whether Cell is lower than Board Height */
 	public boolean isBelowBottom(BlockBattleBoard b) {
 		if(this.location.y >= b.getHeight())
 			return true;

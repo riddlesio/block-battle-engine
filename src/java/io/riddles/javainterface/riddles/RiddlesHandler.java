@@ -73,6 +73,7 @@ public class RiddlesHandler extends AbstractPlatformHandler {
         AbstractPlayer winner = this.processor.getWinner();
         String winnerId = "null";
         if (winner != null) {
+            /* Attention! HUGE HACK is applied here. */
             winnerId = winner.getId() - 1 + "";
         }
 
