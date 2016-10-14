@@ -1,6 +1,8 @@
 package io.riddles.blockbattle.engine;
 
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
+import io.riddles.blockbattle.game.data.Shape;
+import io.riddles.blockbattle.game.data.ShapeType;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.processor.BlockBattleProcessor;
 import io.riddles.blockbattle.game.state.BlockBattleState;
@@ -88,10 +90,13 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
      */
     @Override
     protected BlockBattleState getInitialState() {
-        BlockBattleState s = new BlockBattleState();
+        BlockBattleState state = new BlockBattleState();
         for (BlockBattlePlayer player : this.players) {
-            s.setBoard(new BlockBattleBoard(configuration.getInt("fieldWidth"), (configuration.getInt("fieldHeight"))), player.getId());
+            BlockBattleBoard board = new BlockBattleBoard(configuration.getInt("fieldWidth"), (configuration.getInt("fieldHeight")));
+            board.setPlayerId(player.getId());
+            state.setBoard(board);
         }
-        return s;
+        state.setNextShape(new Shape(ShapeType.getRandom()));
+        return state;
     }
 }

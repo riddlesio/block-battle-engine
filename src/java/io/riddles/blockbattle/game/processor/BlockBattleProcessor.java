@@ -81,15 +81,15 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
 
         BlockBattleState nextState = state;
 
-        int playerCounter = 0;
         for (BlockBattlePlayer player : this.players) {
             if (!hasGameEnded(nextState)) {
+                player.setCurrentShape(state.getNextShape().clone());
 
-                Shape shape = new Shape(getRandomShape());
-                if(!shapeOps.spawnShape(shape, nextState.getBoard(player.getId()))) { /* Board is full! */
+                System.out.println("Playing roundNumber " + roundNumber + " with player " + player.getId());
+
+                if(!shapeOps.spawnShape(player.getCurrentShape(), nextState.getBoard(player.getId()))) { /* Board is full! */
                     /* TODO: OPPONENT WINS */
                 }
-                player.setCurrentShape(shape);
 
                 sendRoundUpdatesToPlayer(player, nextState);
 
@@ -100,8 +100,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 ArrayList<BlockBattleMove> moves = deserializer.traverse(response);
 
                 nextState = new BlockBattleState(nextState, moves, roundNumber);
-                nextState.setMoveNumber(roundNumber*2 + playerCounter - 1);
-
 
 
                 try {
@@ -115,23 +113,17 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                     this.gameOver = true;
                 }
 
-               // nextState.getBoard().dump();
+                //nextState.getBoard(player.getId()).dump();
 
 
                 checkWinner(nextState);
-                playerCounter++;
             }
 
         }
+        nextState.setNextShape(new Shape(ShapeType.getRandom()));
         return nextState;
     }
 
-    /**
-     * Get the next shape to be played randomly
-     */
-    private ShapeType getRandomShape() {
-        return ShapeType.getRandom();
-    }
 
     /**
      * Sends all updates the player needs at the start of the round.
@@ -142,8 +134,8 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         // game updates
         player.sendUpdate("round", roundNumber);
         player.sendUpdate("this_piece_type", player.getCurrentShape().getType().toString());
-        /* TODO */
-        //player.sendUpdate("next_piece_type", player.getNextShape().getType().toString());
+
+        player.sendUpdate("next_piece_type", nextState.getNextShape().getType().toString());
         player.sendUpdate("this_piece_position", player.getCurrentShape().getPositionString());
 
         // player updates
@@ -198,7 +190,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     @Override
     public boolean hasGameEnded(BlockBattleState state) {
         boolean returnVal = false;
-        if (this.roundNumber >= BlockBattleEngine.configuration.getInt("maxRounds")) returnVal = true;
+        if (this.roundNumber > BlockBattleEngine.configuration.getInt("maxRounds")) returnVal = true;
         checkWinner(state);
         if (this.winner != null) returnVal = true;
         return returnVal;

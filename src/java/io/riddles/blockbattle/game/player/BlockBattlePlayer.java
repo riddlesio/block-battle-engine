@@ -42,7 +42,6 @@ public class BlockBattlePlayer extends AbstractPlayer {
     private int rowsRemoved;
     private int skips;
     private Shape currentShape;
-    private Shape nextShape;
     private boolean performedTSpin;
     private boolean fieldCleared;
     private int points;
@@ -61,22 +60,6 @@ public class BlockBattlePlayer extends AbstractPlayer {
 
     public String toString() {
         return "BlockBattlePlayer " + this.getId();
-    }
-
-    public void setCurrentShape(Shape shape) {
-        this.currentShape = shape;
-    }
-
-    public Shape getCurrentShape() {
-        return this.currentShape;
-    }
-
-    public void setNextShape(Shape shape) {
-        this.nextShape = shape;
-    }
-
-    public Shape getNextShape() {
-        return this.nextShape;
     }
 
     public void addRowPoints(int points) {
@@ -137,4 +120,8 @@ public class BlockBattlePlayer extends AbstractPlayer {
     public void setFieldCleared(boolean isFieldCleared) {
         this.fieldCleared = isFieldCleared;
     }
+
+
+    public Shape getCurrentShape() { return this.currentShape; }
+    public void setCurrentShape(Shape currentShape) { this.currentShape = currentShape; }
 }

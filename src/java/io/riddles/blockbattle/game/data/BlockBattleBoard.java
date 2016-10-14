@@ -21,6 +21,7 @@ public class BlockBattleBoard extends Board<Cell> {
     }
 
     private int solidRows;
+    private int playerId;
 
     @Override
     public void clear() {
@@ -42,8 +43,9 @@ public class BlockBattleBoard extends Board<Cell> {
     public BlockBattleBoard(BlockBattleBoard b) {
         this.width = b.getWidth();
         this.height = b.getHeight();
-        this.solidRows = 0;
+        this.solidRows = b.getSolidRows();
         this.fields = new Cell[width][height];
+        this.playerId = b.getPlayerId();
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
                 this.fields[x][y] = b.getFieldAt(new Point(x, y)).clone();
@@ -72,8 +74,11 @@ public class BlockBattleBoard extends Board<Cell> {
         System.out.println(this.toString(true, true));
     }
 
-    public int getSolidRows() { return solidRows; }
-    public void setSolidRows(int rows) { solidRows = rows; }
+    public int getSolidRows() { return this.solidRows; }
+    public void setSolidRows(int rows) { this.solidRows = rows; }
+
+    public int getPlayerId() { return this.playerId; }
+    public void setPlayerId(int playerId) { this.playerId = playerId; }
 
     // handles round end by clean up and checking for full rows
     // returns number of full rows

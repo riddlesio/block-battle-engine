@@ -42,7 +42,6 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
 
     private JSONObject visitState(BlockBattleState state) throws NullPointerException {
         JSONObject stateJson = new JSONObject();
-        stateJson.put("move", state.getMoveNumber());
 
         BlockBattleMove move = state.getMoves().get(0);
 
@@ -59,7 +58,6 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
         //stateJson.put("field", state.getBoard().toString(true, true));
         stateJson.put("winner", winnerString);
 
-        stateJson.put("move", state.getMoveNumber());
 
         if (move.getException() == null) {
             stateJson.put("exception", JSONObject.NULL);

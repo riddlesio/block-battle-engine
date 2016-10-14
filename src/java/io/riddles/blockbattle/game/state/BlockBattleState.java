@@ -19,6 +19,7 @@
 
 package io.riddles.blockbattle.game.state;
 
+import io.riddles.blockbattle.game.data.Shape;
 import io.riddles.javainterface.game.state.AbstractState;
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
@@ -38,19 +39,19 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
 
     private BlockBattleMove move;
 
-    private String fieldString;
     private int round;
 
     private ArrayList<BlockBattleMove> roundMoves;
 
+    private Shape nextShape;
+
 
     private ArrayList<BlockBattleBoard> boards;
-    private String errorMessage;
-    private int moveNumber;
 
 
     public BlockBattleState() {
         super();
+        this.boards = new ArrayList<BlockBattleBoard>();
     }
 
     public BlockBattleState(BlockBattleState previousState, BlockBattleMove move, int roundNumber) {
@@ -60,6 +61,7 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
             BlockBattleBoard newBoard = new BlockBattleBoard(board);
             this.boards.add(newBoard);
         }
+        this.nextShape = previousState.getNextShape().clone();
     }
 
     public BlockBattleState(BlockBattleState previousState, ArrayList<BlockBattleMove> moves, int roundNumber) {
@@ -69,19 +71,24 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
             BlockBattleBoard newBoard = new BlockBattleBoard(board);
             this.boards.add(newBoard);
         }
+        this.nextShape = previousState.getNextShape().clone();
     }
 
     public ArrayList<BlockBattleBoard> getBoards() { return this.boards; }
-    public BlockBattleBoard getBoard(int i) {
-        return this.boards.get(i);
+
+    public BlockBattleBoard getBoard(int playerId) {
+        for (BlockBattleBoard board : this.boards) {
+            if (board.getPlayerId() == playerId) return board;
+        }
+        return null;
     }
 
-    public void setBoard(BlockBattleBoard b, int player) {
-        this.boards.add(player, b);
+    public void setBoard(BlockBattleBoard b) {
+        this.boards.add(b);
     }
 
-    public void setMoveNumber(int n) { this.moveNumber = n; }
-    public int getMoveNumber() { return this.moveNumber; }
+    public Shape getNextShape() { return this.nextShape; }
+    public void setNextShape(Shape nextShape) { this.nextShape = nextShape; }
 
 
 
