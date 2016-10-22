@@ -46,6 +46,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     private BlockBattleLogic logic;
     private ShapeOperations shapeOps;
     private BlockBattleBoardOperations boardOps;
+    public ShapeFactory shapeFactory;
 
     /* Constructor */
     public BlockBattleProcessor(ArrayList<BlockBattlePlayer> players) {
@@ -54,6 +55,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         this.logic = new BlockBattleLogic();
         this.shapeOps = new ShapeOperations();
         this.boardOps = new BlockBattleBoardOperations();
+        this.shapeFactory = new ShapeFactory();
     }
 
     /* preGamePhase may be used to set up the Processor before starting the game loop.
@@ -132,7 +134,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                     setWinner(state, getOpponentPlayer(player));
             }
         }
-        nextState.setNextShape(new Shape(ShapeType.getRandom()));
+        nextState.setNextShape(shapeFactory.getNext());
         return nextState;
     }
 
@@ -305,4 +307,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         state.setWinner(winner);
         System.out.println("WE HAVE A WINNER!");
     }
+
+    public void setShapeFactory(ShapeFactory s) { this.shapeFactory = s; }
 }

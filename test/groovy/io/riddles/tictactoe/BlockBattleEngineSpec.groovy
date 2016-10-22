@@ -20,6 +20,8 @@
 package io.riddles.tictactoe
 
 import io.riddles.blockbattle.engine.BlockBattleEngine
+import io.riddles.blockbattle.game.data.Shape
+import io.riddles.blockbattle.game.data.ShapeFactory
 import io.riddles.blockbattle.game.data.ShapeType
 import io.riddles.blockbattle.game.state.BlockBattleState
 import io.riddles.javainterface.exception.TerminalException
@@ -65,6 +67,7 @@ class BlockBattleEngineSpec extends Specification {
 
             LOGGER.info("Running pre-game phase...");
 
+            this.processor.setShapeFactory(new ShapeFactoryValues());
             this.processor.preGamePhase();
 
 
@@ -77,6 +80,21 @@ class BlockBattleEngineSpec extends Specification {
             this.platformHandler.finish(playedGame);
         }
     }
+
+    class ShapeFactoryValues extends ShapeFactory {
+        String shapes = "O,I,I,O,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L";
+        int shapeCounter = 0;
+        @Override
+        public Shape getNext() {
+            String[] shapes = shapes.split(",");
+            Shape s = new Shape(ShapeType.valueOf(shapes[shapeCounter]));
+            shapeCounter++;
+            return s;
+        }
+
+        public void setShapes(String s) { this.shapes = s; }
+    }
+
 
     //@Ignore
     def "test if BlockBattleEngine is created"() {

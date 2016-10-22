@@ -2,6 +2,7 @@ package io.riddles.blockbattle.engine;
 
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
 import io.riddles.blockbattle.game.data.Shape;
+import io.riddles.blockbattle.game.data.ShapeFactory;
 import io.riddles.blockbattle.game.data.ShapeType;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.processor.BlockBattleProcessor;
@@ -108,7 +109,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
             board.setPlayerId(player.getId());
             state.setBoard(board);
         }
-        state.setNextShape(new Shape(ShapeType.getRandom()));
+        state.setNextShape(processor.shapeFactory.getNext());
         return state;
     }
 }
