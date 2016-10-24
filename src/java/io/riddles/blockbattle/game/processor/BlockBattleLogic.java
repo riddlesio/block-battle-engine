@@ -49,7 +49,6 @@ public class BlockBattleLogic {
         if (moves.size() > 0) {
             BlockBattlePlayer player = moves.get(0).getPlayer();
             BlockBattleBoard board = state.getBoard(player.getId());
-            System.out.println (player.getId() + " boardhash " + board.hashCode() + " state " + state.hashCode());
 
             Shape shape = player.getCurrentShape();
             BlockBattleMove lastMove1 = null;
@@ -65,35 +64,40 @@ public class BlockBattleLogic {
                     break;
                 }
                 String result = "";
-                switch (move.getMoveType()) {
-                    case LEFT:
-                        result = shapeOps.oneLeft(shape, board);
-                        break;
-                    case RIGHT:
-                        result = shapeOps.oneRight(shape, board);
-                        break;
-                    case TURNLEFT:
-                        result = shapeOps.turnLeft(shape, board);
-                        break;
-                    case TURNRIGHT:
-                        result = shapeOps.turnRight(shape, board);
-                        break;
-                    case DOWN:
-                        result = shapeOps.oneDown(shape, board);
-                        break;
-                    case DROP:
-                        shapeOps.drop(shape, board);
-                        break;
-                    case SKIP:
-                        if (player.getSkips() > 0) {
-                            shapeOps.skip(shape, board);
-                            player.setSkips(player.getSkips() - 1);
-                            player.setUsedSkip(true);
-                        }
-                        break;
+                if (move.getMoveType() == null) { /* Drop it anyway */
+                    shapeOps.drop(shape, board);
+                } else {
+                    switch (move.getMoveType()) {
+                        case LEFT:
+                            result = shapeOps.oneLeft(shape, board);
+                            break;
+                        case RIGHT:
+                            result = shapeOps.oneRight(shape, board);
+                            break;
+                        case TURNLEFT:
+                            result = shapeOps.turnLeft(shape, board);
+                            break;
+                        case TURNRIGHT:
+                            result = shapeOps.turnRight(shape, board);
+                            break;
+                        case DOWN:
+                            result = shapeOps.oneDown(shape, board);
+                            break;
+                        case DROP:
+                            shapeOps.drop(shape, board);
+                            break;
+                        case SKIP:
+                            if (player.getSkips() > 0) {
+                                shapeOps.skip(shape, board);
+                                player.setSkips(player.getSkips() - 1);
+                                player.setUsedSkip(true);
+                            }
+                            break;
 
+                    }
                 }
-                System.out.println(result);
+                move.setBoardRepresentation(board.toString(false, true));
+
                 if (!result.isEmpty()) {
                     move.setException(new InvalidInputException(result));
                 }
@@ -106,7 +110,6 @@ public class BlockBattleLogic {
 
                 //System.out.println(move);
                 //board.dump();
-                move.setBoardRepresentation(board.toString(true, true));
             } /* End moves for loop */
 
 

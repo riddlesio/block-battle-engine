@@ -58,6 +58,17 @@ public class BlockBattlePlayer extends AbstractPlayer {
         this.points = 0;
     }
 
+    public BlockBattlePlayer(BlockBattlePlayer player) {
+        super(player.getId());
+        this.rowPoints = player.getRowPoints();
+        this.combo = player.getCombo();
+        this.skips = player.getSkips();
+        this.performedTSpin = player.getPerformedTSpin();
+        this.fieldCleared = player.getfieldCleared();
+        this.usedSkip = player.getUsedSkip();
+        this.points = player.getPoints();
+    }
+
     public String toString() {
         return "BlockBattlePlayer " + this.getId();
     }
@@ -99,6 +110,12 @@ public class BlockBattlePlayer extends AbstractPlayer {
 
     public boolean getUsedSkip() {
         return this.usedSkip;
+    }
+    public boolean getPerformedTSpin() {
+        return this.performedTSpin;
+    }
+    public boolean getfieldCleared() {
+        return this.fieldCleared;
     }
 
     public void setRowsRemoved(int rowsRemoved) {

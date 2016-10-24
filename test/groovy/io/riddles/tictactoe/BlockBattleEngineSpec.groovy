@@ -82,7 +82,7 @@ class BlockBattleEngineSpec extends Specification {
     }
 
     class ShapeFactoryValues extends ShapeFactory {
-        String shapes = "O,I,I,O,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L,L";
+        String shapes = "L,I,I,T,S,O,O,T,T,Z,Z,L,T,I,Z,J,J,O,L,S,T,J,I,I,J";
         int shapeCounter = 0;
         @Override
         public Shape getNext() {

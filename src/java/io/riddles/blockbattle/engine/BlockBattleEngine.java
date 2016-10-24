@@ -40,7 +40,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
     }
 
     private void setDefaults() {
-        configuration.put("maxRounds", 20);
+        configuration.put("maxRounds", 5);
         configuration.put("fieldWidth", 10);
         configuration.put("fieldHeight", 20);
 
@@ -108,6 +108,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
             BlockBattleBoard board = new BlockBattleBoard(configuration.getInt("fieldWidth"), (configuration.getInt("fieldHeight")));
             board.setPlayerId(player.getId());
             state.setBoard(board);
+            state.setPlayer(player);
         }
         state.setNextShape(processor.shapeFactory.getNext());
         return state;

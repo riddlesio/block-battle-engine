@@ -112,7 +112,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 if (response == null) {
                     this.gameOver = true;
                 }
-                board.dump();
+                //board.dump();
             }
         }
 
@@ -133,6 +133,8 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                     // set winner if player is out of bounds
                     setWinner(state, getOpponentPlayer(player));
             }
+            nextState.setPlayer(player);
+
         }
         nextState.setNextShape(shapeFactory.getNext());
         return nextState;
@@ -305,7 +307,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     public void setWinner(BlockBattleState state, BlockBattlePlayer winner) {
         this.winner = winner;
         state.setWinner(winner);
-        System.out.println("WE HAVE A WINNER!");
     }
 
     public void setShapeFactory(ShapeFactory s) { this.shapeFactory = s; }

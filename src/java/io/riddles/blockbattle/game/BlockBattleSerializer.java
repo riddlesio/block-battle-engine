@@ -19,6 +19,8 @@
 
 package io.riddles.blockbattle.game;
 
+import io.riddles.blockbattle.BlockBattle;
+import io.riddles.blockbattle.game.data.MoveType;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
 import io.riddles.javainterface.game.player.AbstractPlayer;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
@@ -41,8 +43,6 @@ import java.util.ArrayList;
 public class BlockBattleSerializer extends
         AbstractGameSerializer<BlockBattleProcessor, BlockBattleState> {
 
-    private final int SIZE = Integer.MIN_VALUE; /* TODO: remove this */
-
     @Override
     public String traverseToString(BlockBattleProcessor processor, BlockBattleState initialState) {
         JSONObject game = new JSONObject();
@@ -59,7 +59,7 @@ public class BlockBattleSerializer extends
             state = (BlockBattleState) state.getNextState();
             ArrayList<BlockBattleMove> moves = state.getMoves();
             BlockBattleState state2 = (BlockBattleState) state.getNextState();
-            ArrayList<BlockBattleMove> moves2 = new ArrayList<BlockBattleMove>();
+            ArrayList<BlockBattleMove> moves2 = new ArrayList<>();
             if (state2 != null) {
                 moves2 = state2.getMoves();
             }
@@ -69,33 +69,59 @@ public class BlockBattleSerializer extends
                 maxMoves = moves2.size();
             }
 
+            String boardRep1 = "", boardRep2 = "";
             for (int i = 0; i < maxMoves; i++) {
-                String move1 = "----", move2="----";
-                JSONObject move1JSON = new JSONObject(), move2JSON = new JSONObject();
+                String move1 = "skips", move2="skips";
+                JSONObject player1JSON = new JSONObject(), player2JSON = new JSONObject();
+                BlockBattlePlayer pData1 = state.getPlayer(1);
+                BlockBattlePlayer pData2 = state.getPlayer(2);
 
                 if (moves.size() > i) {
-                    move1 = moves.get(i).getMoveType().toString();
-                    move1JSON.put("field", moves.get(i).getBoardRepresentation());
+                    MoveType moveType = moves.get(i).getMoveType();
+                    if (moveType != null) {
+                        move1 = moveType.toString();
+                    }
+                    boardRep1 = moves.get(i).getBoardRepresentation();
+                }
 
-                }
+                /* TODO: put the correct values here */
+                player1JSON.put("move", move1);
+                player1JSON.put("skips", pData1.getSkips());
+                player1JSON.put("field", boardRep1);
+                player1JSON.put("combo", pData1.getCombo());
+                player1JSON.put("points", pData1.getPoints());
+
                 if (moves2.size() > i) {
-                    move2 = moves2.get(i).getMoveType().toString();
-                    move2JSON.put("field", moves2.get(i).getBoardRepresentation());
+                    MoveType moveType = moves2.get(i).getMoveType();
+                    if (moveType != null) {
+                        move2 = moveType.toString();
+                    }
+                    boardRep2 = moves2.get(i).getBoardRepresentation();
                 }
-                System.out.println (move1 + "  " + move2);
+
+                /* TODO: put the correct values here */
+                player2JSON.put("move", move2);
+                player2JSON.put("skips", pData2.getSkips());
+                player2JSON.put("field", boardRep2);
+                player2JSON.put("combo", pData2.getCombo());
+                player2JSON.put("points", pData2.getPoints());
 
                 JSONArray players = new JSONArray();
-                players.put(move1JSON);
-                players.put(move2JSON);
-                states.put(players);
-            }
+                players.put(player1JSON);
+                players.put(player2JSON);
 
+                JSONObject subState = new JSONObject();
+                subState.put("nextShape", state.getNextShape().getType());
+                subState.put("round", 0);
+                subState.put("players", players);
+                states.put(subState);
+            }
         }
         //states.put(serializer.traverseToJson(state));
 
         JSONObject matchdata = new JSONObject();
         matchdata.put("states", states);
-        matchdata.put("settings", getSettingsJSON(game, processor));
+        matchdata.put("settings", getSettingsJSON(initialState, processor));
 
         game.put("playerData", getPlayerDataJSON(processor));
 
@@ -107,13 +133,13 @@ public class BlockBattleSerializer extends
         return game.toString();
     }
 
-    protected JSONObject getSettingsJSON(JSONObject game, BlockBattleProcessor processor) {
+    protected JSONObject getSettingsJSON(BlockBattleState initialState, BlockBattleProcessor processor) {
         JSONObject settings = new JSONObject();
 
 
         JSONObject field = new JSONObject();
-        field.put("width", SIZE);
-        field.put("height", SIZE);
+        field.put("width", initialState.getBoards().get(0).getWidth());
+        field.put("height", initialState.getBoards().get(0).getHeight());
         settings.put("field", field);
 
         settings.put("players", getPlayersJSON(processor));

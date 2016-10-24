@@ -47,6 +47,7 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
     private Shape nextShape;
 
     private ArrayList<BlockBattleBoard> boards;
+    private ArrayList<BlockBattlePlayer> players;
 
     private BlockBattlePlayer winner;
 
@@ -54,14 +55,21 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
     public BlockBattleState() {
         super();
         this.boards = new ArrayList<BlockBattleBoard>();
+        this.players = new ArrayList<BlockBattlePlayer>();
+
     }
 
     public BlockBattleState(BlockBattleState previousState, BlockBattleMove move, int roundNumber) {
         super(previousState, move, roundNumber);
         this.boards = new ArrayList<BlockBattleBoard>();
+        this.players = new ArrayList<BlockBattlePlayer>();
         for (BlockBattleBoard board : previousState.getBoards()) {
             BlockBattleBoard newBoard = new BlockBattleBoard(board);
             this.boards.add(newBoard);
+        }
+        for (BlockBattlePlayer player : previousState.getPlayers()) {
+            BlockBattlePlayer newPlayer = new BlockBattlePlayer(player);
+            this.players.add(newPlayer);
         }
         this.nextShape = previousState.getNextShape().clone();
     }
@@ -69,14 +77,21 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
     public BlockBattleState(BlockBattleState previousState, ArrayList<BlockBattleMove> moves, int roundNumber) {
         super(previousState, moves, roundNumber);
         this.boards = new ArrayList<BlockBattleBoard>();
+        this.players = new ArrayList<BlockBattlePlayer>();
+
         for (BlockBattleBoard board : previousState.getBoards()) {
             BlockBattleBoard newBoard = new BlockBattleBoard(board);
             this.boards.add(newBoard);
+        }
+        for (BlockBattlePlayer player : previousState.getPlayers()) {
+            BlockBattlePlayer newPlayer = new BlockBattlePlayer(player);
+            this.players.add(newPlayer);
         }
         this.nextShape = previousState.getNextShape().clone();
     }
 
     public ArrayList<BlockBattleBoard> getBoards() { return this.boards; }
+    public ArrayList<BlockBattlePlayer> getPlayers() { return this.players; }
 
     public BlockBattleBoard getBoard(int playerId) {
         for (BlockBattleBoard board : this.boards) {
@@ -87,6 +102,19 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
 
     public void setBoard(BlockBattleBoard b) {
         this.boards.add(b);
+    }
+
+    public BlockBattlePlayer getPlayer(int playerId) {
+        for (BlockBattlePlayer player : this.players) {
+            if (player.getId() == playerId) return player;
+        }
+        return null;
+    }
+
+    /* Makes a clone of BlockBattlePlayer, and stores it so it's data can be retrieved later */
+    public void setPlayer(BlockBattlePlayer player) {
+        BlockBattlePlayer playerClone = new BlockBattlePlayer(player);
+        this.players.add(playerClone);
     }
 
     public Shape getNextShape() { return this.nextShape; }
