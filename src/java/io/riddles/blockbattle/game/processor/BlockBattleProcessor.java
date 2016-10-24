@@ -112,7 +112,9 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 if (response == null) {
                     this.gameOver = true;
                 }
-                //board.dump();
+                if (player.getId() == 1) {
+                    board.dump();
+                }
             }
         }
 

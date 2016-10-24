@@ -1,4 +1,3 @@
-L,I,I,T,S,O,O,T,T,Z,Z,L,T,I,Z,J,J,O,L,S,T,J,I,I,J
 right,right,right,right,drop
 drop
 right,drop
@@ -7,3 +6,21 @@ left,left,drop
 left,drop
 right,drop
 right,right,right,right,drop
+left,left,left,left,turnright,left,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
