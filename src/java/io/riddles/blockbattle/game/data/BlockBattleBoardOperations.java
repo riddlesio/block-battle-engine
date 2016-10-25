@@ -52,6 +52,7 @@ public class BlockBattleBoardOperations {
         return failed;
     }
 
+    /* Returns true if adding garbage rows failed, i.e. game over */
     public boolean addGarbageLines(BlockBattleBoard board, int amount, boolean firstIsSingle) {
         boolean gameOver = moveFieldUp(board, amount);
 //		ArrayList<Integer> exclude = new ArrayList<Integer>();

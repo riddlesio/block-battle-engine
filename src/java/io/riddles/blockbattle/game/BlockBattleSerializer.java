@@ -54,57 +54,67 @@ public class BlockBattleSerializer extends
 
 
 
-
+        String boardRep1 = "", boardRep2 = "";
         while (state.hasNextState()) {
+            String winner = "";
+
+            System.out.println("nextState");
             state = (BlockBattleState) state.getNextState();
-            ArrayList<BlockBattleMove> moves = state.getMoves();
-            BlockBattleState state2 = (BlockBattleState) state.getNextState();
+            ArrayList<BlockBattleMove> moves1 = state.getMoves();
             ArrayList<BlockBattleMove> moves2 = new ArrayList<>();
-            if (state2 != null) {
-                moves2 = state2.getMoves();
+            if (state.getWinner() != null) {
+                winner = "player" + state.getWinner().getId();
+            }
+            if (state.hasNextState()) {
+                state = (BlockBattleState) state.getNextState();
+                if (state.getWinner() != null) {
+                    winner = "player" + state.getWinner().getId();
+                }
+                moves2 = state.getMoves();
             }
 
-            int maxMoves = moves.size();
-            if (moves2.size() > moves.size()) {
+            int maxMoves = moves1.size();
+            if (moves2.size() > moves1.size()) {
                 maxMoves = moves2.size();
             }
 
-            String boardRep1 = "", boardRep2 = "";
             for (int i = 0; i < maxMoves; i++) {
                 String move1 = "skips", move2="skips";
                 JSONObject player1JSON = new JSONObject(), player2JSON = new JSONObject();
                 BlockBattlePlayer pData1 = state.getPlayer(1);
                 BlockBattlePlayer pData2 = state.getPlayer(2);
 
-                if (moves.size() > i) {
-                    MoveType moveType = moves.get(i).getMoveType();
+                if (moves1.size() > i) {
+                    MoveType moveType = moves1.get(i).getMoveType();
                     if (moveType != null) {
                         move1 = moveType.toString();
                     }
-                    boardRep1 = moves.get(i).getBoardRepresentation();
+                    if (moves1.get(i).getBoardRepresentation() != null) {
+                        boardRep1 = moves1.get(i).getBoardRepresentation();
+                    }
                 }
 
-                /* TODO: put the correct values here */
                 player1JSON.put("move", move1);
                 player1JSON.put("skips", pData1.getSkips());
                 player1JSON.put("field", boardRep1);
                 player1JSON.put("combo", pData1.getCombo());
-                player1JSON.put("points", pData1.getPoints());
+                player1JSON.put("points", pData1.getRowPoints());
 
                 if (moves2.size() > i) {
                     MoveType moveType = moves2.get(i).getMoveType();
                     if (moveType != null) {
                         move2 = moveType.toString();
                     }
-                    boardRep2 = moves2.get(i).getBoardRepresentation();
+                    if (moves2.get(i).getBoardRepresentation() != null) {
+                        boardRep2 = moves2.get(i).getBoardRepresentation();
+                    }
                 }
 
-                /* TODO: put the correct values here */
                 player2JSON.put("move", move2);
                 player2JSON.put("skips", pData2.getSkips());
                 player2JSON.put("field", boardRep2);
                 player2JSON.put("combo", pData2.getCombo());
-                player2JSON.put("points", pData2.getPoints());
+                player2JSON.put("points", pData2.getRowPoints());
 
                 JSONArray players = new JSONArray();
                 players.put(player1JSON);
@@ -114,7 +124,12 @@ public class BlockBattleSerializer extends
                 subState.put("nextShape", state.getNextShape().getType());
                 subState.put("round", 0);
                 subState.put("players", players);
+
+                if (!winner.isEmpty()) {
+                    subState.put("winner", winner);
+                }
                 states.put(subState);
+
             }
         }
         //states.put(serializer.traverseToJson(state));

@@ -112,8 +112,13 @@ public class BlockBattleState extends AbstractState<BlockBattleMove> {
     }
 
     /* Makes a clone of BlockBattlePlayer, and stores it so it's data can be retrieved later */
+    /* If player with id already exists, it is overwritten. */
     public void setPlayer(BlockBattlePlayer player) {
         BlockBattlePlayer playerClone = new BlockBattlePlayer(player);
+        /* If player already exists, remove it first to prevent duplicates */
+        if (getPlayer(player.getId()) != null) {
+            this.players.remove(getPlayer(player.getId()));
+        }
         this.players.add(playerClone);
     }
 

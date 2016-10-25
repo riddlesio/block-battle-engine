@@ -171,8 +171,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     }
 
     private void processPointsForPlayer(BlockBattleState state, BlockBattlePlayer player) {
-
-        int unusedRowPoints = player.getRowPoints() % BlockBattleEngine.configuration.getInt("roundsPerSolid");
+        int unusedRowPoints = player.getRowPoints() % BlockBattleEngine.configuration.getInt("pointsPerGarbage");
         int rowsRemoved = player.getRowsRemoved();
 
         // calculate row points for this round
@@ -243,7 +242,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         if(boardOps.addGarbageLines(state.getBoard(getOpponentPlayer(player).getId()), nrGarbageRows, firstIsSingle)) {
             setWinner(state, player);
         }
-        System.out.println("rowsRemoved: " + player.getRowsRemoved());
     }
 
     /**
@@ -309,6 +307,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     public void setWinner(BlockBattleState state, BlockBattlePlayer winner) {
         this.winner = winner;
         state.setWinner(winner);
+        System.out.println( "we have a winner");
     }
 
     public void setShapeFactory(ShapeFactory s) { this.shapeFactory = s; }
