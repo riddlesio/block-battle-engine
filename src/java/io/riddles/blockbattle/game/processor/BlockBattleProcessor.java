@@ -87,14 +87,14 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 player.setCurrentShape(nextState.getNextShape().clone());
 
                 BlockBattleBoard board = nextState.getBoard(player.getId());
-                System.out.println("Playing roundNumber " + roundNumber + " with player " + player.getId());
+                //System.out.println("Playing roundNumber " + roundNumber + " with player " + player.getId());
 
                 if(!shapeOps.spawnShape(player.getCurrentShape(), board)) { /* Board is full! */
                     setWinner(state, getOpponentPlayer(player));
                 }
                 sendRoundUpdatesToPlayer(player, nextState);
 
-                String response = player.requestMove(ActionType.MOVE.toString());
+                String response = player.requestMove(ActionType.MOVES.toString());
                 // parse the response
                 BlockBattleMoveDeserializer deserializer = new BlockBattleMoveDeserializer(player);
                 ArrayList<BlockBattleMove> moves = deserializer.traverse(response);
@@ -111,9 +111,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 // stop game if bot returns nothing
                 if (response == null) {
                     this.gameOver = true;
-                }
-                if (player.getId() == 1) {
-                    board.dump();
                 }
             }
         }
@@ -307,7 +304,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     public void setWinner(BlockBattleState state, BlockBattlePlayer winner) {
         this.winner = winner;
         state.setWinner(winner);
-        System.out.println( "we have a winner");
     }
 
     public void setShapeFactory(ShapeFactory s) { this.shapeFactory = s; }

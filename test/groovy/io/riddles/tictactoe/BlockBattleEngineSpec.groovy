@@ -121,7 +121,7 @@ class BlockBattleEngineSpec extends Specification {
         //engine.finalState.getBoard().toString() == "2,0,1,0,0,0,0,0,2,0,0,0,0,0,0,1,1,1,0,0,0,2,0,2,2,0,0,0,0,2,1,1,1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,2,1,0,0,0,2,1,0,0";
     }
 
-    //@Ignore
+    @Ignore
     def "test t spin"() {
 
         setup:
@@ -131,7 +131,7 @@ class BlockBattleEngineSpec extends Specification {
         botInputs[0] = "./test/resources/bot_input_tspin.txt"
         botInputs[1] = "./test/resources/bot2_input.txt"
 
-        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,S,O,O,Z,I,S,T,J,J,J,J,J,J,J,J,J,J,J,J,J,J,J,J,J,J");
+        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,S,O,O,Z,I,S,T,J,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
         def engine = new TestEngine(wrapperInput, botInputs, sf)
         engine.run()
 
@@ -151,6 +151,42 @@ class BlockBattleEngineSpec extends Specification {
         botInputs[1] = "./test/resources/bot2_input.txt"
 
         ShapeFactoryValues sf = new ShapeFactoryValues("J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T");
+        def engine = new TestEngine(wrapperInput, botInputs, sf)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof BlockBattleState;
+    }
+
+    @Ignore
+    def "test long game"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot_input_tspin.txt"
+        botInputs[1] = "./test/resources/bot_input_tspin.txt"
+
+        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,S,O,O,Z,I,S,T,J,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
+        def engine = new TestEngine(wrapperInput, botInputs, sf)
+        engine.run()
+
+        expect:
+        engine.finalState instanceof BlockBattleState;
+    }
+
+    //@Ignore
+    def "test combo"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot_input_tspin.txt"
+        botInputs[1] = "./test/resources/bot_input_combo.txt"
+
+        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
         def engine = new TestEngine(wrapperInput, botInputs, sf)
         engine.run()
 

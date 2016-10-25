@@ -66,6 +66,11 @@ public abstract class AbstractPlayer {
         return this.name;
     }
 
+    /**
+     * @param name The name of this player
+     */
+    public void setName(String name) { this.name = name; }
+
     public BotIO getIoHandler() {
         return this.ioHandler;
     }

@@ -31,7 +31,8 @@ package io.riddles.blockbattle.game.move;
  */
 
 public enum ActionType {
-    MOVE;
+    MOVE,
+    MOVES;
 
     @Override
     public String toString() {

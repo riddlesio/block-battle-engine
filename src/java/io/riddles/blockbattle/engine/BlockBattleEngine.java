@@ -78,6 +78,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
          */
         for (BlockBattlePlayer player : this.players) {
             player.setId(player.getId() + 1);
+            player.setName("player" + player.getId());
         }
         return new BlockBattleProcessor(this.players);
     }
@@ -87,6 +88,10 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
      */
     @Override
     protected void sendGameSettings(BlockBattlePlayer player) {
+        player.sendSetting("field_height", configuration.getInt("fieldHeight"));
+        player.sendSetting("field_width", configuration.getInt("fieldWidth"));
+        player.sendSetting("max_rounds", configuration.getInt("maxRounds"));
+        player.sendSetting("your_bot", "player" + player.getId());
     }
 
     /* getPlayedGame creates a serializer and serialises the game

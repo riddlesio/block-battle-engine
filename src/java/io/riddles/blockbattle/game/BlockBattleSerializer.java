@@ -55,7 +55,7 @@ public class BlockBattleSerializer extends
 
 
         String boardRep1 = "", boardRep2 = "";
-        int roundNr = 0;
+        int roundNr = 1;
         String winner = "";
 
         /* Why do we need pData and pStatData for each player?
@@ -68,8 +68,6 @@ public class BlockBattleSerializer extends
 
         while (state.hasNextState() && winner.isEmpty()) {
 
-
-            System.out.println("nextState");
             state = (BlockBattleState) state.getNextState();
             ArrayList<BlockBattleMove> moves1 = state.getMoves();
             ArrayList<BlockBattleMove> moves2 = new ArrayList<>();
@@ -92,7 +90,7 @@ public class BlockBattleSerializer extends
 
 
             for (int i = 0; i < maxMoves; i++) {
-                String move1 = "skips", move2="skips";
+                String move1 = "", move2="";
                 JSONObject player1JSON = new JSONObject(), player2JSON = new JSONObject();
                 BlockBattlePlayer pData1 = state.getPlayer(1);
                 BlockBattlePlayer pData2 = state.getPlayer(2);
