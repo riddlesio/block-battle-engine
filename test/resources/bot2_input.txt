@@ -7,6 +7,7 @@ left,drop
 right,drop
 right,right,right,right,drop
 left,left,left,left,turnright,left,drop
+left,left,left,drop
 right,right,left,left,drop
 down,down,down,turnright,turnright,right,drop
 turnleft,turnleft,left,left

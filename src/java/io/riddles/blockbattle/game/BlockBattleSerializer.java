@@ -55,8 +55,19 @@ public class BlockBattleSerializer extends
 
 
         String boardRep1 = "", boardRep2 = "";
-        while (state.hasNextState()) {
-            String winner = "";
+        int roundNr = 0;
+        String winner = "";
+
+        /* Why do we need pData and pStatData for each player?
+            We use pStatData for displaying points, combo and skips.
+            If we take this data directly from pData, the points, combo and skips will show up 1 round too soon.
+            pStatData is updated after each round.
+            */
+        BlockBattlePlayer pStatData1 = state.getPlayer(1);
+        BlockBattlePlayer pStatData2 = state.getPlayer(2);
+
+        while (state.hasNextState() && winner.isEmpty()) {
+
 
             System.out.println("nextState");
             state = (BlockBattleState) state.getNextState();
@@ -78,6 +89,8 @@ public class BlockBattleSerializer extends
                 maxMoves = moves2.size();
             }
 
+
+
             for (int i = 0; i < maxMoves; i++) {
                 String move1 = "skips", move2="skips";
                 JSONObject player1JSON = new JSONObject(), player2JSON = new JSONObject();
@@ -95,10 +108,10 @@ public class BlockBattleSerializer extends
                 }
 
                 player1JSON.put("move", move1);
-                player1JSON.put("skips", pData1.getSkips());
+                player1JSON.put("skips", pStatData1.getSkips());
                 player1JSON.put("field", boardRep1);
-                player1JSON.put("combo", pData1.getCombo());
-                player1JSON.put("points", pData1.getRowPoints());
+                player1JSON.put("combo", pStatData1.getCombo());
+                player1JSON.put("points", pStatData1.getRowPoints());
 
                 if (moves2.size() > i) {
                     MoveType moveType = moves2.get(i).getMoveType();
@@ -111,10 +124,10 @@ public class BlockBattleSerializer extends
                 }
 
                 player2JSON.put("move", move2);
-                player2JSON.put("skips", pData2.getSkips());
+                player2JSON.put("skips", pStatData2.getSkips());
                 player2JSON.put("field", boardRep2);
-                player2JSON.put("combo", pData2.getCombo());
-                player2JSON.put("points", pData2.getRowPoints());
+                player2JSON.put("combo", pStatData2.getCombo());
+                player2JSON.put("points", pStatData2.getRowPoints());
 
                 JSONArray players = new JSONArray();
                 players.put(player1JSON);
@@ -122,15 +135,17 @@ public class BlockBattleSerializer extends
 
                 JSONObject subState = new JSONObject();
                 subState.put("nextShape", state.getNextShape().getType());
-                subState.put("round", 0);
+                subState.put("round", roundNr);
                 subState.put("players", players);
 
-                if (!winner.isEmpty()) {
+                if (!winner.isEmpty() && i == maxMoves-1 ) {
                     subState.put("winner", winner);
                 }
                 states.put(subState);
-
             }
+            pStatData1 = state.getPlayer(1);
+            pStatData2 = state.getPlayer(2);
+            roundNr++;
         }
         //states.put(serializer.traverseToJson(state));
 
