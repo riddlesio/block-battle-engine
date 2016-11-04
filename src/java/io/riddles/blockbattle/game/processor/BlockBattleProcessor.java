@@ -107,11 +107,6 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
                 } catch (Exception e) {
                     LOGGER.info(String.format("Unknown response: %s", response));
                 }
-
-                // stop game if bot returns nothing
-                if (response == null) {
-                    this.gameOver = true;
-                }
             }
         }
 
@@ -273,8 +268,8 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         return null;
     }
 
-    /* hasGameEnded should check all conditions on which a game should end
-    *  returns: boolean
+    /** hasGameEnded should check all conditions on which a game should end
+    *  @return: boolean
     * */
     @Override
     public boolean hasGameEnded(BlockBattleState state) {
@@ -284,8 +279,8 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         return returnVal;
     }
 
-    /* getWinner should check if there is a winner.
-    *  returns: if there is a winner, the winning Player, otherwise return null.
+    /** getWinner should check if there is a winner.
+    *  @return: if there is a winner, the winning Player, otherwise return null.
     *  */
     @Override
     public BlockBattlePlayer getWinner() {
@@ -293,18 +288,25 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
     }
 
 
-    /* getScore should return the game score if applicable.
-    *  returns: double Score
+    /** getScore should return the game score if applicable.
+    *  @return: double Score
     *  */
     @Override
     public double getScore() {
         return 0;
     }
 
+    /** setWinner set the winner in this Processor, and in the state provided.
+     *  @param: BlockbattleState
+     *  @param: BlockBattlePlayer
+     *  */
     public void setWinner(BlockBattleState state, BlockBattlePlayer winner) {
         this.winner = winner;
         state.setWinner(winner);
     }
 
+    /** setShapeFactory is used to set a non-random ShapeFactory for testing purposes.
+     * @param ShapeFactory to set.
+    *  */
     public void setShapeFactory(ShapeFactory s) { this.shapeFactory = s; }
 }

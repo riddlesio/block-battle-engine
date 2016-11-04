@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 
 /**
- * Created by joost on 22-10-16.
+ * ShapeFactory returns random Shapes.
  */
 public class ShapeFactory {
     private static final SecureRandom RANDOM = new SecureRandom();

@@ -49,7 +49,7 @@ public class ShapeOperations {
         shape.isFrozen = true;
     }
 
-    //////////////////////////////////// /* TODO: Please add documentation */
+    //////////////////////////////////// 
     private void takePosition(Shape shape1, Shape shape2, BlockBattleBoard board) {
         shape1.shape = shape2.shape;
         shape1.blocks = shape2.blocks;
