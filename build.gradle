@@ -1,0 +1,48 @@
+group 'io.riddles'
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'io.riddles.blockbattle.BlockBattle'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+    }
+
+    test {
+        groovy {
+            srcDir 'test/groovy'
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Block Battle Game Engine',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.json', name: 'json', version: '20160212'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.7.13'
+    compile 'org.mongodb:mongo-java-driver:2.13.3'
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.1'
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    testCompile group: 'cglib', name: 'cglib-nodep', version: '3.2.2'
+}
