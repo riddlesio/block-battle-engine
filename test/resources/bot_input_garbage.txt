@@ -1,0 +1,29 @@
+place_move 1
+place_move a
+garbage
+right,right,right,right,drop
+drop
+right,drop
+turnright,turnright,right,right,right,right,drop
+left,left,drop
+left,drop
+right,drop
+right,right,right,right,drop
+left,left,left,left,turnright,left,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
+right,drop
