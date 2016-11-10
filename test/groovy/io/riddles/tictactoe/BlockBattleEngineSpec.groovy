@@ -26,6 +26,7 @@ import io.riddles.blockbattle.game.data.ShapeType
 import io.riddles.blockbattle.game.state.BlockBattleState
 import io.riddles.javainterface.exception.TerminalException
 import io.riddles.javainterface.io.IOHandler
+import org.json.JSONObject
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -41,6 +42,7 @@ class BlockBattleEngineSpec extends Specification {
     class TestEngine extends BlockBattleEngine {
         protected BlockBattleState finalState = null
         protected ShapeFactory sf = new ShapeFactory();
+        public String playedGame = "";
 
         TestEngine(IOHandler ioHandler) {
             super();
@@ -79,7 +81,7 @@ class BlockBattleEngineSpec extends Specification {
             BlockBattleState initialState = getInitialState();
             this.finalState = this.gameLoop.run(initialState, this.processor);
 
-            String playedGame = getPlayedGame(initialState);
+            playedGame = getPlayedGame(initialState);
             this.platformHandler.finish(playedGame);
         }
     }
@@ -141,7 +143,7 @@ class BlockBattleEngineSpec extends Specification {
     }
 
 
-    @Ignore
+    //@Ignore
     def "test garbage input"() {
 
         setup:
@@ -157,9 +159,11 @@ class BlockBattleEngineSpec extends Specification {
 
         expect:
         engine.finalState instanceof BlockBattleState;
+        JSONObject j = new JSONObject(engine.playedGame);
+        j.get("winner") == 2;
     }
 
-    @Ignore
+    //@Ignore
     def "test long game"() {
 
         setup:
@@ -175,9 +179,11 @@ class BlockBattleEngineSpec extends Specification {
 
         expect:
         engine.finalState instanceof BlockBattleState;
+        JSONObject j = new JSONObject(engine.playedGame);
+        j.get("winner") == JSONObject.NULL;
     }
 
-    @Ignore
+    //@Ignore
     def "test combo"() {
 
         setup:
@@ -193,9 +199,11 @@ class BlockBattleEngineSpec extends Specification {
 
         expect:
         engine.finalState instanceof BlockBattleState;
+        JSONObject j = new JSONObject(engine.playedGame);
+        j.get("winner") == 1;
     }
 
-    //@Ignore
+    @Ignore
     def "test a game"() {
 
         setup:
@@ -210,5 +218,25 @@ class BlockBattleEngineSpec extends Specification {
 
         expect:
         engine.finalState instanceof BlockBattleState;
+    }
+
+    //@Ignore
+    def "test a draw game"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot1_input.txt"
+        botInputs[1] = "./test/resources/bot1_input.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs, new ShapeFactory())
+        engine.run()
+
+        expect:
+        engine.finalState instanceof BlockBattleState;
+        JSONObject j = new JSONObject(engine.playedGame);
+        j.get("winner") == JSONObject.NULL;
+
     }
 }

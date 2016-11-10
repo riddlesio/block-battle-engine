@@ -82,8 +82,8 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
 
         BlockBattleState nextState = state;
 
-        for (BlockBattlePlayer player : this.players) {
-            if (!hasGameEnded(nextState)) {
+        if (!hasGameEnded(nextState)) {
+            for (BlockBattlePlayer player : this.players) {
                 player.setCurrentShape(nextState.getNextShape().clone());
 
                 BlockBattleBoard board = nextState.getBoard(player.getId());
@@ -295,6 +295,7 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
         boolean returnVal = false;
         if (this.roundNumber > BlockBattleEngine.configuration.getInt("maxRounds")) returnVal = true;
         if (this.winner != null) returnVal = true;
+        if (this.gameOver) returnVal = true;
         return returnVal;
     }
 
@@ -320,8 +321,14 @@ public class BlockBattleProcessor extends AbstractProcessor<BlockBattlePlayer, B
      *  @param: BlockBattlePlayer
      *  */
     public void setWinner(BlockBattleState state, BlockBattlePlayer winner) {
-        this.winner = winner;
-        state.setWinner(winner);
+        if (this.winner == null) {
+            this.winner = winner;
+            state.setWinner(winner);
+        } else {
+            this.winner = null;
+            state.setWinner(null);
+        }
+        this.gameOver = true;
     }
 
     /** setShapeFactory is used to set a non-random ShapeFactory for testing purposes.
