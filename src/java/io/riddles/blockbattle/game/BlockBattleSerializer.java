@@ -55,8 +55,6 @@ public class BlockBattleSerializer extends
         BlockBattleStateSerializer serializer = new BlockBattleStateSerializer();
 
 
-
-
         String boardRep1 = "", boardRep2 = "";
         int roundNr = 1;
         String winner = "";
@@ -155,56 +153,5 @@ public class BlockBattleSerializer extends
         game.put("states", states);
 
         return game.toString();
-    }
-
-    protected JSONObject getSettingsJSON(BlockBattleState initialState, BlockBattleProcessor processor) {
-        JSONObject settings = new JSONObject();
-
-
-        JSONObject field = new JSONObject();
-        field.put("width", initialState.getBoards().get(0).getWidth());
-        field.put("height", initialState.getBoards().get(0).getHeight());
-        settings.put("field", field);
-
-        settings.put("players", getPlayersJSON(processor));
-
-        // add winner
-        String winner = "null";
-        if (processor.getWinner() != null) {
-            winner = processor.getWinner().getId() + "";
-        }
-        settings.put("winnerplayer", winner);
-
-        return settings;
-    }
-
-    protected JSONObject getPlayersJSON(BlockBattleProcessor processor) {
-
-        JSONArray playerNames = new JSONArray();
-        for (Object obj : processor.getPlayers()) {
-            AbstractPlayer player = (AbstractPlayer) obj;
-            playerNames.put(player.getName());
-        }
-
-        JSONObject players = new JSONObject();
-        players.put("count", processor.getPlayers().size());
-        players.put("names", playerNames);
-
-        return players;
-    }
-
-
-    protected JSONArray getPlayerDataJSON(BlockBattleProcessor processor) {
-
-        JSONArray playerData = new JSONArray();
-        for (BlockBattlePlayer obj : processor.getPlayers()) {
-            BlockBattlePlayer player = obj;
-            JSONObject p = new JSONObject();
-
-            p.put("name", player.getName());
-            playerData.put(p);
-        }
-
-        return playerData;
     }
 }

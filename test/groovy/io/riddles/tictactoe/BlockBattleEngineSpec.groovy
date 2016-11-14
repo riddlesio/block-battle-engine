@@ -116,12 +116,11 @@ class BlockBattleEngineSpec extends Specification {
         botInputs[0] = "./test/resources/bot1_input.txt"
         botInputs[1] = "./test/resources/bot2_input.txt"
 
-        def engine = new TestEngine(wrapperInput, botInputs, new ShapeFactoryValues())
+        def engine = new TestEngine(wrapperInput, botInputs)
         engine.run()
 
         expect:
         engine.finalState instanceof BlockBattleState;
-        //engine.finalState.getBoard().toString() == "2,0,1,0,0,0,0,0,2,0,0,0,0,0,0,1,1,1,0,0,0,2,0,2,2,0,0,0,0,2,1,1,1,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,2,1,0,0,0,2,1,0,0";
     }
 
     @Ignore
@@ -160,7 +159,7 @@ class BlockBattleEngineSpec extends Specification {
         expect:
         engine.finalState instanceof BlockBattleState;
         JSONObject j = new JSONObject(engine.playedGame);
-        j.get("winner") == 2;
+        j.get("winner") == 1;
     }
 
     @Ignore
@@ -200,7 +199,7 @@ class BlockBattleEngineSpec extends Specification {
         expect:
         engine.finalState instanceof BlockBattleState;
         JSONObject j = new JSONObject(engine.playedGame);
-        j.get("winner") == 1;
+        j.get("winner") == 0;
     }
 
     @Ignore
@@ -213,13 +212,14 @@ class BlockBattleEngineSpec extends Specification {
         botInputs[0] = "./test/resources/bot1_input_game.txt"
         botInputs[1] = "./test/resources/bot_input_combo.txt"
 
-        def engine = new TestEngine(wrapperInput, botInputs, new ShapeFactory())
+        ShapeFactoryValues sf = new ShapeFactoryValues("J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T,J,O,O,S,T");
+        def engine = new TestEngine(wrapperInput, botInputs, sf)
         engine.run()
 
         expect:
         engine.finalState instanceof BlockBattleState;
         JSONObject j = new JSONObject(engine.playedGame);
-        j.get("winner") == 2;
+        j.get("winner") == 1;
     }
 
     @Ignore

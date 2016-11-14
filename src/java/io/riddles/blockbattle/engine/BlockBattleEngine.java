@@ -67,7 +67,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
      */
     @Override
     protected BlockBattlePlayer createPlayer(int id) {
-        BlockBattlePlayer p = new BlockBattlePlayer(id);
+        BlockBattlePlayer p = new BlockBattlePlayer(id + 1);
         return p;
     }
 
@@ -77,13 +77,6 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
     @Override
     protected BlockBattleProcessor createProcessor() {
 
-        /* We're going for one-based indexes for playerId's so we can use 0's for empty fields.
-         * This makes sure existing bots will still work with TicTacToe, when used with the new wrapper.
-         */
-        for (BlockBattlePlayer player : this.players) {
-            player.setId(player.getId() + 1);
-            player.setName("player" + player.getId());
-        }
         return new BlockBattleProcessor(this.players);
     }
 

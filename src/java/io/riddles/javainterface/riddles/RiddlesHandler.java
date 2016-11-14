@@ -48,7 +48,7 @@ public class RiddlesHandler extends AbstractPlatformHandler {
         if (this.botInputFiles != null) {
             int id = player.getId();
 
-            BotIOHandler inputFileHandler = new BotIOHandler(id, this.botInputFiles[id]);
+            BotIOHandler inputFileHandler = new BotIOHandler(id, this.botInputFiles[id-1 ]);
             player.setIoHandler(inputFileHandler);
         }
     }
@@ -72,9 +72,10 @@ public class RiddlesHandler extends AbstractPlatformHandler {
 
         AbstractPlayer winner = this.processor.getWinner();
         String winnerId = "null";
+
         if (winner != null) {
             /* Attention! HUGE HACK is applied here. */
-            winnerId = winner.getId() - 1 + "";
+            winnerId = winner.getId()-1 + "";
         }
 
         JSONObject details = new JSONObject();

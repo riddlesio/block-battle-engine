@@ -37,13 +37,13 @@ public class BotIOHandler extends IOHandler implements BotIO {
 
     public BotIOHandler(int botId) {
         super();
-        this.botId = botId;
+        this.botId = botId-1;
     }
 
     // used for debugging only
     public BotIOHandler(int botId, String inputFile) {
         super(inputFile);
-        this.botId = botId;
+        this.botId = botId-1;
     }
 
     /**

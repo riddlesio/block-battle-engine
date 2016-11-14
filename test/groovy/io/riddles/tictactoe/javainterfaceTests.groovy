@@ -8,6 +8,7 @@ import io.riddles.blockbattle.game.move.BlockBattleMoveDeserializer
 import io.riddles.blockbattle.game.player.BlockBattlePlayer
 import io.riddles.blockbattle.game.processor.BlockBattleProcessor
 import io.riddles.blockbattle.game.state.BlockBattleState
+import org.json.JSONArray
 import org.json.JSONObject
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -49,7 +50,7 @@ class javainterfaceTests extends Specification {
 
         def wrapperInput = "./test/resources/wrapper_input.txt"
         botInputs[0] = "./test/resources/bot1_input.txt"
-        botInputs[1] = "./test/resources/bot1_input.txt"
+        botInputs[1] = "./test/resources/bot2_input.txt"
 
         def engine = new BlockBattleEngineSpec.TestEngine(wrapperInput, botInputs)
         engine.run()
@@ -59,7 +60,11 @@ class javainterfaceTests extends Specification {
         JSONObject j = new JSONObject(engine.playedGame);
         j.get("settings") instanceof JSONObject;
         j.get("settings").get('players') instanceof JSONObject;
+        j.get("settings").get('players').get('names') instanceof JSONArray;
+        j.get("settings").get('players').get('count') instanceof Integer;
         j.get("score") instanceof Integer;
+        j.get("winner") instanceof Integer;
+
 
 
 
