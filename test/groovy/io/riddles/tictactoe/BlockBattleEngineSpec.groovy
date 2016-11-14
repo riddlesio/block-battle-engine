@@ -39,7 +39,7 @@ import spock.lang.Specification
 
 class BlockBattleEngineSpec extends Specification {
 
-    class TestEngine extends BlockBattleEngine {
+    public static class TestEngine extends BlockBattleEngine {
         protected BlockBattleState finalState = null
         protected ShapeFactory sf = new ShapeFactory();
         public String playedGame = "";
@@ -143,7 +143,7 @@ class BlockBattleEngineSpec extends Specification {
     }
 
 
-    //@Ignore
+    @Ignore
     def "test garbage input"() {
 
         setup:
@@ -163,7 +163,7 @@ class BlockBattleEngineSpec extends Specification {
         j.get("winner") == 2;
     }
 
-    //@Ignore
+    @Ignore
     def "test long game"() {
 
         setup:
@@ -183,7 +183,7 @@ class BlockBattleEngineSpec extends Specification {
         j.get("winner") == JSONObject.NULL;
     }
 
-    //@Ignore
+    @Ignore
     def "test combo"() {
 
         setup:
@@ -218,9 +218,11 @@ class BlockBattleEngineSpec extends Specification {
 
         expect:
         engine.finalState instanceof BlockBattleState;
+        JSONObject j = new JSONObject(engine.playedGame);
+        j.get("winner") == 2;
     }
 
-    //@Ignore
+    @Ignore
     def "test a draw game"() {
 
         setup:
