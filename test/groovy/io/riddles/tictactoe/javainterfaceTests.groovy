@@ -41,7 +41,7 @@ class javainterfaceTests extends Specification {
     }
 
 
-    //@Ignore
+    @Ignore
     def "Test JSON addDefaultJSON output"() {
         println("addDefaultJSON")
 
@@ -64,9 +64,6 @@ class javainterfaceTests extends Specification {
         j.get("settings").get('players').get('count') instanceof Integer;
         j.get("score") instanceof Integer;
         j.get("winner") instanceof Integer;
-
-
-
 
     }
 }

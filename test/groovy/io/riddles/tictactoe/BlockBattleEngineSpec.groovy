@@ -239,6 +239,24 @@ class BlockBattleEngineSpec extends Specification {
         engine.finalState instanceof BlockBattleState;
         JSONObject j = new JSONObject(engine.playedGame);
         j.get("winner") == JSONObject.NULL;
+    }
 
+    //@Ignore
+    def "test a left right game"() {
+
+        setup:
+        String[] botInputs = new String[2]
+
+        def wrapperInput = "./test/resources/wrapper_input.txt"
+        botInputs[0] = "./test/resources/bot_input_leftright.txt"
+        botInputs[1] = "./test/resources/bot_input_leftright.txt"
+
+        def engine = new TestEngine(wrapperInput, botInputs, new ShapeFactory())
+        engine.run()
+
+        expect:
+        engine.finalState instanceof BlockBattleState;
+        JSONObject j = new JSONObject(engine.playedGame);
+        j.get("winner") == JSONObject.NULL;
     }
 }
