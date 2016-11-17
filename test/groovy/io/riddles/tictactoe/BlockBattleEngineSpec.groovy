@@ -258,5 +258,7 @@ class BlockBattleEngineSpec extends Specification {
         engine.finalState instanceof BlockBattleState;
         JSONObject j = new JSONObject(engine.playedGame);
         j.get("winner") == JSONObject.NULL;
+
+        // details = new JSONObject(engine.getDetails());
     }
 }

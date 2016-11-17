@@ -63,7 +63,8 @@ class javainterfaceTests extends Specification {
         j.get("settings").get('players').get('names') instanceof JSONArray;
         j.get("settings").get('players').get('count') instanceof Integer;
         j.get("score") instanceof Integer;
-        j.get("winner") instanceof Integer;
-
+        if (j.get("winner") != null) {
+            j.get("winner") instanceof Integer;
+        }
     }
 }
