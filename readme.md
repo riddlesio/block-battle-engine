@@ -1,5 +1,5 @@
 # Block Battle
-This repository contains Block Battle for the Riddles.io platform and TheAIGames.com.
+This repository contains Block Battle for the Riddles.io platform.
 
 ## Setting up
 
