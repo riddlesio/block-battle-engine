@@ -24,6 +24,8 @@ import io.riddles.blockbattle.game.data.MoveType;
 import io.riddles.javainterface.exception.InvalidInputException;
 import io.riddles.javainterface.game.move.AbstractMove;
 
+import java.util.ArrayList;
+
 /**
  * ${PACKAGE_NAME}
  *
@@ -36,34 +38,26 @@ import io.riddles.javainterface.game.move.AbstractMove;
  */
 
 
-public class BlockBattleMove extends AbstractMove<BlockBattlePlayer> {
+public class BlockBattleMove extends AbstractMove {
 
-    private MoveType type;
-    private String boardRepresentation;
+    private ArrayList<MoveType> types;
 
-    public BlockBattleMove(BlockBattlePlayer player) {
-        super(player);
+    public BlockBattleMove() {
+        this.types = new ArrayList<MoveType>();
     }
 
-    public BlockBattleMove(BlockBattlePlayer player, MoveType type) {
-        super(player);
-        this.type = type;
+    public BlockBattleMove(ArrayList<MoveType> types) {
+        this.types = types;
+    }
+    public BlockBattleMove(Exception exception) {
+        super(exception);
     }
 
-    public BlockBattleMove(BlockBattlePlayer player, InvalidInputException exception) {
-        super(player, exception);
+    public void setMoveTypes(ArrayList<MoveType> types) {
+        this.types = types;
     }
 
-    public MoveType getMoveType() {
-        return this.type;
+    public ArrayList<MoveType> getMoveTypes() {
+        return this.types;
     }
-
-    @Override
-    public String toString() {
-        return this.type.toString();
-    }
-
-    public void setBoardRepresentation(String s) { this.boardRepresentation = s; }
-    public String getBoardRepresentation() { return this.boardRepresentation; }
-
 }

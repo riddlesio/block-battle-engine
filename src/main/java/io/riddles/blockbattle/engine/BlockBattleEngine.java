@@ -12,6 +12,7 @@ import io.riddles.blockbattle.game.state.BlockBattlePlayerState;
 import io.riddles.blockbattle.game.state.BlockBattleState;
 import io.riddles.javainterface.configuration.Configuration;
 import io.riddles.javainterface.engine.GameLoopInterface;
+import io.riddles.javainterface.engine.SimpleGameLoop;
 import io.riddles.javainterface.engine.TurnBasedGameLoop;
 import io.riddles.javainterface.exception.TerminalException;
 import io.riddles.blockbattle.game.BlockBattleSerializer;
@@ -78,7 +79,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
 
     @Override
     protected GameLoopInterface createGameLoop() {
-        return new TurnBasedGameLoop();
+        return new SimpleGameLoop();
     }
 
     @Override

@@ -36,109 +36,20 @@ import io.riddles.javainterface.game.player.AbstractPlayer;
 
 public class BlockBattlePlayer extends AbstractPlayer {
 
-    private boolean usedSkip;
-    private int rowPoints;
-    private int combo;
-    private int rowsRemoved;
-    private int skips;
-    private Shape currentShape;
-    private boolean performedTSpin;
-    private boolean fieldCleared;
-    private int points;
+
 
 
     public BlockBattlePlayer(int id) {
         super(id);
-        this.rowPoints = 0;
-        this.combo = 0;
-        this.skips = 0;
-        this.performedTSpin = false;
-        this.fieldCleared = false;
-        this.usedSkip = false;
-        this.points = 0;
     }
 
     public BlockBattlePlayer(BlockBattlePlayer player) {
         super(player.getId());
-        this.rowPoints = player.getRowPoints();
-        this.combo = player.getCombo();
-        this.skips = player.getSkips();
-        this.performedTSpin = player.getPerformedTSpin();
-        this.fieldCleared = player.getfieldCleared();
-        this.usedSkip = player.getUsedSkip();
-        this.points = player.getPoints();
     }
 
     public String toString() {
         return "BlockBattlePlayer " + this.getId();
     }
 
-    public void addRowPoints(int points) {
-        this.rowPoints += points;
-    }
 
-    public boolean getTSpin() {
-        return this.performedTSpin;
-    }
-
-    public boolean getFieldCleared() {
-        return this.fieldCleared;
-    }
-    public int getRowPoints() {
-        return this.rowPoints;
-    }
-
-    public void setCombo(int combo) {
-        this.combo = combo;
-    }
-
-    public int getCombo() {
-        return this.combo;
-    }
-
-    public void setSkips(int skips) {
-        this.skips = skips;
-    }
-
-    public int getSkips() {
-        return this.skips;
-    }
-
-    public void setUsedSkip(boolean usedSkip) {
-        this.usedSkip = usedSkip;
-    }
-
-    public boolean getUsedSkip() {
-        return this.usedSkip;
-    }
-    public boolean getPerformedTSpin() {
-        return this.performedTSpin;
-    }
-    public boolean getfieldCleared() {
-        return this.fieldCleared;
-    }
-
-    public void setRowsRemoved(int rowsRemoved) {
-        this.rowsRemoved = rowsRemoved;
-    }
-
-    public int getRowsRemoved() {
-        return this.rowsRemoved;
-    }
-
-    public int getPoints() {
-        return this.points;
-    }
-
-    public void setTSpin(boolean performedTSpin) {
-        this.performedTSpin = performedTSpin;
-    }
-
-    public void setFieldCleared(boolean isFieldCleared) {
-        this.fieldCleared = isFieldCleared;
-    }
-
-
-    public Shape getCurrentShape() { return this.currentShape; }
-    public void setCurrentShape(Shape currentShape) { this.currentShape = currentShape; }
 }

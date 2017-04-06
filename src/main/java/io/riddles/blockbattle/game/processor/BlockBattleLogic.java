@@ -6,6 +6,7 @@ import io.riddles.blockbattle.game.data.Shape;
 import io.riddles.blockbattle.game.data.ShapeOperations;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
+import io.riddles.blockbattle.game.state.BlockBattlePlayerState;
 import io.riddles.blockbattle.game.state.BlockBattleState;
 import io.riddles.javainterface.exception.InvalidInputException;
 import io.riddles.javainterface.game.data.Point;
@@ -32,8 +33,8 @@ public class BlockBattleLogic {
      * @param BlockBattleMove The move of the player
      * @return
      */
-    public void transform(BlockBattleState state, ArrayList<BlockBattleMove> moves) throws InvalidInputException {
-        executeMovesForPlayer(state, moves); /* Taken from old Processor.java */
+    public void transform(BlockBattleState state, BlockBattlePlayerState playerState) throws InvalidInputException {
+        executeMovesForPlayer(state, playerState);
     }
 
     /**
@@ -45,7 +46,7 @@ public class BlockBattleLogic {
      * @param ArrayList<BlockBattleMove> The move(s) of the player
      * @return
      */
-    private void executeMovesForPlayer(BlockBattleState state, ArrayList<BlockBattleMove> moves) {
+    private void executeMovesForPlayer(BlockBattleState state, BlockBattlePlayerState playerState) {
         if (moves.size() > 0) {
             BlockBattlePlayer player = moves.get(0).getPlayer();
             BlockBattleBoard board = state.getBoard(player.getId());

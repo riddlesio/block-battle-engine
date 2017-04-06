@@ -38,35 +38,34 @@ import java.util.ArrayList;
  * @author Niko
  */
 
-public class BlockBattleMoveDeserializer implements Deserializer<ArrayList<BlockBattleMove>> {
+public class BlockBattleMoveDeserializer implements Deserializer<BlockBattleMove> {
 
-    private BlockBattlePlayer player;
 
-    public BlockBattleMoveDeserializer(BlockBattlePlayer player) {
-        this.player = player;
+    public BlockBattleMoveDeserializer() {
     }
 
     @Override
-    public ArrayList<BlockBattleMove> traverse(String string) {
-        ArrayList<BlockBattleMove> moves = new ArrayList<BlockBattleMove>();
+    public BlockBattleMove traverse(String string) {
         try {
-            moves = visitMove(string);
+            return visitMove(string);
         } catch (InvalidInputException ex) {
-            moves.add(new BlockBattleMove(this.player, ex));
+            return new BlockBattleMove(ex);
         } catch (Exception ex) {
-            moves.add(new BlockBattleMove(this.player, new InvalidInputException("Failed to parse move")));
+            return new BlockBattleMove(new InvalidInputException("Failed to parse move"));
         }
-        return moves;
+
     }
 
-    private ArrayList<BlockBattleMove> visitMove(String input) throws InvalidInputException {
+    private BlockBattleMove visitMove(String input) throws InvalidInputException {
+        BlockBattleMove move = new BlockBattleMove();
 
         String[] split = input.split(",");
-        ArrayList<BlockBattleMove> moves = new ArrayList<BlockBattleMove>();
+        ArrayList<MoveType> moves = new ArrayList<MoveType>();
         for (int i = 0; i < split.length; i++) {
-            moves.add(new BlockBattleMove(this.player, visitAssessment(split[i])));
+            moves.add(visitAssessment(split[i]));
         }
-        return moves;
+        move.setMoveTypes(moves);
+        return move;
     }
 
     public MoveType visitAssessment(String input) throws InvalidInputException {

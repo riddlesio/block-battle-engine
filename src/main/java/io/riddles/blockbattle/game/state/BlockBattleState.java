@@ -21,6 +21,7 @@ package io.riddles.blockbattle.game.state;
 
 import io.riddles.blockbattle.game.data.Shape;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
+import io.riddles.javainterface.game.player.PlayerBound;
 import io.riddles.javainterface.game.state.AbstractState;
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
@@ -37,25 +38,31 @@ import java.util.ArrayList;
  * @author joost
  */
 
-public class BlockBattleState extends AbstractState<BlockBattlePlayerState> {
+public class BlockBattleState extends AbstractState<BlockBattlePlayerState> implements PlayerBound {
 
-    private BlockBattleMove move;
-
-    private int round;
+    private int playerId;
 
 
+    private Shape currentShape;
     private Shape nextShape;
 
 
 
     public BlockBattleState(BlockBattleState previousState, ArrayList<BlockBattlePlayerState> playerStates, int roundNumber) {
         super(previousState, playerStates, roundNumber);
+        this.currentShape = previousState.getNextShape().clone(); /* Clone the next shape of previousState, which is the current shape */
         this.nextShape = previousState.getNextShape().clone();
     }
 
     public Shape getNextShape() { return this.nextShape; }
     public void setNextShape(Shape nextShape) { this.nextShape = nextShape; }
 
+    public Shape getCurrentShape() { return this.currentShape; }
+    public void setCurrentShape(Shape currentShape) { this.currentShape = currentShape; }
 
+    public int getPlayerId() { return this.playerId; }
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
 
 }
