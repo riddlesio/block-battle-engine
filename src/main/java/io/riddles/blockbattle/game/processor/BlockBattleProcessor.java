@@ -75,6 +75,9 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
     public BlockBattleState createNextState(BlockBattleState state, int roundNumber) {
 
         ArrayList<BlockBattlePlayer> players = this.playerProvider.getPlayers();
+        sendUpdates(state, players.get(0));
+        sendUpdates(state, players.get(1));
+
 
         BlockBattleMoveDeserializer deserializer = new BlockBattleMoveDeserializer();
         String responseP1 = players.get(0).requestMove(ActionType.MOVE);
@@ -82,6 +85,8 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
 
         BlockBattleMove moveP1 = deserializer.traverse(responseP1);
         BlockBattleMove moveP2 = deserializer.traverse(responseP2);
+
+
 
         while (moveP1.getMoveTypes().size() > 0 || moveP2.getMoveTypes().size() > 0) {
             createState(state, moveP1, moveP2);
@@ -313,8 +318,6 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
     *  */
     public void setShapeFactory(ShapeFactory s) { this.shapeFactory = s; }
 
-
-    @Override
     public void sendUpdates(BlockBattleState state, BlockBattlePlayer player) {
         player.sendUpdate("round", state.getRoundNumber());
         BlockBattlePlayerState playerState = getActivePlayerState(state.getPlayerStates(), player.getId());
