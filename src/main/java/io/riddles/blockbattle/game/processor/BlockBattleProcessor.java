@@ -118,13 +118,7 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
         BlockBattlePlayerState playerStateP1 = getActivePlayerState(state.getPlayerStates(), 0);
         BlockBattlePlayerState playerStateP2 = getActivePlayerState(state.getPlayerStates(), 1);
         BlockBattleBoard boardP1 = playerStateP1.getBoard();
-        if (!shapeOps.spawnShape(state.getNextShape().clone(), boardP1)) {
-            setWinnerId(state, 1);
-        }
         BlockBattleBoard boardP2 = playerStateP2.getBoard();
-        if (!shapeOps.spawnShape(state.getNextShape().clone(), boardP2)) {
-            setWinnerId(state, 0);
-        }
 
         if (state.getRoundNumber() % BlockBattleEngine.configuration.getInt("roundsPerSolid") == 0) { // add solid line on certain round number
             if (boardOps.addSolidRows(boardP1, 1)) {
@@ -135,8 +129,17 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
             }
         }
 
+        int rowsRemoved = boardP1.processEndOfRoundField();
 
-        playerStateP1.setRowsRemoved(boardP1.processEndOfRoundField());
+        playerStateP1.setRowsRemoved(rowsRemoved);
+
+        if (!shapeOps.spawnShape(state.getNextShape().clone(), boardP2)) {
+            setWinnerId(state, 0);
+        }
+        if (!shapeOps.spawnShape(state.getNextShape().clone(), boardP1)) {
+            setWinnerId(state, 1);
+        }
+
         playerStateP1.setFieldCleared(boardP1.isFieldCleared());
         playerStateP2.setRowsRemoved(boardP2.processEndOfRoundField());
         playerStateP2.setFieldCleared(boardP2.isFieldCleared());
@@ -144,19 +147,22 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
         processPointsForPlayer(state, playerStateP1);
         processPointsForPlayer(state, playerStateP2);
 
+        Shape nextShape = shapeFactory.getNext();
+        playerStateP1.setCurrentShape(nextShape.clone());
+        playerStateP2.setCurrentShape(nextShape.clone());
 
-        state.setNextShape(shapeFactory.getNext());
+        boardP1.dump();
+
+        state.setNextShape(nextShape);
         return state;
     }
 
     private BlockBattleState createState(BlockBattleState state, BlockBattleMove moveP1, BlockBattleMove moveP2) {
-        System.out.println(state.getPlayerStates().get(0).getCurrentShape().location);
 
         ArrayList<BlockBattlePlayerState> nextPlayerStates = clonePlayerStates(state.getPlayerStates());
         BlockBattleState nextState = new BlockBattleState(state, state.getPlayerStates(), state.getRoundNumber(), state.getMoveNumber()+1);
 
 
-        System.out.println(nextPlayerStates.get(0).getCurrentShape().location);
         MoveType moveTypeP1 = null, moveTypeP2 = null;
         if (moveP1.getMoveTypes().size() > 0)
             moveTypeP1 = moveP1.getMoveTypes().remove(0);
@@ -181,9 +187,6 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
             moveP2.setException(new InvalidMoveException("Error transforming move."));
             playerStateP2.setMove(moveP2);
         }
-        System.out.println(nextPlayerStates.get(0).getCurrentShape().location);
-
-        playerStateP1.getBoard().dump();
 
         nextState.setPlayerstates(nextPlayerStates);
 
