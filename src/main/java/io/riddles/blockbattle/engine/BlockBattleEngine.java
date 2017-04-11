@@ -113,19 +113,19 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
     @Override
     protected BlockBattleState getInitialState() {
         ArrayList<BlockBattlePlayerState> playerStates = new ArrayList<>();
+        Shape nextShape = processor.shapeFactory.getNext();
 
         for (BlockBattlePlayer player : playerProvider.getPlayers()) {
             BlockBattlePlayerState playerState = new BlockBattlePlayerState(player.getId());
             BlockBattleBoard board = new BlockBattleBoard(configuration.getInt("fieldWidth"), (configuration.getInt("fieldHeight")));
             playerState.setBoard(board);
-            playerState.setPlayerId(playerProvider.getPlayers().get(0).getId());
+            playerState.setCurrentShape(nextShape.clone());
             playerStates.add(playerState);
-
-
         }
-        BlockBattleState state = new BlockBattleState(null, playerStates, 0);
+        BlockBattleState state = new BlockBattleState(null, playerStates, 0, 0);
 
         state.setNextShape(processor.shapeFactory.getNext());
+
 
         return state;
     }

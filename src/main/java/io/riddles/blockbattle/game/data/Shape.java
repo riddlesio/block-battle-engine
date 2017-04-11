@@ -1,9 +1,6 @@
 package io.riddles.blockbattle.game.data;
 
-
-import io.riddles.blockbattle.game.move.BlockBattleMove;
-import io.riddles.blockbattle.game.data.MoveType;
-import io.riddles.javainterface.game.data.Point;
+import java.awt.*;
 
 public class Shape {
 
@@ -18,6 +15,7 @@ public class Shape {
 		this.type = type;
 		this.blocks = new Cell[4];
 		this.isFrozen = false;
+		this.location = new Point(0,0); /* TODO: */
 		setShape();
 	}
 	
@@ -33,10 +31,11 @@ public class Shape {
 	
 	public Shape clone() {
 		Shape clone;
-		
-		if(this.location == null)
+
+		if(this.location == null) {
 			clone = new Shape(this.type);
-		else {
+			System.out.println("location null");
+		} else {
 			Cell[][] shapeClone = new Cell[size][size];
 			Cell[] blocksClone = new Cell[4];
 			int blockNr = 0;
@@ -49,9 +48,9 @@ public class Shape {
 					}
 				}
 			}
-			clone = new Shape(this.type, this.size, (Point) this.location.clone(), shapeClone, blocksClone, isFrozen);
+			clone = new Shape(this.type, this.size, new Point(this.location.x, this.location.y), shapeClone, blocksClone, isFrozen);
 		}
-		
+
 		return clone;
 	}
 	

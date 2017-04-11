@@ -1,7 +1,6 @@
 package io.riddles.blockbattle.game.data;
 
-import io.riddles.blockbattle.game.move.BlockBattleMove;
-import io.riddles.javainterface.game.data.Point;
+import java.awt.*;
 
 /**
  * Created by joost on 10/11/16.
@@ -60,7 +59,7 @@ public class ShapeOperations {
     }
 
     /* TODO: Needs reimplementation */
-    public boolean checkTSpin(Shape shape, BlockBattleBoard board, BlockBattleMove lastMove1, BlockBattleMove lastMove2, Point lastLocation) {
+    public boolean checkTSpin(Shape shape, BlockBattleBoard board, MoveType lastMove1, MoveType lastMove2, Point lastLocation) {
         if(shape.type != ShapeType.T)
             return false;
 
@@ -69,9 +68,9 @@ public class ShapeOperations {
 
         // last move is turn or second to last move is turn
 
-        if(!(lastMove1.getMoveType() == MoveType.TURNRIGHT || lastMove1.getMoveType() == MoveType.TURNLEFT
-                || ((lastMove1.getMoveType() == MoveType.DOWN || lastMove1.getMoveType() == MoveType.DROP)
-                && (lastMove2.getMoveType() == MoveType.TURNLEFT || lastMove2.getMoveType() == MoveType.TURNRIGHT)
+        if(!(lastMove1 == MoveType.TURNRIGHT || lastMove1 == MoveType.TURNLEFT
+                || ((lastMove1 == MoveType.DOWN || lastMove1 == MoveType.DROP)
+                && (lastMove2 == MoveType.TURNLEFT || lastMove2 == MoveType.TURNRIGHT)
                 && (lastLocation.equals(shape.location)))))
             return false;
 

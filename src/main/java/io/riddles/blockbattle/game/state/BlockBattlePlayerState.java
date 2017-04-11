@@ -1,7 +1,9 @@
 package io.riddles.blockbattle.game.state;
 
 import io.riddles.blockbattle.game.data.BlockBattleBoard;
+import io.riddles.blockbattle.game.data.Shape;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
+import io.riddles.javainterface.game.data.Board;
 import io.riddles.javainterface.game.state.AbstractPlayerState;
 
 public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove> {
@@ -14,6 +16,8 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
     private boolean performedTSpin;
     private boolean fieldCleared;
     private int points;
+    private Shape currentShape;
+
 
     private BlockBattleBoard board;
 
@@ -30,16 +34,17 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
 
 
 
-    public BlockBattlePlayerState clone() {
-        BlockBattlePlayerState psClone = new BlockBattlePlayerState(this.playerId);
-        psClone.setRowPoints(rowPoints);
-        psClone.setCombo(combo);
-        psClone.setSkips(skips);
-        psClone.setPerformedTSpin(performedTSpin);
-        psClone.setFieldCleared(fieldCleared);
-        psClone.setUsedSkip(usedSkip);
-        psClone.setPoints(points);
-        return psClone;
+    public BlockBattlePlayerState(BlockBattlePlayerState ps) {
+        super(ps.getPlayerId());
+        this.setBoard(new BlockBattleBoard(ps.board));
+        this.setRowPoints(ps.getRowPoints());
+        this.setCombo(ps.getCombo());
+        this.setSkips(ps.getSkips());
+        this.setPerformedTSpin(ps.getPerformedTSpin());
+        this.setFieldCleared(ps.getFieldCleared());
+        this.setUsedSkip(ps.getUsedSkip());
+        this.setPoints(ps.getPoints());
+        this.currentShape = ps.getCurrentShape().clone();
     }
 
     public int getPlayerId() { return this.playerId; }
@@ -90,7 +95,7 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
         return this.usedSkip;
     }
 
-    public boolean setPerformedTSpin(boolean performedTSpin) { this.performedTSpin = performedTSpin; }
+    public void setPerformedTSpin(boolean performedTSpin) { this.performedTSpin = performedTSpin; }
     public boolean getPerformedTSpin() {
         return this.performedTSpin;
     }
@@ -120,4 +125,6 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
     }
 
 
+    public Shape getCurrentShape() { return this.currentShape; }
+    public void setCurrentShape(Shape currentShape) { this.currentShape = currentShape; }
 }

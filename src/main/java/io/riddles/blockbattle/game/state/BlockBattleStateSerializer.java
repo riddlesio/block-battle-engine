@@ -44,11 +44,14 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
     private JSONObject visitState(BlockBattleState state) throws NullPointerException {
         JSONObject stateJson = new JSONObject();
 
-        BlockBattleMove move = state.getMoves().get(0);
+        BlockBattlePlayerState playerStateP0 = state.getPlayerStateById(0);
+        BlockBattlePlayerState playerStateP1 = state.getPlayerStateById(1);
+        BlockBattleMove moveP0 = playerStateP0.getMove();
+        BlockBattleMove moveP1 = playerStateP1.getMove();
 
-        stateJson.put("movetype", move.getMoveType());
+        //stateJson.put("movetype", move.getMoveType());
 
-        BlockBattlePlayer winner = state.getWinner();
+        BlockBattlePlayer winner = null;//state.getWinner();
         String winnerString = "";
         if (winner != null) {
             winnerString = winner.toString();
@@ -59,20 +62,17 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
         stateJson.put("winner", winner);
 
 
-        if (move.getException() == null) {
+        if (moveP0.getException() == null) {
             stateJson.put("exception", JSONObject.NULL);
             stateJson.put("illegalMove", "");
         } else {
-            stateJson.put("exception", move.getException().getMessage());
-            stateJson.put("illegalMove", move.getException().getMessage());
+            stateJson.put("exception", moveP0.getException().getMessage());
+            stateJson.put("illegalMove", moveP0.getException().getMessage());
         }
 
-        /* TODO: We need a BlockBattlePlayer here. */
-        /*
-        stateJson.put("points", state.getPoints());
-        stateJson.put("combo", state.getCombo());
-        stateJson.put("skips", state.getSkips());
-        */
+        stateJson.put("points", playerStateP0.getPoints());
+        stateJson.put("combo", playerStateP0.getCombo());
+        stateJson.put("skips", playerStateP0.getSkips());
 
         return stateJson;
     }

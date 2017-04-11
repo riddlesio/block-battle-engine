@@ -27,6 +27,7 @@ import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.processor.BlockBattleProcessor;
 import io.riddles.blockbattle.game.state.BlockBattleState;
 import io.riddles.blockbattle.game.state.BlockBattleStateSerializer;
+import io.riddles.javainterface.game.state.AbstractState;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,8 +47,7 @@ public class BlockBattleSerializer extends
     @Override
     public String traverseToString(BlockBattleProcessor processor, BlockBattleState initialState) {
         JSONObject game = new JSONObject();
-        game = addDefaultJSON(game, processor);
-
+        game = addDefaultJSON(initialState, game, processor);
 
         // add all states
         JSONArray states = new JSONArray();
@@ -64,6 +64,7 @@ public class BlockBattleSerializer extends
             If we take this data directly from pData, the points, combo and skips will show up 1 round too soon.
             pStatData is updated after each round.
             */
+        /*
         BlockBattlePlayer pStatData1 = state.getPlayer(1);
         BlockBattlePlayer pStatData2 = state.getPlayer(2);
 
@@ -146,9 +147,9 @@ public class BlockBattleSerializer extends
             pStatData2 = state.getPlayer(2);
             roundNr++;
         }
-
+        */
         // add score
-        game.put("score", processor.getScore());
+        game.put("score", processor.getScore(initialState));
 
         game.put("states", states);
 

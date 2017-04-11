@@ -1,7 +1,6 @@
 package io.riddles.blockbattle.game.data;
 
-import io.riddles.javainterface.game.data.Point;
-
+import java.awt.*;
 import java.security.SecureRandom;
 
 /**

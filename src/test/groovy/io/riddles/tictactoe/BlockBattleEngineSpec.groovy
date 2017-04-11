@@ -23,8 +23,13 @@ import io.riddles.blockbattle.engine.BlockBattleEngine
 import io.riddles.blockbattle.game.data.Shape
 import io.riddles.blockbattle.game.data.ShapeFactory
 import io.riddles.blockbattle.game.data.ShapeType
+import io.riddles.blockbattle.game.player.BlockBattlePlayer
+import io.riddles.blockbattle.game.processor.BlockBattleProcessor
 import io.riddles.blockbattle.game.state.BlockBattleState
 import io.riddles.javainterface.exception.TerminalException
+import io.riddles.javainterface.game.player.PlayerProvider
+import io.riddles.javainterface.game.state.AbstractState
+import io.riddles.javainterface.io.FileIOHandler
 import io.riddles.javainterface.io.IOHandler
 import org.json.JSONObject
 import spock.lang.Ignore
@@ -40,49 +45,10 @@ import spock.lang.Specification
 class BlockBattleEngineSpec extends Specification {
 
     public static class TestEngine extends BlockBattleEngine {
-        protected BlockBattleState finalState = null
-        protected ShapeFactory sf = new ShapeFactory();
-        public String playedGame = "";
 
-        TestEngine(IOHandler ioHandler) {
-            super();
-            this.ioHandler = ioHandler;
-        }
-        TestEngine(String wrapperFile, String[] botFiles) {
-            super(wrapperFile, botFiles)
-        }
-        TestEngine(String wrapperFile, String[] botFiles, ShapeFactory sf) {
-            super(wrapperFile, botFiles)
-            this.sf = sf;
-        }
-
-        IOHandler getIOHandler() {
-            return this.ioHandler;
-        }
-
-        @Override
-        public void run() throws TerminalException, InterruptedException {
-            LOGGER.info("Starting...");
-
-            setup();
-
-            if (this.processor == null) {
-                throw new TerminalException("Processor has not been set");
-            }
-
-            LOGGER.info("Running pre-game phase...");
-
-            this.processor.setShapeFactory(sf);
-            this.processor.preGamePhase();
-
-
-            LOGGER.info("Starting game loop...");
-
-            BlockBattleState initialState = getInitialState();
-            this.finalState = this.gameLoop.run(initialState, this.processor);
-
-            playedGame = getPlayedGame(initialState);
-            this.platformHandler.finish(playedGame);
+        TestEngine(PlayerProvider<BlockBattleEngine> playerProvider, String wrapperInput) {
+            super(playerProvider, null);
+            this.ioHandler = new FileIOHandler(wrapperInput);
         }
     }
 
@@ -106,23 +72,39 @@ class BlockBattleEngineSpec extends Specification {
     }
 
 
-    @Ignore
+    //@Ignore
     def "test if BlockBattleEngine is created"() {
 
         setup:
         String[] botInputs = new String[2]
 
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot1_input.txt"
-        botInputs[1] = "./test/resources/bot2_input.txt"
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input.txt"
+        botInputs[1] = "./src/test/resources/bot2_input.txt"
 
-        def engine = new TestEngine(wrapperInput, botInputs)
-        engine.run()
+        PlayerProvider<BlockBattlePlayer> playerProvider = new PlayerProvider<>();
+        BlockBattlePlayer player1 = new BlockBattlePlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        BlockBattlePlayer player2 = new BlockBattlePlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        AbstractState initialState = engine.willRun()
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
+        BlockBattleProcessor processor = engine.getProcessor();
+        ShapeFactory sf = new ShapeFactory();
+        processor.setShapeFactory(sf);
+
 
         expect:
-        engine.finalState instanceof BlockBattleState;
+        finalState instanceof BlockBattleState;
+        finalState.getPlayerStateById(0).getBoard().toString() == ".,0,.,.,.,.,.,.,1,.,.,.,.,.,.,0,1,.,.,.,.,.,1,0,1,.,.,.,1,1,0,0,.,.,.,0,1,0,0,0,.,.";
+        processor.getWinnerId(finalState) == 0;
     }
 
+    /*
     @Ignore
     def "test t spin"() {
 
@@ -261,4 +243,5 @@ class BlockBattleEngineSpec extends Specification {
 
         // details = new JSONObject(engine.getDetails());
     }
+    */
 }

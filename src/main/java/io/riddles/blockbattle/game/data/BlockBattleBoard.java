@@ -1,7 +1,8 @@
 package io.riddles.blockbattle.game.data;
 
 import io.riddles.javainterface.game.data.Board;
-import io.riddles.javainterface.game.data.Point;
+
+import java.awt.*;
 
 /**
  * ${PACKAGE_NAME}
@@ -16,10 +17,6 @@ import io.riddles.javainterface.game.data.Point;
 
 public class BlockBattleBoard extends Board<Cell> {
 
-    public BlockBattleBoard() {
-        super();
-    }
-
     private int solidRows;
     private int playerId;
 
@@ -32,17 +29,20 @@ public class BlockBattleBoard extends Board<Cell> {
         }
     }
 
+    @Override
+    public Cell fieldFromString(String s) {
+        return null;
+    }
+
     public BlockBattleBoard(int w, int h) {
-        this.width = w;
-        this.height = h;
+        super(w, h);
         this.solidRows = 0;
         this.fields = new Cell[width][height];
         clear();
     }
 
     public BlockBattleBoard(BlockBattleBoard b) {
-        this.width = b.getWidth();
-        this.height = b.getHeight();
+        super(b.getWidth(), b.getHeight());
         this.solidRows = b.getSolidRows();
         this.fields = new Cell[width][height];
         this.playerId = b.getPlayerId();
