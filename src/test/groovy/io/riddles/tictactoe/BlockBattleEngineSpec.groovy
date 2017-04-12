@@ -72,7 +72,7 @@ class BlockBattleEngineSpec extends Specification {
     }
 
 
-    //@Ignore
+    @Ignore
     def "test if BlockBattleEngine is created"() {
 
         setup:
@@ -104,26 +104,38 @@ class BlockBattleEngineSpec extends Specification {
         processor.getWinnerId(finalState) == 0;
     }
 
-    /*
-    @Ignore
+    //@Ignore
     def "test t spin"() {
 
         setup:
         String[] botInputs = new String[2]
 
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot_input_tspin.txt"
-        botInputs[1] = "./test/resources/bot2_input.txt"
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot_input_tspin.txt"
+        botInputs[1] = "./src/test/resources/bot2_input.txt"
+
+        PlayerProvider<BlockBattlePlayer> playerProvider = new PlayerProvider<>();
+        BlockBattlePlayer player1 = new BlockBattlePlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        BlockBattlePlayer player2 = new BlockBattlePlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
 
         ShapeFactoryValues sf = new ShapeFactoryValues("O,O,S,O,O,Z,I,S,T,J,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
-        def engine = new TestEngine(wrapperInput, botInputs, sf)
-        engine.run()
+        engine.shapeFactory = sf;
+        AbstractState initialState = engine.willRun()
+        BlockBattleProcessor processor = engine.getProcessor();
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
 
         expect:
-        engine.finalState instanceof BlockBattleState;
+        finalState instanceof BlockBattleState;
+        finalState.getPlayerStateById(0).getBoard().toString() == ".,0,.,.,.,.,.,.,1,.,.,.,.,.,.,0,1,.,.,.,.,.,1,0,1,.,.,.,1,1,0,0,.,.,.,0,1,0,0,0,.,.";
+        processor.getWinnerId(finalState) == 0;
     }
 
-
+/*
     @Ignore
     def "test garbage input"() {
 

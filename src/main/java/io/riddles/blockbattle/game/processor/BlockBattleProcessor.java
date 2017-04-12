@@ -129,31 +129,38 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
             }
         }
 
-        int rowsRemoved = boardP1.processEndOfRoundField();
 
-        playerStateP1.setRowsRemoved(rowsRemoved);
 
-        if (!shapeOps.spawnShape(state.getNextShape().clone(), boardP2)) {
-            setWinnerId(state, 0);
-        }
-        if (!shapeOps.spawnShape(state.getNextShape().clone(), boardP1)) {
-            setWinnerId(state, 1);
-        }
 
+
+        int rowsRemovedP1 = boardP1.processEndOfRoundField();
+        playerStateP1.setRowsRemoved(rowsRemovedP1);
         playerStateP1.setFieldCleared(boardP1.isFieldCleared());
-        playerStateP2.setRowsRemoved(boardP2.processEndOfRoundField());
+
+        int rowsRemovedP2 = boardP2.processEndOfRoundField();
+        playerStateP2.setRowsRemoved(rowsRemovedP2);
         playerStateP2.setFieldCleared(boardP2.isFieldCleared());
 
         processPointsForPlayer(state, playerStateP1);
         processPointsForPlayer(state, playerStateP2);
 
-        Shape nextShape = shapeFactory.getNext();
+
+
+
+
+        Shape nextShape = state.getNextShape();
         playerStateP1.setCurrentShape(nextShape.clone());
         playerStateP2.setCurrentShape(nextShape.clone());
-
+        if (!shapeOps.spawnShape(playerStateP1.getCurrentShape(), boardP2)) {
+            setWinnerId(state, 0);
+        }
+        if (!shapeOps.spawnShape(playerStateP2.getCurrentShape(), boardP1)) {
+            setWinnerId(state, 1);
+        }
         boardP1.dump();
+        //boardP2.dump();
 
-        state.setNextShape(nextShape);
+        state.setNextShape(shapeFactory.getNext());
         return state;
     }
 

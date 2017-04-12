@@ -13,7 +13,6 @@ public class ShapeOperations {
     public boolean spawnShape(Shape shape, BlockBattleBoard board) {
         int x = (board.getWidth() - shape.size) / 2;
         int y = -1;
-
         shape.location = new Point(x, y);
         shape.setBlockLocations();
 

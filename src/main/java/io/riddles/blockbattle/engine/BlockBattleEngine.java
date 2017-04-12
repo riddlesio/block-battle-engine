@@ -34,9 +34,11 @@ import java.util.ArrayList;
  */
 
 public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, BlockBattlePlayer, BlockBattleState> {
+    public ShapeFactory shapeFactory;
 
     public BlockBattleEngine(PlayerProvider<BlockBattlePlayer> playerProvider, IOHandler ioHandler) throws TerminalException {
         super(playerProvider, ioHandler);
+        shapeFactory = new ShapeFactory();
     }
 
     /* createPlayer creates and initialises a Player for the game.
@@ -74,7 +76,9 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
     @Override
     protected BlockBattleProcessor createProcessor() {
 
-        return new BlockBattleProcessor(playerProvider);
+        BlockBattleProcessor processor = new BlockBattleProcessor(playerProvider);
+        processor.setShapeFactory(this.shapeFactory);
+        return processor;
     }
 
     @Override
@@ -84,6 +88,7 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
 
     @Override
     protected void sendSettingsToPlayer(BlockBattlePlayer player) {
+
         String playerNames = "";
         for(BlockBattlePlayer p : playerProvider.getPlayers()) {
             playerNames += p.getName() + ",";
@@ -113,20 +118,18 @@ public class BlockBattleEngine extends AbstractEngine<BlockBattleProcessor, Bloc
     @Override
     protected BlockBattleState getInitialState() {
         ArrayList<BlockBattlePlayerState> playerStates = new ArrayList<>();
-        Shape nextShape = processor.shapeFactory.getNext();
+        Shape shape = shapeFactory.getNext();
 
         for (BlockBattlePlayer player : playerProvider.getPlayers()) {
             BlockBattlePlayerState playerState = new BlockBattlePlayerState(player.getId());
             BlockBattleBoard board = new BlockBattleBoard(configuration.getInt("fieldWidth"), (configuration.getInt("fieldHeight")));
             playerState.setBoard(board);
-            playerState.setCurrentShape(nextShape.clone());
+            playerState.setCurrentShape(shape.clone());
             playerStates.add(playerState);
         }
         BlockBattleState state = new BlockBattleState(null, playerStates, 0, 0);
 
-        state.setNextShape(processor.shapeFactory.getNext());
-
-
+        state.setNextShape(shapeFactory.getNext());
         return state;
     }
 }
