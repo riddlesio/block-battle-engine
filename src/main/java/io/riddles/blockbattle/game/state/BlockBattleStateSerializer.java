@@ -56,14 +56,14 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
 
 
         player1Json.put("move", playerStateP0.getCurrentMove());
-        player1Json.put("points", playerStateP0.getPoints());
+        player1Json.put("points", playerStateP0.getRowPoints());
         player1Json.put("combo", playerStateP0.getCombo());
         player1Json.put("skips", playerStateP0.getSkips());
         player1Json.put("field", playerStateP0.getBoard().toString(false, true));
         playersJson.put(player1Json);
 
         player2Json.put("move", playerStateP1.getCurrentMove());
-        player2Json.put("points", playerStateP1.getPoints());
+        player2Json.put("points", playerStateP1.getRowPoints());
         player2Json.put("combo", playerStateP1.getCombo());
         player2Json.put("skips", playerStateP1.getSkips());
         player2Json.put("field", playerStateP1.getBoard().toString(false, true));

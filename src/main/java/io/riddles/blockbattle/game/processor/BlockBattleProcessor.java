@@ -78,7 +78,7 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
 
         BlockBattleMoveDeserializer deserializer = new BlockBattleMoveDeserializer();
         String responseP1 = players.get(0).requestMove(ActionType.MOVE);
-        String responseP2 = players.get(0).requestMove(ActionType.MOVE);
+        String responseP2 = players.get(1).requestMove(ActionType.MOVE);
 
         BlockBattleMove moveP1 = deserializer.traverse(responseP1);
         BlockBattleMove moveP2 = deserializer.traverse(responseP2);
@@ -89,6 +89,37 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
         while (moveP1.getMoveTypes().size() > 0 || moveP2.getMoveTypes().size() > 0) {
             state = createState(state, moveP1, moveP2);
         }
+        logic.finishMoveSet(state.getPlayerStateById(0));
+        logic.finishMoveSet(state.getPlayerStateById(1));
+
+
+
+        BlockBattlePlayerState playerStateP1 = getActivePlayerState(state.getPlayerStates(), 0);
+        BlockBattlePlayerState playerStateP2 = getActivePlayerState(state.getPlayerStates(), 1);
+        BlockBattleBoard boardP1 = playerStateP1.getBoard();
+        BlockBattleBoard boardP2 = playerStateP2.getBoard();
+
+        // add solid line on certain round number
+        if (state.getRoundNumber() % BlockBattleEngine.configuration.getInt("roundsPerSolid") == 0) {
+            if (boardOps.addSolidRows(boardP1, 1)) {
+                setWinnerId(state, playerStateP2.getPlayerId());
+            }
+            if (boardOps.addSolidRows(boardP2, 1)) {
+                setWinnerId(state, playerStateP1.getPlayerId());
+            }
+        }
+
+        int rowsRemovedP1 = boardP1.processEndOfRoundField();
+        playerStateP1.setRowsRemoved(rowsRemovedP1);
+        playerStateP1.setFieldCleared(boardP1.isFieldCleared());
+
+        int rowsRemovedP2 = boardP2.processEndOfRoundField();
+        playerStateP2.setRowsRemoved(rowsRemovedP2);
+        playerStateP2.setFieldCleared(boardP2.isFieldCleared());
+
+        processPointsForPlayer(state, playerStateP1);
+        processPointsForPlayer(state, playerStateP2);
+
 
         /* Add final states when we are at maxRounds and there is no winner. */
         /*
@@ -108,44 +139,6 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
             }
         }
         */
-
-
-
-        //if (shapeOps.isOverflowing(shape)) {
-            /* OTHER PLAY WINS */ /* TODO: Move this to processor */
-        //}
-
-        BlockBattlePlayerState playerStateP1 = getActivePlayerState(state.getPlayerStates(), 0);
-        BlockBattlePlayerState playerStateP2 = getActivePlayerState(state.getPlayerStates(), 1);
-        BlockBattleBoard boardP1 = playerStateP1.getBoard();
-        BlockBattleBoard boardP2 = playerStateP2.getBoard();
-
-        if (state.getRoundNumber() % BlockBattleEngine.configuration.getInt("roundsPerSolid") == 0) { // add solid line on certain round number
-            if (boardOps.addSolidRows(boardP1, 1)) {
-                setWinnerId(state, playerStateP2.getPlayerId());
-            }
-            if (boardOps.addSolidRows(boardP2, 1)) {
-                setWinnerId(state, playerStateP1.getPlayerId());
-            }
-        }
-
-
-
-
-
-        int rowsRemovedP1 = boardP1.processEndOfRoundField();
-        playerStateP1.setRowsRemoved(rowsRemovedP1);
-        playerStateP1.setFieldCleared(boardP1.isFieldCleared());
-
-        int rowsRemovedP2 = boardP2.processEndOfRoundField();
-        playerStateP2.setRowsRemoved(rowsRemovedP2);
-        playerStateP2.setFieldCleared(boardP2.isFieldCleared());
-
-        processPointsForPlayer(state, playerStateP1);
-        processPointsForPlayer(state, playerStateP2);
-
-
-
 
 
         Shape nextShape = state.getNextShape();
@@ -175,8 +168,6 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
             moveTypeP1 = moveP1.getMoveTypes().remove(0);
         if (moveP2.getMoveTypes().size() > 0)
             moveTypeP2 = moveP2.getMoveTypes().remove(0);
-
-        System.out.println("m1: " + moveTypeP1 + " m2: " + moveTypeP2);
 
         BlockBattlePlayerState playerStateP1 = getActivePlayerState(nextPlayerStates, 0);
         BlockBattlePlayerState playerStateP2 = getActivePlayerState(nextPlayerStates, 1);

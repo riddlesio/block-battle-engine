@@ -122,7 +122,7 @@ class BlockBattleEngineSpec extends Specification {
 
         def engine = new TestEngine(playerProvider, wrapperInput)
 
-        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,S,O,O,Z,I,S,T,J,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
+        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,S,O,O,O,I,I,O,T,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
         engine.shapeFactory = sf;
         AbstractState initialState = engine.willRun()
         BlockBattleProcessor processor = engine.getProcessor();
@@ -131,8 +131,8 @@ class BlockBattleEngineSpec extends Specification {
 
         expect:
         finalState instanceof BlockBattleState;
-        finalState.getPlayerStateById(0).getBoard().toString() == ".,0,.,.,.,.,.,.,1,.,.,.,.,.,.,0,1,.,.,.,.,.,1,0,1,.,.,.,1,1,0,0,.,.,.,0,1,0,0,0,.,.";
-        processor.getWinnerId(finalState) == 0;
+        finalState.getPlayerStateById(0).getBoard().toString(false, true) == "0,0,0,0,O,O,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,I,0;0,0,O,O,O,O,0,0,I,0;O,O,0,S,0,O,O,O,O,I";
+        processor.getWinnerId(finalState) == null;
     }
 
 /*
@@ -155,27 +155,37 @@ class BlockBattleEngineSpec extends Specification {
         JSONObject j = new JSONObject(engine.playedGame);
         j.get("winner") == 1;
     }
-
-    @Ignore
+*/
+    //@Ignore
     def "test long game"() {
-
         setup:
         String[] botInputs = new String[2]
 
-        def wrapperInput = "./test/resources/wrapper_input.txt"
-        botInputs[0] = "./test/resources/bot_input_tspin.txt"
-        botInputs[1] = "./test/resources/bot_input_tspin.txt"
+        def wrapperInput = "./src/test/resources/wrapper_input.txt"
+        botInputs[0] = "./src/test/resources/bot1_input_game.txt"
+        botInputs[1] = "./src/test/resources/bot2_input.txt"
 
-        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,S,O,O,Z,I,S,T,J,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
-        def engine = new TestEngine(wrapperInput, botInputs, sf)
-        engine.run()
+        PlayerProvider<BlockBattlePlayer> playerProvider = new PlayerProvider<>();
+        BlockBattlePlayer player1 = new BlockBattlePlayer(0);
+        player1.setIoHandler(new FileIOHandler(botInputs[0])); playerProvider.add(player1);
+        BlockBattlePlayer player2 = new BlockBattlePlayer(1);
+        player2.setIoHandler(new FileIOHandler(botInputs[1])); playerProvider.add(player2);
+
+        def engine = new TestEngine(playerProvider, wrapperInput)
+
+        ShapeFactoryValues sf = new ShapeFactoryValues("O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O");
+        engine.shapeFactory = sf;
+        AbstractState initialState = engine.willRun()
+        BlockBattleProcessor processor = engine.getProcessor();
+        AbstractState finalState = engine.run(initialState);
+        engine.didRun(initialState, finalState);
 
         expect:
-        engine.finalState instanceof BlockBattleState;
-        JSONObject j = new JSONObject(engine.playedGame);
-        j.get("winner") == JSONObject.NULL;
+        finalState instanceof BlockBattleState;
+        finalState.getPlayerStateById(0).getBoard().toString(false, true) == "0,0,0,0,O,O,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,0,0;0,0,0,0,0,0,0,0,I,0;0,0,O,O,O,O,0,0,I,0;O,O,0,S,0,O,O,O,O,I";
+        processor.getWinnerId(finalState) == null;
     }
-
+/*
     @Ignore
     def "test combo"() {
 

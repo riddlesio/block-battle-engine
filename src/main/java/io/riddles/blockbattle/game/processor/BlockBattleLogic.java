@@ -102,12 +102,21 @@ public class BlockBattleLogic {
         if (moveType == MoveType.SKIP)
             return;
 
-        //System.out.println(move);
-        //board.dump();
+    }
 
+    public void finishMoveSet(BlockBattlePlayerState playerState) {
+        BlockBattleMove bbMove = playerState.getMove();
+        BlockBattleBoard board = playerState.getBoard();
+
+        Shape shape = playerState.getCurrentShape();
+        MoveType lastMove1 = null;
+        MoveType lastMove2 = null;
+        Point lastLocation = new Point(-1, -1);
+        playerState.setUsedSkip(false);
+
+        lastLocation = new Point(shape.getLocation().x, shape.getLocation().y);
 
         // freeze shape and add extra drop move if the piece is still loose in the field
-/*
         if (!shape.isFrozen()) {
             int initialY = shape.getLocation().y;
             shapeOps.drop(shape, board);
@@ -118,8 +127,10 @@ public class BlockBattleLogic {
                 if (lastMove1 != null && lastMove1 == MoveType.SKIP)
                     error = "Can't perform 'skip'. There were no skips available.";
                 MoveType move = MoveType.DROP;
-                bbMove.setException(new InvalidInputException(error));
-                moves.add(move);
+
+                /* TODO: Need to add a drop move? Below line needs to be done differently */
+                //bbMove.setException(new InvalidInputException(error));
+                //moves.add(move);
                 playerState.setTSpin(false);
             } else {
                 playerState.setTSpin(shapeOps.checkTSpin(shape, board, lastMove1, lastMove2, lastLocation));
@@ -127,6 +138,5 @@ public class BlockBattleLogic {
         } else {
             playerState.setTSpin(shapeOps.checkTSpin(shape, board, lastMove1, lastMove2, lastLocation));
         }
-            */
     }
 }
