@@ -17,6 +17,7 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
     private boolean fieldCleared;
     private int points;
     private Shape currentShape;
+    private String currentMove = "";
 
 
     private BlockBattleBoard board;
@@ -127,4 +128,8 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
 
     public Shape getCurrentShape() { return this.currentShape; }
     public void setCurrentShape(Shape currentShape) { this.currentShape = currentShape; }
+
+
+    public String getCurrentMove() { return this.currentMove; }
+    public void setCurrentMove(String currentMove) { this.currentMove = currentMove; }
 }

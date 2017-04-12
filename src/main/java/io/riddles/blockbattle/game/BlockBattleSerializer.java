@@ -20,8 +20,10 @@
 package io.riddles.blockbattle.game;
 
 import io.riddles.blockbattle.BlockBattle;
+import io.riddles.blockbattle.engine.BlockBattleEngine;
 import io.riddles.blockbattle.game.data.MoveType;
 import io.riddles.blockbattle.game.move.BlockBattleMove;
+import io.riddles.blockbattle.game.state.BlockBattlePlayerState;
 import io.riddles.javainterface.game.player.AbstractPlayer;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.processor.BlockBattleProcessor;
@@ -49,107 +51,31 @@ public class BlockBattleSerializer extends
         JSONObject game = new JSONObject();
         game = addDefaultJSON(initialState, game, processor);
 
+
+        JSONObject field = new JSONObject();
+        field.put("width", BlockBattleEngine.configuration.getInt("fieldWidth"));
+        field.put("height", BlockBattleEngine.configuration.getInt("fieldHeight"));
+
+        game.getJSONObject("settings").put("field", field);
+
+
         // add all states
         JSONArray states = new JSONArray();
         BlockBattleState state = initialState;
+
         BlockBattleStateSerializer serializer = new BlockBattleStateSerializer();
 
 
-        String boardRep1 = "", boardRep2 = "";
+
         int roundNr = 1;
         String winner = "";
 
-        /* Why do we need pData and pStatData for each player?
-            We use pStatData for displaying points, combo and skips.
-            If we take this data directly from pData, the points, combo and skips will show up 1 round too soon.
-            pStatData is updated after each round.
-            */
-        /*
-        BlockBattlePlayer pStatData1 = state.getPlayer(1);
-        BlockBattlePlayer pStatData2 = state.getPlayer(2);
-
         while (state.hasNextState() && winner.isEmpty()) {
-
+            JSONObject stateJson = serializer.traverseToJson(state);
+            states.put(stateJson);
 
             state = (BlockBattleState) state.getNextState();
-            ArrayList<BlockBattleMove> moves1 = state.getMoves();
-            ArrayList<BlockBattleMove> moves2 = new ArrayList<>();
-            if (state.getWinner() != null) {
-                winner = "player" + state.getWinner().getId();
-            }
-            if (state.hasNextState()) {
-                state = (BlockBattleState) state.getNextState();
-                if (state.getWinner() != null) {
-                    winner = "player" + state.getWinner().getId();
-                }
-                moves2 = state.getMoves();
-            }
-
-            int maxMoves = moves1.size();
-            if (moves2.size() > moves1.size()) {
-                maxMoves = moves2.size();
-            }
-
-            for (int i = 0; i < maxMoves; i++) {
-
-                String move1 = "", move2="";
-                JSONObject player1JSON = new JSONObject(), player2JSON = new JSONObject();
-                BlockBattlePlayer pData1 = state.getPlayer(1);
-                BlockBattlePlayer pData2 = state.getPlayer(2);
-
-                if (moves1.size() > i) {
-                    MoveType moveType = moves1.get(i).getMoveType();
-                    if (moveType != null) {
-                        move1 = moveType.toString();
-                    }
-                    if (moves1.get(i).getBoardRepresentation() != null) {
-                        boardRep1 = moves1.get(i).getBoardRepresentation();
-                    }
-                }
-
-                player1JSON.put("move", move1);
-                player1JSON.put("skips", pStatData1.getSkips());
-                player1JSON.put("field", boardRep1);
-                player1JSON.put("combo", pStatData1.getCombo());
-                player1JSON.put("points", pStatData1.getRowPoints());
-
-                if (moves2.size() > i) {
-                    MoveType moveType = moves2.get(i).getMoveType();
-                    if (moveType != null) {
-                        move2 = moveType.toString();
-                    }
-                    if (moves2.get(i).getBoardRepresentation() != null) {
-                        boardRep2 = moves2.get(i).getBoardRepresentation();
-                    }
-                }
-
-                player2JSON.put("move", move2);
-                player2JSON.put("skips", pStatData2.getSkips());
-                player2JSON.put("field", boardRep2);
-                player2JSON.put("combo", pStatData2.getCombo());
-                player2JSON.put("points", pStatData2.getRowPoints());
-
-                JSONArray players = new JSONArray();
-                players.put(player1JSON);
-                players.put(player2JSON);
-
-                JSONObject subState = new JSONObject();
-                subState.put("nextShape", state.getNextShape().getType());
-                subState.put("round", roundNr);
-                subState.put("players", players);
-
-                if (!winner.isEmpty() && i == maxMoves-1 ) {
-                    subState.put("winner", winner);
-                }
-                states.put(subState);
-            }
-            pStatData1 = state.getPlayer(1);
-            pStatData2 = state.getPlayer(2);
-            roundNr++;
         }
-        */
-        // add score
-        game.put("score", processor.getScore(initialState));
 
         game.put("states", states);
 

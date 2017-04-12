@@ -157,7 +157,7 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
         if (!shapeOps.spawnShape(playerStateP2.getCurrentShape(), boardP1)) {
             setWinnerId(state, 1);
         }
-        boardP1.dump();
+        //boardP1.dump();
         //boardP2.dump();
 
         state.setNextShape(shapeFactory.getNext());
@@ -180,6 +180,10 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
 
         BlockBattlePlayerState playerStateP1 = getActivePlayerState(nextPlayerStates, 0);
         BlockBattlePlayerState playerStateP2 = getActivePlayerState(nextPlayerStates, 1);
+        if (moveTypeP1 != null)
+            playerStateP1.setCurrentMove(moveTypeP1.toString());
+        if (moveTypeP2 != null)
+            playerStateP2.setCurrentMove(moveTypeP2.toString());
 
 
         try {

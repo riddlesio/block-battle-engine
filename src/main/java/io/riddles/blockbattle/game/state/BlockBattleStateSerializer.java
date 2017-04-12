@@ -21,6 +21,7 @@ package io.riddles.blockbattle.game.state;
 
 import io.riddles.blockbattle.game.move.BlockBattleMove;
 import io.riddles.blockbattle.game.player.BlockBattlePlayer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import io.riddles.javainterface.game.state.AbstractStateSerializer;
 
@@ -44,35 +45,33 @@ public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBat
     private JSONObject visitState(BlockBattleState state) throws NullPointerException {
         JSONObject stateJson = new JSONObject();
 
+        JSONArray playersJson = new JSONArray();
+
+        JSONObject player1Json = new JSONObject();
+        JSONObject player2Json = new JSONObject();
+
         BlockBattlePlayerState playerStateP0 = state.getPlayerStateById(0);
         BlockBattlePlayerState playerStateP1 = state.getPlayerStateById(1);
-        BlockBattleMove moveP0 = playerStateP0.getMove();
-        BlockBattleMove moveP1 = playerStateP1.getMove();
-
-        //stateJson.put("movetype", move.getMoveType());
-
-        BlockBattlePlayer winner = null;//state.getWinner();
-        String winnerString = "";
-        if (winner != null) {
-            winnerString = winner.toString();
-        }
-
-        /* TODO: Add for each player */
-        //stateJson.put("field", state.getBoard().toString(true, true));
-        stateJson.put("winner", winner);
 
 
-        if (moveP0.getException() == null) {
-            stateJson.put("exception", JSONObject.NULL);
-            stateJson.put("illegalMove", "");
-        } else {
-            stateJson.put("exception", moveP0.getException().getMessage());
-            stateJson.put("illegalMove", moveP0.getException().getMessage());
-        }
 
-        stateJson.put("points", playerStateP0.getPoints());
-        stateJson.put("combo", playerStateP0.getCombo());
-        stateJson.put("skips", playerStateP0.getSkips());
+        player1Json.put("move", playerStateP0.getCurrentMove());
+        player1Json.put("points", playerStateP0.getPoints());
+        player1Json.put("combo", playerStateP0.getCombo());
+        player1Json.put("skips", playerStateP0.getSkips());
+        player1Json.put("field", playerStateP0.getBoard().toString(false, true));
+        playersJson.put(player1Json);
+
+        player2Json.put("move", playerStateP1.getCurrentMove());
+        player2Json.put("points", playerStateP1.getPoints());
+        player2Json.put("combo", playerStateP1.getCombo());
+        player2Json.put("skips", playerStateP1.getSkips());
+        player2Json.put("field", playerStateP1.getBoard().toString(false, true));
+        playersJson.put(player2Json);
+
+        stateJson.put("nextShape", state.getNextShape().type);
+        stateJson.put("round", state.getRoundNumber());
+        stateJson.put("players", playersJson);
 
         return stateJson;
     }
