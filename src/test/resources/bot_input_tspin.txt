@@ -6,7 +6,8 @@ right,right,right,drop
 right,right,drop
 right,right,right,right,turnleft,right,right,drop
 turnleft,right,right,right,right,drop
-turnleft,down,down,down,down,down,down,down,down,down,down,down,down,down,down,down,down,down,turnleft
+left,left,drop
+turnright,down,down,down,down,down,down,down,down,down,down,down,down,down,down,down,down,down,turnright
 drop
 skip
 left,left,left,left,drop
