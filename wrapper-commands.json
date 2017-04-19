@@ -8,9 +8,11 @@
   },
   "match": {
     "bots": [{
-      "command": "java -cp /home/jim/Downloads/topblockbattlebotjava/bin bot.BotStarter"
+      "command": "java -cp /home/jim/workspace/blockbattle-starterbot-java/build/classes/main bot.BotStarter",
+      "command2": "java -cp /home/jim/Downloads/topblockbattlebotjava/bin bot.BotStarter"
     },{
-      "command": "java -cp /home/jim/Downloads/topblockbattlebotjava/bin bot.BotStarter"
+      "command": "java -cp /home/jim/workspace/blockbattle-starterbot-java/build/classes/main bot.BotStarter",
+      "command2": "java -cp /home/jim/Downloads/topblockbattlebotjava/bin bot.BotStarter"
     }],
     "engine": {
       "command": "java -jar /home/jim/workspace/block-battle-engine/build/libs/game-1.0.0.jar"

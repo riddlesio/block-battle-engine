@@ -21,7 +21,7 @@ package io.riddles.blockbattle.game.move;
 
 
 public enum MoveType {
-    DOWN, LEFT, RIGHT, TURNLEFT, TURNRIGHT, DROP, SKIP;
+    DOWN, LEFT, RIGHT, TURNLEFT, TURNRIGHT, DROP, SKIP, PASS;
 
     public static MoveType fromString(String move) {
         if (move != null) {

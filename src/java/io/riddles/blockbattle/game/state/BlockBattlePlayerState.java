@@ -19,7 +19,7 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
     private Shape currentShape;
     private MoveType currentMove;
     private BlockBattleBoard board;
-    private InvalidMoveException exception;  // exception on the MoveType
+    private Exception exception;  // exception on the MoveType
 
     public BlockBattlePlayerState(int playerId) {
         super(playerId);
@@ -126,11 +126,11 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
         this.currentMove = currentMove;
     }
 
-    public InvalidMoveException getException() {
+    public Exception getException() {
         return this.exception;
     }
 
-    public void setException(InvalidMoveException exception) {
+    public void setException(Exception exception) {
         this.exception = exception;
     }
 

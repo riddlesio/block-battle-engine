@@ -43,13 +43,15 @@ public class BlockBattleMoveDeserializer implements Deserializer<BlockBattleMove
 
     private BlockBattleMove visitMove(String input) throws InvalidInputException {
         BlockBattleMove move = new BlockBattleMove();
-
         String[] split = input.split(",");
         ArrayList<MoveType> moves = new ArrayList<>();
+
         for (String aSplit : split) {
             moves.add(vistMoveType(aSplit));
         }
+
         move.setMoveTypes(moves);
+
         return move;
     }
 

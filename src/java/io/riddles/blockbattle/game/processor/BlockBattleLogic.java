@@ -59,6 +59,7 @@ public class BlockBattleLogic {
                 result = ShapeOperations.turnRight(shape, board);
                 break;
             case DOWN:
+            case PASS:
                 result = ShapeOperations.oneDown(shape, board);
                 break;
             case DROP:

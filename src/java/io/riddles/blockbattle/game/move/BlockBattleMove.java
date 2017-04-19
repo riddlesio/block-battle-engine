@@ -34,6 +34,7 @@ public class BlockBattleMove extends AbstractMove {
 
     public BlockBattleMove(Exception exception) {
         super(exception);
+        this.types = new ArrayList<>();
     }
 
     public void setMoveTypes(ArrayList<MoveType> types) {

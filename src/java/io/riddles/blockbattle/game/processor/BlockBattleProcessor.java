@@ -103,6 +103,11 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
                 nextState.addPlayerState(newPlayerState);
                 previousPlayerState = newPlayerState;
 
+                if (move.getException() != null) {
+                    newPlayerState.setException(move.getException());
+                    break;
+                }
+
                 if (i >= move.getMoveTypes().size()) break;
 
                 // Process the moveType
@@ -147,7 +152,7 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
             ShapeOperations.drop(shape, board);
             int finalY = shape.getLocation().y;
 
-            if (initialY != finalY) {
+            if (initialY != finalY && playerState.getException() == null) {
                 playerState.setException(new InvalidMoveException(
                         "The piece is still loose in the field. Dropping it"));
             }
