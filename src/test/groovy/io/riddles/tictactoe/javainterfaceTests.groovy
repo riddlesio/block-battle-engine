@@ -1,6 +1,6 @@
 package io.riddles.tictactoe
 
-import io.riddles.blockbattle.game.data.MoveType
+import io.riddles.blockbattle.game.move.MoveType
 import io.riddles.blockbattle.game.move.BlockBattleMove
 import io.riddles.blockbattle.game.move.BlockBattleMoveDeserializer
 import io.riddles.blockbattle.game.player.BlockBattlePlayer
