@@ -33,11 +33,11 @@ import io.riddles.javainterface.io.IOHandler;
 public class BlockBattle {
 
     public static void main(String[] args) throws Exception {
-        BlockBattleEngine engine;
-        engine = new BlockBattleEngine(new PlayerProvider<>(), new IOHandler());
+        BlockBattleEngine engine = new BlockBattleEngine(new PlayerProvider<>(), new IOHandler());
 
         BlockBattleState initialState = engine.willRun();
         BlockBattleState finalState = engine.run(initialState);
+
         engine.didRun(initialState, finalState);
     }
 }

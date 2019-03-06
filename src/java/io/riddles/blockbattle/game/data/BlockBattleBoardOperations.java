@@ -19,12 +19,12 @@
 
 package io.riddles.blockbattle.game.data;
 
+import io.riddles.blockbattle.engine.BlockBattleEngine;
+
 import java.awt.*;
-import java.security.SecureRandom;
 
 
 public class BlockBattleBoardOperations {
-    private static final SecureRandom RANDOM = new SecureRandom();
 
     // moves the whole field upwards to make room for new
     // lines from the bottom, leaves the bottom rows untouched (are changed in the appropriate methods).
@@ -87,11 +87,11 @@ public class BlockBattleBoardOperations {
                 board.getFieldAt(new Point(x, y)).setShapeType(ShapeType.G);
             }
 
-            int index1 = RANDOM.nextInt(board.getWidth());
+            int index1 = BlockBattleEngine.random.nextInt(board.getWidth());
             board.getFieldAt(new Point(index1, y)).setEmpty();
 
             if ((count % 2 == 1 && !firstIsSingle) || (count % 2 == 0 && firstIsSingle)) { // double hole
-                int rotate = 1 + RANDOM.nextInt(board.getWidth() - 1);
+                int rotate = 1 + BlockBattleEngine.random.nextInt(board.getWidth() - 1);
                 int index2 = (index1 + rotate) % board.getWidth();
                 board.getFieldAt(new Point(index2, y)).setEmpty();
             }

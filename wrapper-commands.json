@@ -4,16 +4,23 @@
     "timePerMove": 200,
     "maxTimeouts": 0,
     "resultFile": "./resultfile.json",
+    "propagateBotExitCode": false,
     "debug": true
   },
   "match": {
     "bots": [{
-      "command": "java -cp /home/jim/workspace/blockbattle-starterbot-java/build/classes/main bot.BotStarter"
+      "command": "java -jar /Users/jimvaneeden/Downloads/bot_c32d4ce3-37a6-4d84-9727-a62618963e01_4-compiled/run_ai.jar"
     },{
-      "command": "java -cp /home/jim/workspace/blockbattle-starterbot-java/build/classes/main bot.BotStarter"
+      "command": "java -jar /Users/jimvaneeden/Downloads/bot_c32d4ce3-37a6-4d84-9727-a62618963e01_4-compiled/run_ai.jar"
     }],
     "engine": {
-      "command": "java -jar /home/jim/workspace/block-battle-engine/build/libs/block-battle-engine-1.0.1.jar"
+      "command": "java -jar /Users/jimvaneeden/development/block-battle-engine/build/libs/block-battle-engine-1.0.2.jar",
+      "configuration": {
+        "seed": {
+          "type": "string",
+          "value": "cc7fbe52-ba86-4e3b-a2a1-814e1f83574d"
+        }
+      }
     }
   }
 }

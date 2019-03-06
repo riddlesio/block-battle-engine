@@ -26,6 +26,7 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
         this.rowPoints = 0;
         this.combo = 0;
         this.skips = 0;
+        this.rowsRemoved = 0;
         this.performedTSpin = false;
         this.fieldCleared = false;
         this.usedSkip = false;
@@ -43,11 +44,17 @@ public class BlockBattlePlayerState extends AbstractPlayerState<BlockBattleMove>
         this.rowPoints = playerState.getRowPoints();
         this.combo = playerState.getCombo();
         this.skips = playerState.getSkips();
+        this.rowsRemoved = playerState.getRowsRemoved();
         this.exception = null;
         this.currentMove = null;
         this.performedTSpin = false;
         this.fieldCleared = false;
         this.usedSkip = false;
+    }
+
+    @Override
+    public BlockBattlePlayerState clone() {
+        return new BlockBattlePlayerState(this);
     }
 
     public int getPlayerId() {

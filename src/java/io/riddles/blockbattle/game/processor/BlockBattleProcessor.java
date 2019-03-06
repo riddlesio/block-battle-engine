@@ -33,6 +33,7 @@ import io.riddles.blockbattle.game.player.BlockBattlePlayer;
 import io.riddles.blockbattle.game.state.BlockBattlePlayerState;
 import io.riddles.blockbattle.game.state.BlockBattleState;
 import io.riddles.javainterface.exception.InvalidMoveException;
+import io.riddles.javainterface.game.move.AbstractMoveDeserializer;
 import io.riddles.javainterface.game.player.PlayerProvider;
 import io.riddles.javainterface.game.processor.SimpleProcessor;
 
@@ -319,6 +320,11 @@ public class BlockBattleProcessor extends SimpleProcessor<BlockBattleState, Bloc
     @Override
     public double getScore(BlockBattleState state) {
         return state.getRoundNumber();
+    }
+
+    @Override
+    public AbstractMoveDeserializer createMoveDeserializer() {
+        return new BlockBattleMoveDeserializer();
     }
 
     private void sendUpdates(BlockBattleState state, BlockBattlePlayer player) {

@@ -20,28 +20,20 @@
 package io.riddles.blockbattle.game.move;
 
 import io.riddles.javainterface.exception.InvalidInputException;
-import io.riddles.javainterface.serialize.Deserializer;
+import io.riddles.javainterface.game.move.AbstractMoveDeserializer;
 
 import java.util.ArrayList;
 
 
-public class BlockBattleMoveDeserializer implements Deserializer<BlockBattleMove> {
-
-    public BlockBattleMoveDeserializer() {}
+public class BlockBattleMoveDeserializer extends AbstractMoveDeserializer<BlockBattleMove> {
 
     @Override
-    public BlockBattleMove traverse(String string) {
-        try {
-            return visitMove(string);
-        } catch (InvalidInputException ex) {
-            return new BlockBattleMove(ex);
-        } catch (Exception ex) {
-            return new BlockBattleMove(new InvalidInputException("Failed to parse move"));
-        }
-
+    protected BlockBattleMove createExceptionMove(InvalidInputException exception) {
+        return new BlockBattleMove(exception);
     }
 
-    private BlockBattleMove visitMove(String input) throws InvalidInputException {
+    @Override
+    protected BlockBattleMove visitMove(String input) throws InvalidInputException {
         BlockBattleMove move = new BlockBattleMove();
         String[] split = input.split(",");
         ArrayList<MoveType> moves = new ArrayList<>();

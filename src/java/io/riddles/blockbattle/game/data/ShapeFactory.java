@@ -19,20 +19,18 @@
 
 package io.riddles.blockbattle.game.data;
 
-import java.security.SecureRandom;
+import io.riddles.blockbattle.engine.BlockBattleEngine;
 
 /**
  * ShapeFactory returns random Shapes.
  */
 public class ShapeFactory {
 
-    private static final SecureRandom RANDOM = new SecureRandom();
-
     /**
      * Gets a random ShapeType, NONE and G not included
      */
     public static Shape getNext() {
-        return new Shape(ShapeType.values()[RANDOM.nextInt(ShapeType.SIZE_SHAPES)]);
+        return new Shape(ShapeType.values()[BlockBattleEngine.random.nextInt(ShapeType.SIZE_SHAPES)]);
     }
 
 }

@@ -36,12 +36,15 @@ import io.riddles.javainterface.game.AbstractGameSerializer;
  * @author jim
  */
 public class BlockBattleSerializer extends
-        AbstractGameSerializer<BlockBattleProcessor, BlockBattleState> {
+        AbstractGameSerializer<BlockBattleProcessor, BlockBattleState, BlockBattleStateSerializer> {
 
     @Override
-    public String traverseToString(BlockBattleProcessor processor, BlockBattleState initialState) {
-        JSONObject game = new JSONObject();
-        game = addDefaultJSON(initialState, game, processor);
+    public JSONObject visitGame(
+            BlockBattleProcessor processor,
+            BlockBattleState initialState,
+            BlockBattleStateSerializer stateSerializer
+    ) {
+        JSONObject game = super.visitGame(processor, initialState, stateSerializer);
 
         JSONObject field = new JSONObject();
         field.put("width", BlockBattleEngine.configuration.getInt("fieldWidth"));
@@ -49,21 +52,6 @@ public class BlockBattleSerializer extends
 
         game.getJSONObject("settings").put("field", field);
 
-        // add all states
-        JSONArray states = new JSONArray();
-        BlockBattleState state = initialState;
-
-        BlockBattleStateSerializer serializer = new BlockBattleStateSerializer();
-
-        while (state != null) {
-            JSONObject stateJson = serializer.traverseToJson(state);
-            states.put(stateJson);
-
-            state = (BlockBattleState) state.getNextState();
-        }
-
-        game.put("states", states);
-
-        return game.toString();
+        return game;
     }
 }

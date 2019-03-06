@@ -20,18 +20,22 @@
 package io.riddles.blockbattle.game.move;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum MoveType {
     DOWN, LEFT, RIGHT, TURNLEFT, TURNRIGHT, DROP, SKIP, PASS;
 
-    public static MoveType fromString(String move) {
-        if (move != null) {
-            for (MoveType type : MoveType.values()) {
-                if (move.equalsIgnoreCase(type.toString()))
-                    return type;
-            }
-        }
+    private static final Map<String, MoveType> TYPE_MAP = new HashMap<>();
 
-        return null;
+    static {
+        for (MoveType moveType : values()) {
+            TYPE_MAP.put(moveType.toString(), moveType);
+        }
+    }
+
+    public static MoveType fromString(String string) {
+        return TYPE_MAP.get(string.toLowerCase());
     }
 
     @Override

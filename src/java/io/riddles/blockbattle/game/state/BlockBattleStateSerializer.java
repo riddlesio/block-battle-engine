@@ -19,28 +19,19 @@
 
 package io.riddles.blockbattle.game.state;
 
+import io.riddles.javainterface.serialize.AbstractSerializer;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import io.riddles.javainterface.game.state.AbstractStateSerializer;
 
 /**
  * BlockBattleStateSerializer takes a BlockBattleState and serialises it into a String.
  *
  * @author jim
  */
-public class BlockBattleStateSerializer extends AbstractStateSerializer<BlockBattleState> {
+public class BlockBattleStateSerializer extends AbstractSerializer<BlockBattleState> {
 
     @Override
-    public String traverseToString(BlockBattleState state) {
-        return visitState(state).toString();
-    }
-
-    @Override
-    public JSONObject traverseToJson(BlockBattleState state) throws NullPointerException {
-        return visitState(state);
-    }
-
-    private JSONObject visitState(BlockBattleState state) throws NullPointerException {
+    public JSONObject visitObject(BlockBattleState state) {
         JSONObject stateJson = new JSONObject();
         JSONArray players = new JSONArray();
 
